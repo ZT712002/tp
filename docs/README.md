@@ -1,4 +1,4 @@
-# Duke
+# FinancialProPlus
 
 {Give product intro here}
 
