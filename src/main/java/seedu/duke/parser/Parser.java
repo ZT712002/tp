@@ -4,11 +4,24 @@ import seedu.duke.command.Command;
 
 public class Parser {
     public Command parse(String userInput) {
-        String[] parts = input.split(" ", 2);
-        String commandType = parts[0].toLowerCase();
-        String arguments = parts.length >1 ? parts[1]: "";
-        return new Command(commandType, arguments);
+        Parser commandParser = selectParsertType(userInput);
+
     }
+    private Parser selectParsertType(String userInput) {
+        String[] commandParts = userInput.split(" ", 2);
+        String commandType = commandParts[0];
+        switch (commandType) {
+        case "client":
+            return new ClientParser();
+        case "list":
+            return new ListParser();
+        case "exit":
+            return new ExitParser();
+        default:
+            throw new Exception("Invalid command type");
+        }
+    }
+
 
 
 }
