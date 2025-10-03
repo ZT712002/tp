@@ -1,13 +1,12 @@
 package seedu.duke.command;
 
-public class Command {
-    private String commandType;
-    private String commandSubtype;
-    private String arguments;
-    public Command(String CommandType, String CommandSubtype, String Arguments) {
-        this.commandType = CommandType;
-        this.commandSubtype = CommandSubtype;
-        this.arguments = Arguments;
+import seedu.duke.exception.FinanceProPlusException;
 
+public class Command {
+    public Command(){
+
+    }
+    public void execute() throws FinanceProPlusException {
+        throw new FinanceProPlusException("This command should be implemented by child classes");
     }
 }
