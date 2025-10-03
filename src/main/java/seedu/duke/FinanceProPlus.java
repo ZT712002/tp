@@ -1,7 +1,7 @@
 package seedu.duke;
 
 import seedu.duke.client.ClientList;
-import seedu.duke.lookuptable.LookUpTable;
+import seedu.duke.container.LookUpTable;
 import seedu.duke.meeting.MeetingList;
 import seedu.duke.policy.PolicyList;
 import seedu.duke.ui.Ui;
