@@ -8,13 +8,13 @@ import java.util.Scanner;
 /**
  * Ui class handles user interactions, including input and output.
  * @param IN Scanner object for reading user input
- * @param isPasserActive boolean flag to control the main loop
+ * @param isActive boolean flag to control the main loop
  * @param userInput String to store the latest user input
  *
  */
 public class Ui {
     private final Scanner IN;
-    private boolean isPasserActive;
+    private boolean isActive;
     private String userInput;
 
 
@@ -28,19 +28,19 @@ public class Ui {
      */
     public Ui() {
         this.IN = new Scanner(System.in);
-        this.isPasserActive = true;
+        this.isActive = true;
     }
 
     public void setUserInput() {
         this.userInput = IN.nextLine();
     }
 
-    public boolean isPasserActive() {
-        return isPasserActive;
+    public boolean getIsActive() {
+        return isActive;
     }
 
-    public void setIsPasserActiveOff() {
-        isPasserActive = false;
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
     }
     public void printWelcomeMessage() {
         String logo = " ____        _        \n"
