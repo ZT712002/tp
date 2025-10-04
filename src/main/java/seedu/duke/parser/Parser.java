@@ -13,7 +13,7 @@ public class Parser {
         throw new FinanceProPlusException("Child classes to fulfill this method");
     }
 
-    private static Parser selectParserType(String userInput) throws FinanceProPlusException {
+    protected static Parser selectParserType(String userInput) throws FinanceProPlusException {
         String[] commandParts = splitCommand(userInput);
         String commandType = commandParts[0];
         String commandArgs = commandParts.length > 1 ? commandParts[1] : "";

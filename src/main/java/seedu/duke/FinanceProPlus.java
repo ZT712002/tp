@@ -31,14 +31,19 @@ public class FinanceProPlus {
         runLoop = false;
     }
 
-    public void run() throws FinanceProPlusException {
+    public void run() {
         ui.printWelcomeMessage();
 
         while(runLoop){
-            ui.setUserInput();
-            String unprocessedInput = ui.getUserInput();
-            Command c = Parser.parse(unprocessedInput);
-            c.execute();
+            try {
+                ui.setUserInput();
+                String unprocessedInput = ui.getUserInput();
+                Command c = Parser.parse(unprocessedInput);
+                c.execute();
+            }
+            catch (FinanceProPlusException e) {
+                System.out.println(e.getMessage());
+            }
 
         }
         ui.printGoodbyeMessage();
