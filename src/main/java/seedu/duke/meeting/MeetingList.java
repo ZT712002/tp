@@ -1,6 +1,7 @@
 package seedu.duke.meeting;
 
 import seedu.duke.container.ListContainer;
+import seedu.duke.exception.FinanceProPlusException;
 
 import java.util.ArrayList;
 
@@ -11,5 +12,10 @@ public class MeetingList implements ListContainer {
     }
     public ArrayList<Meeting> getMeetings() {
         return meetings;
+    }
+
+    @Override
+    public void addItem(String arguments) throws FinanceProPlusException {
+
     }
 }

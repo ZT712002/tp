@@ -11,4 +11,8 @@ public class ExitCommand extends Command {
     public void execute(LookUpTable lookUpTable) {
         FinanceProPlus.terminate();
     }
+    @Override
+    public void printExecutionMessage() {
+        System.out.println("Exiting....");
+    }
 }

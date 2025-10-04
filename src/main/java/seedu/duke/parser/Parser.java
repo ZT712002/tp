@@ -19,9 +19,9 @@ public class Parser {
         String commandArgs = commandParts.length > 1 ? commandParts[1] : "";
         switch (commandType) {
         case "client":
-            return new ClientParser(commandArgs);
+            return new ClientParser(commandType ,commandArgs);
         case "list":
-            return new ListParser(commandArgs);
+            return new ListParser(commandType, commandArgs);
         case "exit":
             return new ExitParser();
         default:

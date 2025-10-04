@@ -40,6 +40,7 @@ public class FinanceProPlus {
                 String unprocessedInput = ui.getUserInput();
                 Command c = Parser.parse(unprocessedInput);
                 c.execute(lookUpTable);
+                c.printExecutionMessage();
             }
             catch (FinanceProPlusException e) {
                 System.out.println(e.getMessage());

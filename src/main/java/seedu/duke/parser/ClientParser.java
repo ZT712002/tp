@@ -3,27 +3,31 @@ package seedu.duke.parser;
 import seedu.duke.command.AddCommand;
 import seedu.duke.command.Command;
 import seedu.duke.command.DeleteCommand;
-import seedu.duke.subclasses.CommandSubClass;
+import seedu.duke.exception.FinanceProPlusException;
+
 
 public class ClientParser extends Parser{
+    private String commandType;
     private String commandSubtype;
     private String arguments;
-    public ClientParser(String Arguments) {
-        String[] commandParts = splitCommand(Arguments);
-        this.commandSubtype = commandParts[0];
-        this.arguments = commandParts[1];
+    public ClientParser(String type, String commandArgs) {
+        this.commandType = type;
+        String[] commandParts = splitCommand(commandArgs);
+        this.commandSubtype = commandParts[0].toLowerCase();
+        this.arguments = commandParts.length > 1 ? commandParts[1] : "";
     }
     @Override
-    protected Command executeAndCreateCommand() {
+    protected Command executeAndCreateCommand() throws FinanceProPlusException {
         String subtype = this.commandSubtype;
         String args = this.arguments;
         switch (subtype){
         case "add":
-            return new AddCommand(args, CommandSubClass.CLIENT);
-            break;
+            return new AddCommand(commandType, args);
         case "delete":
-            return new DeleteCommand(args);
-            break;
+            return new DeleteCommand(commandType, args);
+        case "default":
+            throw new FinanceProPlusException("Invalid command subtype");
         }
+        return null;
     }
 }
