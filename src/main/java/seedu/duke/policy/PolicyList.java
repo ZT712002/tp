@@ -9,7 +9,7 @@ public class PolicyList implements ListContainer {
     public void addPolicy(Policy policy) {
         policies.add(policy);
     }
-    public ArrayList<Policy> getPolicies() {
+    public ArrayList<Policy> getPolicyList() {
         return policies;
     }
 }

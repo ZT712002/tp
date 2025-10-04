@@ -1,8 +1,11 @@
 package seedu.duke;
 
 import seedu.duke.client.ClientList;
+import seedu.duke.command.Command;
 import seedu.duke.container.LookUpTable;
+import seedu.duke.exception.FinanceProPlusException;
 import seedu.duke.meeting.MeetingList;
+import seedu.duke.parser.Parser;
 import seedu.duke.policy.PolicyList;
 import seedu.duke.ui.Ui;
 
@@ -28,19 +31,22 @@ public class FinanceProPlus {
         runLoop = false;
     }
 
-    public void run(){
+    public void run() throws FinanceProPlusException {
         ui.printWelcomeMessage();
 
         while(runLoop){
             ui.setUserInput();
             String unprocessedInput = ui.getUserInput();
+            Command c = Parser.parse(unprocessedInput);
+            c.execute();
 
         }
+        ui.printGoodbyeMessage();
     }
     /**
      * Main entry-point for the java.duke.Duke application.
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FinanceProPlusException {
         new FinanceProPlus().run();
     }
 }

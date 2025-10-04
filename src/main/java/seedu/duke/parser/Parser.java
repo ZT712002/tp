@@ -4,7 +4,7 @@ import seedu.duke.command.Command;
 import seedu.duke.exception.FinanceProPlusException;
 
 public class Parser {
-    public Command parse(String userInput) throws FinanceProPlusException {
+    public static Command parse(String userInput) throws FinanceProPlusException {
         Parser commandParser = selectParserType(userInput);
         return commandParser.executeAndCreateCommand();
     }
@@ -13,7 +13,7 @@ public class Parser {
         throw new FinanceProPlusException("Child classes to fulfill this method");
     }
 
-    private Parser selectParserType(String userInput) throws FinanceProPlusException {
+    private static Parser selectParserType(String userInput) throws FinanceProPlusException {
         String[] commandParts = splitCommand(userInput);
         String commandType = commandParts[0];
         String commandArgs = commandParts.length > 1 ? commandParts[1] : "";
@@ -28,7 +28,7 @@ public class Parser {
             throw new FinanceProPlusException("Invalid command type");
         }
     }
-    protected String[] splitCommand(String userInput) {
+    protected static String[] splitCommand(String userInput) {
         return userInput.split(" ", 2);
     }
 

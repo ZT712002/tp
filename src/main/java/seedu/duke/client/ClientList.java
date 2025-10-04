@@ -9,6 +9,8 @@ public class ClientList implements ListContainer {
     public ClientList() {
         this.clients = new ArrayList<Client>();
     }
+
+
     public void addClient(Client client) {
         clients.add(client);
     }
