@@ -9,4 +9,6 @@ public interface ListContainer {
     void deleteItem(String arguments) throws FinanceProPlusException;
 
     void listItems() throws FinanceProPlusException;
+
+    int checkDeleteIndex(String arguments) throws FinanceProPlusException;
 }

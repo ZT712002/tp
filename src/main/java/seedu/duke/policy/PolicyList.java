@@ -30,6 +30,11 @@ public class PolicyList implements ListContainer {
     }
 
     @Override
+    public int checkDeleteIndex(String arguments) throws FinanceProPlusException {
+        throw new FinanceProPlusException("Not Implemented yet");
+    }
+
+    @Override
     public String toString(){
         String result = "";
         for (int i = 0; i < policies.size(); i++) {

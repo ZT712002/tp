@@ -28,4 +28,9 @@ public class MeetingList implements ListContainer {
     public void listItems() throws FinanceProPlusException {
         throw new FinanceProPlusException("Not Implemented yet");
     }
+
+    @Override
+    public int checkDeleteIndex(String arguments) throws FinanceProPlusException {
+        throw new FinanceProPlusException("Not Implemented yet");
+    }
 }

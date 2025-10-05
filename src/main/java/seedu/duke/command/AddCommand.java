@@ -20,5 +20,6 @@ public class AddCommand extends Command {
     @Override
     public void printExecutionMessage() {
         System.out.println("Added successfully!");
+        System.out.println("----------------------------------------------------");
     }
 }

@@ -28,8 +28,15 @@ public class ClientList implements ListContainer {
     }
 
     @Override
-    public void deleteItem(String arguments) {
-
+    public void deleteItem(String arguments) throws FinanceProPlusException {
+        if(clients.size() == 0) {
+            System.out.println("No clients to delete.");
+            return;
+        }
+        int index = checkDeleteIndex(arguments);
+        Client removedClient = clients.remove(index);
+        System.out.println("Noted. I've removed this client:");
+        System.out.println(removedClient.toString());
     }
 
     @Override
@@ -42,5 +49,18 @@ public class ClientList implements ListContainer {
                 System.out.println((i + 1) + ". " + clients.get(i).toString());
             }
         }
+    }
+    @Override
+    public int checkDeleteIndex(String arguments) throws FinanceProPlusException {
+        int index;
+        try {
+            index = Integer.parseInt(arguments) - 1;
+            if (index < 0 || index >= clients.size()) {
+                throw new FinanceProPlusException("Invalid index. Please provide a valid client index to delete.");
+            }
+        } catch (NumberFormatException e) {
+            throw new FinanceProPlusException("Invalid input. Please provide a valid client index to delete.");
+        }
+        return index;
     }
 }
