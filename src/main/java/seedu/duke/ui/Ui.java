@@ -1,38 +1,28 @@
 package seedu.duke.ui;
 
-/**
- * Adopted from IP of ZT712002
- */
-
 import java.util.Scanner;
 /**
  * Ui class handles user interactions, including input and output.
- * @param IN Scanner object for reading user input
- * @param isActive boolean flag to control the main loop
- * @param userInput String to store the latest user input
- *
+ * Adopted from IP of ZT712002
  */
 public class Ui {
-    private final Scanner IN;
+    private  Scanner in;
     private boolean isActive;
     private String userInput;
 
-
-
-    public String getUserInput() {
-        return userInput;
-    }
 
     /**
      * Constructor for Ui class. Initializes the Scanner and sets the active flag to true.
      */
     public Ui() {
-        this.IN = new Scanner(System.in);
+        this.in = new Scanner(System.in);
         this.isActive = true;
     }
-
+    public String getUserInput() {
+        return userInput;
+    }
     public void setUserInput() {
-        this.userInput = IN.nextLine();
+        this.userInput = in.nextLine();
     }
 
     public boolean getIsActive() {

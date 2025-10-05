@@ -1,6 +1,5 @@
 package seedu.duke.container;
 
-import seedu.duke.client.Client;
 import seedu.duke.exception.FinanceProPlusException;
 
 public interface ListContainer {

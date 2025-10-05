@@ -12,8 +12,8 @@ import seedu.duke.ui.Ui;
 
 
 public class FinanceProPlus {
-    private Ui ui;
     private static boolean runLoop;
+    private Ui ui;
     private MeetingList meetings;
     private PolicyList policies;
     private ClientList clients;
@@ -41,8 +41,7 @@ public class FinanceProPlus {
                 Command c = Parser.parse(unprocessedInput);
                 c.execute(lookUpTable);
                 c.printExecutionMessage();
-            }
-            catch (FinanceProPlusException e) {
+            } catch (FinanceProPlusException e) {
                 System.out.println(e.getMessage());
             }
 

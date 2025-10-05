@@ -9,16 +9,12 @@ import java.util.Map;
 import java.util.List;
 
 public class Client {
-    private static final String CLIENT_REGEX = "\\\\s+(?=[a-z]+\\\\/)";
+    private static final String CLIENT_REGEX = "\\s+(?=[a-z]+\\/)";
     private String name;
     private PolicyList policyList;
-
-    public String getNric() {
-        return nric;
-    }
-
     private String nric;
     private int phoneNumber;
+
     public Client(String arguments) throws FinanceProPlusException {
         policyList = new PolicyList();
         Map<String, String> detailsMap = parseClientDetails(arguments);
@@ -39,7 +35,7 @@ public class Client {
     public static Map<String, String> parseClientDetails(String clientDetails) {
         Map<String, String> detailsMap = new HashMap<>();
         String trimmedDetails = clientDetails.trim();
-        String[] parts = trimmedDetails.split("\\s+(?=[a-z]+\\/)");
+        String[] parts = trimmedDetails.split(CLIENT_REGEX);
         for (String part : parts) {
             String[] keyValue = part.split("/", 2);
             if (keyValue.length == 2) {
@@ -49,12 +45,6 @@ public class Client {
             }
         }
         return detailsMap;
-    }
-    public String getName() {
-        return name;
-    }
-    public int getPhoneNumber() {
-        return phoneNumber;
     }
     @Override
     public String toString() {
