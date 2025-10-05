@@ -2,6 +2,7 @@ package seedu.duke.command;
 
 import seedu.duke.container.ListContainer;
 import seedu.duke.container.LookUpTable;
+import seedu.duke.exception.FinanceProPlusException;
 
 public class DeleteCommand extends Command{
 
@@ -12,7 +13,7 @@ public class DeleteCommand extends Command{
     }
 
     @Override
-    public void execute(LookUpTable lookUpTable) throws seedu.duke.exception.FinanceProPlusException {
+    public void execute(LookUpTable lookUpTable) throws FinanceProPlusException {
         ListContainer listContainer = lookUpTable.getList(subtype);
         listContainer.deleteItem(arguments);
     }

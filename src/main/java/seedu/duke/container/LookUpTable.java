@@ -7,7 +7,10 @@ import seedu.duke.policy.PolicyList;
 
 import java.util.HashMap;
 
-
+/*
+ * A lookup table that maps string keys to their respective list containers.
+ * This allows for easy retrieval of different types of lists (e.g., clients, policies, meetings)
+ */
 public class LookUpTable {
     private HashMap<String, ListContainer> map;
     public LookUpTable(ClientList clients, PolicyList policies, MeetingList meetings) {

@@ -1,5 +1,7 @@
 package seedu.duke.command;
 
+import seedu.duke.container.ListContainer;
+import seedu.duke.container.LookUpTable;
 import seedu.duke.exception.FinanceProPlusException;
 
 public class ListCommand extends Command{
@@ -9,8 +11,8 @@ public class ListCommand extends Command{
         arguments = subtype;
     }
     @Override
-    public void execute(seedu.duke.container.LookUpTable lookUpTable) throws FinanceProPlusException {
-        seedu.duke.container.ListContainer listContainer = lookUpTable.getList(arguments);
+    public void execute(LookUpTable lookUpTable) throws FinanceProPlusException {
+        ListContainer listContainer = lookUpTable.getList(arguments);
         listContainer.listItems();
     }
     @Override
