@@ -26,4 +26,9 @@ public class ClientList implements ListContainer {
         Client client = new Client(arguments);
         addClient(client);
     }
+
+    @Override
+    public void deleteItem(String arguments) {
+
+    }
 }

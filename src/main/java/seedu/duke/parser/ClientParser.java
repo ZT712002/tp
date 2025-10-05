@@ -25,9 +25,8 @@ public class ClientParser extends Parser{
             return new AddCommand(commandType, args);
         case "delete":
             return new DeleteCommand(commandType, args);
-        case "default":
+        default:
             throw new FinanceProPlusException("Invalid command subtype, Please try again");
         }
-        return null;
     }
 }

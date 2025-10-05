@@ -18,4 +18,9 @@ public class MeetingList implements ListContainer {
     public void addItem(String arguments) throws FinanceProPlusException {
 
     }
+
+    @Override
+    public void deleteItem(String arguments) {
+
+    }
 }
