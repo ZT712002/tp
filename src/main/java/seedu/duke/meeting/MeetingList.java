@@ -16,16 +16,16 @@ public class MeetingList implements ListContainer {
 
     @Override
     public void addItem(String arguments) throws FinanceProPlusException {
-
+        throw new FinanceProPlusException("Not Implemented yet");
     }
 
     @Override
-    public void deleteItem(String arguments) {
-
+    public void deleteItem(String arguments) throws FinanceProPlusException {
+        throw new FinanceProPlusException("Not Implemented yet");
     }
 
     @Override
-    public void listItems() {
-
+    public void listItems() throws FinanceProPlusException {
+        throw new FinanceProPlusException("Not Implemented yet");
     }
 }
