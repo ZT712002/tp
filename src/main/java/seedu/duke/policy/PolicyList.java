@@ -38,7 +38,10 @@ public class PolicyList implements ListContainer {
     public String toString(){
         String result = "";
         for (int i = 0; i < policies.size(); i++) {
-            result += (i + 1) + ". " + policies.get(i).toString() + " ";
+            result += (i + 1) + ". " + policies.get(i).toString();
+            if (i != policies.size() - 1) {
+                result += " ";
+            }
         }
         return result;
     }
