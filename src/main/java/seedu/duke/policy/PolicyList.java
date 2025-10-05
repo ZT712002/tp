@@ -25,6 +25,11 @@ public class PolicyList implements ListContainer {
     }
 
     @Override
+    public void listItems() {
+
+    }
+
+    @Override
     public String toString(){
         String result = "";
         for (int i = 0; i < policies.size(); i++) {

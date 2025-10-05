@@ -7,4 +7,6 @@ public interface ListContainer {
     void addItem(String arguments) throws FinanceProPlusException;
 
     void deleteItem(String arguments);
+
+    void listItems();
 }

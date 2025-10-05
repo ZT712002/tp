@@ -23,4 +23,9 @@ public class MeetingList implements ListContainer {
     public void deleteItem(String arguments) {
 
     }
+
+    @Override
+    public void listItems() {
+
+    }
 }

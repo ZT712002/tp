@@ -1,17 +1,34 @@
 package seedu.duke.parser;
 
+import seedu.duke.command.Command;
+import seedu.duke.command.ListCommand;
 import seedu.duke.exception.FinanceProPlusException;
 
 public class ListParser extends Parser{
-    private String commandType;
     private String commandSubtype;
     public ListParser(String type, String commandArgs) throws FinanceProPlusException {
-        this.commandType = type;
         String[] commandParts = splitCommand(commandArgs);
         if (commandParts.length > 1){
-            throw new FinanceProPlusException("Too many arguments for list command");
+            throw new FinanceProPlusException("Too many arguments for list command. Please use this format" +
+                    "'list <client/meeting/policy>'");
         }
         this.commandSubtype = commandParts[0].toLowerCase();
-        System.out.println(this.commandSubtype + " " + this.commandType);
     }
+
+    @Override
+    protected Command executeAndCreateCommand() throws FinanceProPlusException {
+        String subtype = commandSubtype;
+        boolean isValid = checkIsValid(subtype);
+        if(!isValid){
+            throw new FinanceProPlusException("Invalid list command subtype. Please use this format" +
+                    "'list <client/meeting/policy>'");
+        }
+        return new ListCommand(subtype);
+    }
+
+    private boolean checkIsValid(String subtype) {
+        return subtype.equals("client") || subtype.equals("meeting") || subtype.equals("policy");
+    }
+
+
 }
