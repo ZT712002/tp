@@ -6,4 +6,19 @@ Hello from
 |____/ \__,_|_|\_\___|
 
 What is your name?
-Hello James Gosling
+No clients found.
+Noted. I've added this client:
+Name: Zendne, ID: T0329123L, Contact: 12345678, Policies: 1. 88888888
+Added successfully!
+----------------------------------------------------
+Noted. I've added this client:
+Name: nednez, ID: T0329123L, Contact: 12345678, Policies: 1. 88888888
+Added successfully!
+----------------------------------------------------
+Noted. I've removed this client:
+Name: Zendne, ID: T0329123L, Contact: 12345678, Policies: 1. 88888888
+----------------------------------------------------
+Here are the clients in your list:
+1. Name: nednez, ID: T0329123L, Contact: 12345678, Policies: 1. 88888888
+Exiting....
+Bye. See you next time!

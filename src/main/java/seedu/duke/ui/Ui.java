@@ -24,6 +24,9 @@ public class Ui {
     public void setUserInput() {
         this.userInput = in.nextLine();
     }
+    public void closeScanner() {
+        in.close();
+    }
 
     public boolean getIsActive() {
         return isActive;

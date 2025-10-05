@@ -46,7 +46,9 @@ public class FinanceProPlus {
             }
 
         }
+        ui.closeScanner();
         ui.printGoodbyeMessage();
+
     }
     /**
      * Main entry-point for the java.duke.Duke application.
