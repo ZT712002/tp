@@ -25,7 +25,8 @@ public class Client {
         List<String> requiredKeys = List.of("n", "c", "id", "p");
         for (String key : requiredKeys) {
             if (!detailsMap.containsKey(key) || detailsMap.get(key).isEmpty()) {
-                throw new FinanceProPlusException("Missing or empty required field: " + key);
+                throw new FinanceProPlusException("Invalid client details. Please provide all required fields: "
+                        + "n/NAME c/CONTACT id/NRIC p/POLICY");
             }
         }
         name = detailsMap.get("n");
@@ -58,7 +59,7 @@ public class Client {
     @Override
     public String toString() {
         return "Name: " + name + ", ID: " + nric + ", Contact: " + phoneNumber + ", Policies: " +
-                policyList.getPolicyList().toString();
+                policyList.toString();
     }
 
 }

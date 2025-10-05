@@ -5,4 +5,9 @@ public class Policy {
     public Policy(String policyNumber) {
         this.policyNumber = policyNumber;
     }
+
+    @Override
+    public String toString() {
+        return policyNumber;
+    }
 }

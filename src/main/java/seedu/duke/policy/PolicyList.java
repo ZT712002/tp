@@ -18,4 +18,12 @@ public class PolicyList implements ListContainer {
     public void addItem(String arguments) throws FinanceProPlusException {
 
     }
+    @Override
+    public String toString(){
+        String result = "";
+        for (int i = 0; i < policies.size(); i++) {
+            result += (i + 1) + ". " + policies.get(i).toString() + " ";
+        }
+        return result;
+    }
 }
