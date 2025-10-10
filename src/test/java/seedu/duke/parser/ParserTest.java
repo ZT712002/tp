@@ -1,10 +1,12 @@
 package seedu.duke.parser;
 
 import org.junit.jupiter.api.Test;
-import seedu.duke.command.Command;
 import seedu.duke.exception.FinanceProPlusException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ParserTest {
 

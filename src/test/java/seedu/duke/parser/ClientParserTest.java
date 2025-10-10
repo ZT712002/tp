@@ -21,6 +21,13 @@ class ClientParserTest {
     }
 
     @Test
+    void executeAndCreateCommand_addCommandWithoutMissingArgs_returnsAddCommand() throws FinanceProPlusException {
+        ClientParser parser = new ClientParser("client", "add /n John Doe c/ 12345678 id/");
+        Command command = parser.executeAndCreateCommand();
+        assertInstanceOf(AddCommand.class, command);
+    }
+
+    @Test
     void executeAndCreateCommand_deleteCommandWithArgs_returnsDeleteCommand() throws FinanceProPlusException {
         ClientParser parser = new ClientParser("client", "delete 1");
         Command command = parser.executeAndCreateCommand();
