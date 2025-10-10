@@ -1,1 +1,6 @@
-James Gosling
+list client
+client add n/ Zendne c/ 12345678 id/T0329123L p/88888888
+client add n/ nednez c/ 12345678 id/T0329123L p/88888888
+client delete 1
+list client
+exit
