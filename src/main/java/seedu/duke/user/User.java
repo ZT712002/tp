@@ -1,6 +1,7 @@
 package seedu.duke.user;
 
 import seedu.duke.exception.FinanceProPlusException;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,6 +55,10 @@ public class User {
 
     @Override
     public String toString() {
-        return "User Details:\n" + "Name: " + name + "\n" + "Email: " + email + "\n" + "Phone: " + phoneNumber + "\n" + "Representative No.: " + representativeNumber;
+        return "User Details:\n"
+                + "Name: " + name + "\n"
+                + "Email: " + email + "\n"
+                + "Phone: " + phoneNumber
+                + "\n" + "Representative No.: " + representativeNumber;
     }
 }

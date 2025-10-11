@@ -15,7 +15,7 @@ public class UserList implements ListContainer {
     @Override
     public void addItem(String arguments) throws FinanceProPlusException {
         if (user != null) {
-            throw new FinanceProPlusException("A user already exists. Delete the existing user before adding a new one.");
+            throw new FinanceProPlusException("A user already exists. Delete user before adding a new one.");
         }
         user = new User(arguments);
         System.out.println("Noted. I've added this user:");
