@@ -3,7 +3,7 @@ package seedu.duke.container;
 import seedu.duke.client.ClientList;
 import seedu.duke.meeting.MeetingList;
 import seedu.duke.policy.PolicyList;
-
+import seedu.duke.user.UserList;
 
 import java.util.HashMap;
 
@@ -13,11 +13,12 @@ import java.util.HashMap;
  */
 public class LookUpTable {
     private HashMap<String, ListContainer> map;
-    public LookUpTable(ClientList clients, PolicyList policies, MeetingList meetings) {
+    public LookUpTable(ClientList clients, PolicyList policies, MeetingList meetings , UserList user) {
         map = new HashMap<String, ListContainer>();
         map.put("client", clients);
         map.put("policy", policies);
         map.put("meeting", meetings);
+        map.put("user", user);
     }
     public ListContainer getList(String key) {
         return map.get(key);

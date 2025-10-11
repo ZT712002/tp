@@ -22,6 +22,8 @@ public class Parser {
             return new ClientParser(commandType ,commandArgs);
         case "list":
             return new ListParser(commandType, commandArgs);
+        case "user":
+            return new UserParser(commandType, commandArgs);
         case "exit":
             return new ExitParser();
         default:
