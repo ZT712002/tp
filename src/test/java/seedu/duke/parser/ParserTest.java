@@ -37,6 +37,12 @@ class ParserTest {
     }
 
     @Test
+    void selectParserType_validPolicyCommand_returnsPolicyParser() throws FinanceProPlusException {
+        Parser parser = Parser.selectParserType("policy add");
+        assertInstanceOf(PolicyParser.class, parser);
+    }
+
+    @Test
     void selectParserType_invalidCommand_throwsException() {
         String invalidInput = "unknownCommand";
         Exception exception = assertThrows(FinanceProPlusException.class, () -> {
