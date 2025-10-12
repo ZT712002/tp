@@ -42,10 +42,11 @@ public class Ui {
         printLineDivider();
         System.out.println("New user? Here are some commands to get you started:");
         System.out.println("  1. 'client add n/<NAME> c/<CONTACT> id/<NRIC> p/<POLICY>' - Add a new client");
-        System.out.println("  2. 'list client' - View all your clients");
-        System.out.println("  3. 'list meeting' - View all your meetings");
-        System.out.println("  4. 'list policy' - View all your policies");
-        System.out.println("  5. 'exit' - Exit the application");
+        System.out.println("  2. 'policy add n/<NAME> d/<DETAILS>' - Add a new policy");
+        System.out.println("  3. 'list client' - View all your clients");
+        System.out.println("  4. 'list meeting' - View all your meetings");
+        System.out.println("  5. 'list policy' - View all your policies");
+        System.out.println("  6. 'exit' - Exit the application");
         System.out.println("Tip: Start by adding a client with the full details!");
         printLineDivider();
         System.out.println("What is your command?");
