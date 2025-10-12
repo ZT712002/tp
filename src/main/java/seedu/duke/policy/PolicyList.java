@@ -16,22 +16,48 @@ public class PolicyList implements ListContainer {
 
     @Override
     public void addItem(String arguments) throws FinanceProPlusException {
-        throw new FinanceProPlusException("Not Implemented yet");
+        Policy policy = new Policy(arguments, true);
+        addPolicy(policy);
+        System.out.println("Noted. I've added this policy:");
+        System.out.println(policy.toString());
     }
 
     @Override
     public void deleteItem(String arguments) throws FinanceProPlusException {
-        throw new FinanceProPlusException("Not Implemented yet");
+        if(policies.size() == 0) {
+            System.out.println("No policies to delete.");
+            return;
+        }
+        int index = checkDeleteIndex(arguments);
+        Policy removedPolicy = policies.remove(index);
+        System.out.println("Noted. I've removed this policy:");
+        System.out.println(removedPolicy.toString());
     }
 
     @Override
     public void listItems() throws FinanceProPlusException {
-        throw new FinanceProPlusException("Not Implemented yet");
+        if (policies.size() == 0) {
+            System.out.println("No policies found.");
+        } else {
+            System.out.println("Here are the policies in your list:");
+            for (int i = 0; i < policies.size(); i++) {
+                System.out.println((i + 1) + ". " + policies.get(i).toString());
+            }
+        }
     }
 
     @Override
     public int checkDeleteIndex(String arguments) throws FinanceProPlusException {
-        throw new FinanceProPlusException("Not Implemented yet");
+        int index;
+        try {
+            index = Integer.parseInt(arguments) - 1;
+            if (index < 0 || index >= policies.size()) {
+                throw new FinanceProPlusException("Invalid index. Please provide a valid policy index to delete.");
+            }
+        } catch (NumberFormatException e) {
+            throw new FinanceProPlusException("Invalid input. Please provide a valid policy index to delete.");
+        }
+        return index;
     }
 
     @Override
