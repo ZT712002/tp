@@ -12,6 +12,18 @@ Tip: Start by adding a client with the full details!
 *************************************
 What is your command?
 No clients found.
+No policies found.
+Noted. I've added this policy:
+Name: Life Insurance, Details: Comprehensive life insurance with 500k coverage
+Added successfully!
+----------------------------------------------------
+Noted. I've added this policy:
+Name: Health Insurance, Details: Full medical coverage with dental
+Added successfully!
+----------------------------------------------------
+Here are the policies in your list:
+1. Name: Life Insurance, Details: Comprehensive life insurance with 500k coverage
+2. Name: Health Insurance, Details: Full medical coverage with dental
 Noted. I've added this client:
 Name: Zendne, ID: T0329123L, Contact: 12345678, Policies: 1. 88888888
 Added successfully!
@@ -25,5 +37,8 @@ Name: Zendne, ID: T0329123L, Contact: 12345678, Policies: 1. 88888888
 ----------------------------------------------------
 Here are the clients in your list:
 1. Name: nednez, ID: T0329123L, Contact: 12345678, Policies: 1. 88888888
+Here are the policies in your list:
+1. Name: Life Insurance, Details: Comprehensive life insurance with 500k coverage
+2. Name: Health Insurance, Details: Full medical coverage with dental
 Exiting....
 Bye. See you next time!
