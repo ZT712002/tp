@@ -62,8 +62,8 @@ class ClientParserTest {
 
     @Test
     void constructor_emptyCommandArgs_throwsException() {
-        ClientParser parser = new ClientParser("client", "");
-        Exception exception = assertThrows(FinanceProPlusException.class, parser::executeAndCreateCommand);
-        assertEquals("Invalid command subtype, Please try again", exception.getMessage());
+        AssertionError error = assertThrows(AssertionError.class, () -> new ClientParser("client",
+                ""));
+        assertEquals("Client commands should have arguments", error.getMessage());
     }
 }
