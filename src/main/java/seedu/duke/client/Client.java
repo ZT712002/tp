@@ -16,7 +16,8 @@ public class Client {
     private int phoneNumber;
 
     public Client(String arguments) throws FinanceProPlusException {
-        assert arguments != null && !arguments.trim().isEmpty() : "Arguments for client creation cannot be null or empty";
+        assert arguments != null && !arguments.trim().isEmpty() : "Arguments for client creation cannot be null or" +
+                " empty";
         policyList = new PolicyList();
         assert policyList != null : "policyList should not be null after initialization";
         Map<String, String> detailsMap = parseClientDetails(arguments);
