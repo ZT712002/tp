@@ -7,7 +7,9 @@ import seedu.duke.exception.FinanceProPlusException;
 import seedu.duke.meeting.MeetingList;
 import seedu.duke.parser.Parser;
 import seedu.duke.policy.PolicyList;
+import seedu.duke.user.UserList;
 import seedu.duke.ui.Ui;
+
 
 
 
@@ -18,13 +20,15 @@ public class FinanceProPlus {
     private PolicyList policies;
     private ClientList clients;
     private LookUpTable lookUpTable;
+    private UserList user;
     public FinanceProPlus() {
         ui = new Ui();
         runLoop = true;
         meetings = new MeetingList();
         policies = new PolicyList();
         clients = new ClientList();
-        lookUpTable = new LookUpTable(clients, policies, meetings);
+        user = new UserList();
+        lookUpTable = new LookUpTable(clients, policies, meetings,user);
     }
 
     public static void terminate() {
