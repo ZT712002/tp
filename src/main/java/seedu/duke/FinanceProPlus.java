@@ -43,6 +43,7 @@ public class FinanceProPlus {
                 ui.setUserInput();
                 String unprocessedInput = ui.getUserInput();
                 Command c = Parser.parse(unprocessedInput);
+                assert c != null : "Command should not be null";
                 c.execute(lookUpTable);
                 c.printExecutionMessage();
             } catch (FinanceProPlusException e) {

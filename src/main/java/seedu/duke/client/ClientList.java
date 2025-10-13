@@ -9,11 +9,15 @@ public class ClientList implements ListContainer {
     private ArrayList<Client> clients;
     public ClientList() {
         this.clients = new ArrayList<Client>();
+        assert clients != null : "Client list should be initialized properly";
     }
 
 
     public void addClient(Client client) {
+        assert client != null : "Client to be added should not be null";
+        int oldSize = clients.size();
         clients.add(client);
+        assert clients.size() == oldSize + 1 : "Client list size should increase by 1 after adding a client";
         System.out.println("Noted. I've added this client:");
         System.out.println(client.toString());
     }
@@ -33,8 +37,10 @@ public class ClientList implements ListContainer {
             System.out.println("No clients to delete.");
             return;
         }
+        int oldSize = clients.size();
         int index = checkDeleteIndex(arguments);
         Client removedClient = clients.remove(index);
+        assert clients.size() == oldSize - 1 : "Client list size should decrease by 1 after deleting a client";
         System.out.println("Noted. I've removed this client:");
         System.out.println(removedClient.toString());
     }
