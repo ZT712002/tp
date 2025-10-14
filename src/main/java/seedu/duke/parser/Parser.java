@@ -24,6 +24,8 @@ public class Parser {
             return new ListParser(commandType, commandArgs);
         case "user":
             return new UserParser(commandType, commandArgs);
+        case "policy":
+            return new PolicyParser(commandType, commandArgs);
         case "meeting":
             return new MeetingParser(commandType, commandArgs);
         case "exit":

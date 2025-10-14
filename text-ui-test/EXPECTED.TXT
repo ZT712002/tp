@@ -1,5 +1,30 @@
+*************************************
+Welcome to FinanceProPlus!
+Your personal finance management assistant.
+*************************************
+New user? Here are some commands to get you started:
+  1. 'client add n/<NAME> c/<CONTACT> id/<NRIC> p/<POLICY>' - Add a new client
+  2. 'policy add n/<NAME> d/<DETAILS>' - Add a new policy
+  3. 'list client' - View all your clients
+  4. 'list meeting' - View all your meetings
+  5. 'list policy' - View all your policies
+  6. 'exit' - Exit the application
+Tip: Start by adding a client with the full details!
+*************************************
 What is your command?
 No clients found.
+No policies found.
+Noted. I've added this policy:
+Name: Life Insurance, Details: Comprehensive life insurance with 500k coverage
+Added successfully!
+----------------------------------------------------
+Noted. I've added this policy:
+Name: Health Insurance, Details: Full medical coverage with dental
+Added successfully!
+----------------------------------------------------
+Here are the policies in your list:
+1. Name: Life Insurance, Details: Comprehensive life insurance with 500k coverage
+2. Name: Health Insurance, Details: Full medical coverage with dental
 Noted. I've added this client:
 Name: Zendne, ID: T0329123L, Contact: 12345678, Policies: 1. 88888888
 Added successfully!
@@ -13,5 +38,8 @@ Name: Zendne, ID: T0329123L, Contact: 12345678, Policies: 1. 88888888
 ----------------------------------------------------
 Here are the clients in your list:
 1. Name: nednez, ID: T0329123L, Contact: 12345678, Policies: 1. 88888888
+Here are the policies in your list:
+1. Name: Life Insurance, Details: Comprehensive life insurance with 500k coverage
+2. Name: Health Insurance, Details: Full medical coverage with dental
 Exiting....
 Bye. See you next time!

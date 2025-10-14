@@ -1,6 +1,11 @@
 list client
+policy list
+policy add n/Life Insurance d/Comprehensive life insurance with 500k coverage
+policy add n/Health Insurance d/Full medical coverage with dental
+policy list
 client add n/ Zendne c/ 12345678 id/T0329123L p/88888888
 client add n/ nednez c/ 12345678 id/T0329123L p/88888888
 client delete 1
 list client
+list policy
 exit
