@@ -62,4 +62,7 @@ public class Client {
                 policyList.toString();
     }
 
+    public String getName() {
+        return name;
+    }
 }

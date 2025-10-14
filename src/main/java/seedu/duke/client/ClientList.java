@@ -4,8 +4,10 @@ import seedu.duke.container.ListContainer;
 import seedu.duke.exception.FinanceProPlusException;
 
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 public class ClientList implements ListContainer {
+    private static final Logger logger =Logger.getLogger(ClientList.class.getName());
     private ArrayList<Client> clients;
     public ClientList() {
         this.clients = new ArrayList<Client>();
@@ -29,6 +31,7 @@ public class ClientList implements ListContainer {
     public void addItem(String arguments) throws FinanceProPlusException {
         Client client = new Client(arguments);
         addClient(client);
+        logger.info("Successfully added new client: " + client.getName());
     }
 
     @Override
@@ -43,6 +46,7 @@ public class ClientList implements ListContainer {
         assert clients.size() == oldSize - 1 : "Client list size should decrease by 1 after deleting a client";
         System.out.println("Noted. I've removed this client:");
         System.out.println(removedClient.toString());
+        logger.info("Successfully deleted client: " + removedClient.getName());
     }
 
     @Override
@@ -67,6 +71,7 @@ public class ClientList implements ListContainer {
         } catch (NumberFormatException e) {
             throw new FinanceProPlusException("Invalid input. Please provide a valid client index to delete.");
         }
+        logger.fine("Validated delete index: " + index);
         return index;
     }
 }

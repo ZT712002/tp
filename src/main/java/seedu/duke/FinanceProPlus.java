@@ -4,6 +4,7 @@ import seedu.duke.client.ClientList;
 import seedu.duke.command.Command;
 import seedu.duke.container.LookUpTable;
 import seedu.duke.exception.FinanceProPlusException;
+import seedu.duke.logger.LoggerConfig;
 import seedu.duke.meeting.MeetingList;
 import seedu.duke.parser.Parser;
 import seedu.duke.policy.PolicyList;
@@ -28,6 +29,7 @@ public class FinanceProPlus {
         policies = new PolicyList();
         clients = new ClientList();
         user = new UserList();
+        LoggerConfig.setup();
         lookUpTable = new LookUpTable(clients, policies, meetings,user);
     }
 
