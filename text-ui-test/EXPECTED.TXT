@@ -36,6 +36,12 @@ Added successfully!
 Noted. I've removed this client:
 Name: Zendne, ID: T0329123L, Contact: 12345678, Policies: 1. 88888888
 ----------------------------------------------------
+Noted. I've added this meeting:
+Title: TEST, Client: FOO, Date: 18-02-2025, Time: 10:00 to 14:30
+Added successfully!
+----------------------------------------------------
+Here are the meetings in your list:
+1. Title: TEST, Client: FOO, Date: 18-02-2025, Time: 10:00 to 14:30
 Here are the clients in your list:
 1. Name: nednez, ID: T0329123L, Contact: 12345678, Policies: 1. 88888888
 Here are the policies in your list:

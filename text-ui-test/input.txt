@@ -6,6 +6,8 @@ policy list
 client add n/ Zendne c/ 12345678 id/T0329123L p/88888888
 client add n/ nednez c/ 12345678 id/T0329123L p/88888888
 client delete 1
+meeting add t/TEST c/FOO d/ 18-02-2025 from/10:00 to/14:30
+list meeting
 list client
 list policy
 exit
