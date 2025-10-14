@@ -6,6 +6,7 @@ import seedu.duke.exception.FinanceProPlusException;
 public class Parser {
     public static Command parse(String userInput) throws FinanceProPlusException {
         Parser commandParser = selectParserType(userInput);
+        assert commandParser != null : "Parser should not be null";
         return commandParser.executeAndCreateCommand();
     }
 

@@ -4,16 +4,22 @@ import seedu.duke.container.ListContainer;
 import seedu.duke.exception.FinanceProPlusException;
 
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 public class ClientList implements ListContainer {
+    private static final Logger logger =Logger.getLogger(ClientList.class.getName());
     private ArrayList<Client> clients;
     public ClientList() {
         this.clients = new ArrayList<Client>();
+        assert clients != null : "Client list should be initialized properly";
     }
 
 
     public void addClient(Client client) {
+        assert client != null : "Client to be added should not be null";
+        int oldSize = clients.size();
         clients.add(client);
+        assert clients.size() == oldSize + 1 : "Client list size should increase by 1 after adding a client";
         System.out.println("Noted. I've added this client:");
         System.out.println(client.toString());
     }
@@ -25,6 +31,7 @@ public class ClientList implements ListContainer {
     public void addItem(String arguments) throws FinanceProPlusException {
         Client client = new Client(arguments);
         addClient(client);
+        logger.info("Successfully added new client: " + client.getName());
     }
 
     @Override
@@ -33,10 +40,13 @@ public class ClientList implements ListContainer {
             System.out.println("No clients to delete.");
             return;
         }
+        int oldSize = clients.size();
         int index = checkDeleteIndex(arguments);
         Client removedClient = clients.remove(index);
+        assert clients.size() == oldSize - 1 : "Client list size should decrease by 1 after deleting a client";
         System.out.println("Noted. I've removed this client:");
         System.out.println(removedClient.toString());
+        logger.info("Successfully deleted client: " + removedClient.getName());
     }
 
     @Override
@@ -61,6 +71,7 @@ public class ClientList implements ListContainer {
         } catch (NumberFormatException e) {
             throw new FinanceProPlusException("Invalid input. Please provide a valid client index to delete.");
         }
+        logger.fine("Validated delete index: " + index);
         return index;
     }
 }

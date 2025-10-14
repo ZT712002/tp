@@ -11,6 +11,8 @@ public class ClientParser extends Parser{
     private String commandSubtype;
     private String arguments;
     public ClientParser(String type, String commandArgs) {
+        assert type.equals("client") : "ClientParser can only be used for client commands";
+        assert !commandArgs.isEmpty(): "Client commands should have arguments";
         this.commandType = type;
         String[] commandParts = splitCommand(commandArgs);
         this.commandSubtype = commandParts[0].toLowerCase();

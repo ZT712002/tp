@@ -13,5 +13,8 @@ src/main/resources/docs/
 *.iml
 bin/
 
+financeproplus.log
+financeproplus.log.lck
+
 /text-ui-test/ACTUAL.TXT
 text-ui-test/EXPECTED-UNIX.TXT
