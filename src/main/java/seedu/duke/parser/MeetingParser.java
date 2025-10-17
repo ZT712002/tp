@@ -23,6 +23,9 @@ public class MeetingParser extends Parser {
         case "add":
             return new AddCommand(commandType, arguments);
         case "delete":
+            if (arguments.trim().isEmpty()) {
+                throw new FinanceProPlusException("Invalid meeting command arguments");
+            }
             return new DeleteCommand(commandType, arguments);
         default:
             throw new FinanceProPlusException("Invalid meeting command subtype. Please use one of: "
