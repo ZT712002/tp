@@ -4,20 +4,29 @@ import seedu.duke.container.ListContainer;
 import seedu.duke.exception.FinanceProPlusException;
 
 import java.util.ArrayList;
+import java.util.logging.Logger;
+
 
 public class MeetingList implements ListContainer {
+    private static final Logger logger = Logger.getLogger(MeetingList.class.getName());
     private ArrayList<Meeting> meetings;
 
     public MeetingList() {
         this.meetings = new ArrayList<>();
+        assert meetings != null : "MeetingList should not be null after initialization";
     }
 
     @Override
     public void addItem(String arguments) throws FinanceProPlusException {
         Meeting meeting = new Meeting(arguments);
+        assert meeting != null : "Meeting to be added should not be null";
+        assert meetings != null : "MeetingList should not be null when adding an item";
+        int oldSize = meetings.size();
         meetings.add(meeting);
+        assert meetings.size() == oldSize + 1: "MeetingList size should increase by 1 after adding an item";
         System.out.println("Noted. I've added this meeting:");
         System.out.println(meeting.toString());
+        logger.info("Successfully added new meeting: " + meeting.getTitle());
     }
 
     @Override
@@ -26,10 +35,13 @@ public class MeetingList implements ListContainer {
             System.out.println("No meetings to delete.");
             return;
         }
+        int oldSize = meetings.size();
         int index = checkDeleteIndex(arguments);
         Meeting removedMeeting = meetings.remove(index);
+        assert meetings.size() == oldSize - 1 : "Meeting list size should decrease by 1 after deleting a meeting";
         System.out.println("Noted. I've removed this meeting:");
         System.out.println(removedMeeting.toString());
+        logger.info("Successfully deleted meeting: " + removedMeeting.getTitle());
     }
 
     @Override
@@ -55,6 +67,7 @@ public class MeetingList implements ListContainer {
         } catch (NumberFormatException e) {
             throw new FinanceProPlusException("Invalid input. Please provide a valid meeting index to delete.");
         }
+        logger.fine("Validated delete index: " + index);
         return index;
     }
 }

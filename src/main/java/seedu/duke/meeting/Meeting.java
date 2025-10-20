@@ -15,6 +15,7 @@ public class Meeting {
     private String endTime;
 
     public Meeting(String arguments) throws FinanceProPlusException {
+        assert arguments != null && !arguments.trim().isEmpty() : "Arguments for meetings creation cannot be null";
         Map<String, String> detailsMap = parseMeetingDetails(arguments);
         List<String> requiredKeys = List.of("t", "c", "d", "from");
         for (String key : requiredKeys) {
@@ -28,6 +29,9 @@ public class Meeting {
         client = detailsMap.get("c");
         startTime = detailsMap.get("from");
         endTime = detailsMap.get("to");
+        assert this.title != null && !title.isEmpty() : "Title should not be null or empty";
+        assert this.client != null && !client.isEmpty() : "Client should not be null or empty";
+        assert this.date != null && !date.isEmpty() : "Date should not be null or empty";
 
         validateDateFormat(date);
         validateTimeFormat(startTime);
@@ -48,7 +52,11 @@ public class Meeting {
         }
     }
 
+    public String getTitle() {
+        return title;
+    }
     public static Map<String, String> parseMeetingDetails(String meetingDetails) {
+        assert meetingDetails != null : "Input string for parsing cannot be null";
         Map<String, String> detailsMap = new HashMap<>();
         String trimmedDetails = meetingDetails.trim();
         String[] parts = trimmedDetails.split(MEETING_REGEX);
@@ -60,11 +68,16 @@ public class Meeting {
                 detailsMap.put(key, value);
             }
         }
+        assert detailsMap != null : "The resulting details map should not be null";
         return detailsMap;
     }
 
+
     @Override
     public String toString() {
+        assert title != null && !title.isEmpty() : "Title should not be null or empty";
+        assert client != null && !client.isEmpty() : "Client should not be null or empty";
+        assert date != null && !date.isEmpty() : "Date should not be null or empty";
         String timeInfo = "";
         if (startTime != null && endTime != null) {
             timeInfo = ", Time: " + startTime + " to " + endTime;
