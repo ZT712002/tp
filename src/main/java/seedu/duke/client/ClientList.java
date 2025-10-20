@@ -4,6 +4,8 @@ import seedu.duke.container.ListContainer;
 import seedu.duke.exception.FinanceProPlusException;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 public class ClientList implements ListContainer {
@@ -29,6 +31,15 @@ public class ClientList implements ListContainer {
 
     @Override
     public void addItem(String arguments) throws FinanceProPlusException {
+        Map<String, String> detailsMap = Client.parseClientDetails(arguments);
+        String nric = detailsMap.get("id");
+        if (nric == null || nric.isEmpty()) {
+            throw new FinanceProPlusException("Uniqueness Check Failed: NRIC (id/) must be provided.");
+        }
+        if (findClientByNric(nric).isPresent()) {
+            throw new FinanceProPlusException("Uniqueness Check Failed: A client with NRIC '"
+                    + nric + "' already exists.");
+        }
         Client client = new Client(arguments);
         addClient(client);
         logger.info("Successfully added new client: " + client.getName());
@@ -37,6 +48,7 @@ public class ClientList implements ListContainer {
     @Override
     public void addItem(String arguments, ListContainer policyList) throws FinanceProPlusException {
         Client client = new Client(arguments, policyList);
+
         addClient(client);
         logger.info("Successfully added new client: " + client.getName());
     }
@@ -80,5 +92,11 @@ public class ClientList implements ListContainer {
         }
         logger.fine("Validated delete index: " + index);
         return index;
+    }
+    public Optional<Client> findClientByNric(String nric) {
+        assert nric != null && !nric.isEmpty() : "NRIC to find cannot be null or empty";
+        return clients.stream()
+                .filter(client -> client.getNric().equals(nric))
+                .findFirst();
     }
 }

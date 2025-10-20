@@ -93,4 +93,7 @@ public class Client {
     public String getName() {
         return name;
     }
+    public String getNric() {
+        return nric;
+    }
 }
