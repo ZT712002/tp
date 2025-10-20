@@ -10,6 +10,7 @@ public class Policy {
     private static final String POLICY_REGEX = "\\s+(?=[a-z]+\\/)";
     private String name;
     private String details;
+
     
     public Policy(String policyNumber) {
         this.name = policyNumber;

@@ -26,8 +26,6 @@ public class PolicyParser extends Parser{
             return new AddCommand(commandType, args);
         case "delete":
             return new DeleteCommand(commandType, args);
-        case "list":
-            return new ListCommand(commandType);
         default:
             throw new FinanceProPlusException("Invalid command subtype, Please try again");
         }
