@@ -11,8 +11,11 @@ public class UserParser extends Parser {
     private String arguments;
 
     public UserParser(String type, String commandArgs) {
+        assert type.equals("user"): "UserParser: type must be user";
+        assert !commandArgs.isEmpty(): "User commands should have arguments";
         this.commandType = type;
         String[] commandParts = splitCommand(commandArgs);
+        assert commandParts.length > 0 : "Command parts should contain at least one element";
         this.commandSubtype = commandParts[0].toLowerCase();
         this.arguments = commandParts.length > 1 ? commandParts[1] : "";
     }

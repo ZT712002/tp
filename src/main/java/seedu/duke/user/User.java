@@ -14,8 +14,11 @@ public class User {
     private String representativeNumber;
 
     public User(String arguments) throws FinanceProPlusException {
-        Map<String, String> detailsMap = parseUserDetails(arguments);
+        assert arguments != null && !arguments.trim().isEmpty()
+                : "Arguments for user creation cannot be null or empty";
 
+        Map<String, String> detailsMap = parseUserDetails(arguments);
+        assert detailsMap != null : "Parsed user details map should not be null after parsing";
         List<String> requiredKeys = List.of("n", "e", "p", "r");
 
         for (String key : requiredKeys) {
@@ -34,9 +37,17 @@ public class User {
         } catch (NumberFormatException ex) {
             throw new FinanceProPlusException("Invalid phone number format. Please enter digits only.");
         }
+        assert this.name != null && !this.name.isEmpty()
+                : "User name should be initialized";
+        assert this.email != null && !this.email.isEmpty()
+                : "User email should be initialized";
+        assert this.representativeNumber != null && !this.representativeNumber.isEmpty()
+                : "User representative number should be initialized";
     }
 
     public static Map<String, String> parseUserDetails(String userDetails) {
+        assert userDetails != null : "Input string for parsing cannot be null";
+
         Map<String, String> detailsMap = new HashMap<>();
         String trimmedDetails = userDetails.trim();
         String[] parts = trimmedDetails.split(USER_REGEX);
@@ -49,12 +60,15 @@ public class User {
                 detailsMap.put(key, value);
             }
         }
-
+        assert detailsMap != null : "The resulting details map should not be null";
         return detailsMap;
     }
 
     @Override
     public String toString() {
+        assert name != null : "Name should not be null when calling toString";
+        assert email != null : "Email should not be null when calling toString";
+        assert representativeNumber != null : "Representative number should not be null when calling toString";
         return "User Details:\n"
                 + "Name: " + name + "\n"
                 + "Email: " + email + "\n"
