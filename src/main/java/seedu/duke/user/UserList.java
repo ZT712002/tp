@@ -23,6 +23,11 @@ public class UserList implements ListContainer {
     }
 
     @Override
+    public void addItem(String arguments, ListContainer listContainer) throws FinanceProPlusException {
+        throw new FinanceProPlusException("Implemented only on ClientList class");
+    }
+
+    @Override
     public void deleteItem(String arguments) throws FinanceProPlusException {
         if (user == null) {
             System.out.println("No user to delete.");

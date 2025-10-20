@@ -6,6 +6,7 @@ import seedu.duke.exception.FinanceProPlusException;
  */
 public interface ListContainer {
     void addItem(String arguments) throws FinanceProPlusException;
+    void addItem(String arguments, ListContainer listContainer) throws FinanceProPlusException;
 
     void deleteItem(String arguments) throws FinanceProPlusException;
 

@@ -35,6 +35,13 @@ public class ClientList implements ListContainer {
     }
 
     @Override
+    public void addItem(String arguments, ListContainer policyList) throws FinanceProPlusException {
+        Client client = new Client(arguments, policyList);
+        addClient(client);
+        logger.info("Successfully added new client: " + client.getName());
+    }
+
+    @Override
     public void deleteItem(String arguments) throws FinanceProPlusException {
         if(clients.size() == 0) {
             System.out.println("No clients to delete.");

@@ -1,5 +1,6 @@
 package seedu.duke.client;
 
+import seedu.duke.container.ListContainer;
 import seedu.duke.exception.FinanceProPlusException;
 import seedu.duke.policy.Policy;
 import seedu.duke.policy.PolicyList;
@@ -7,6 +8,7 @@ import seedu.duke.policy.PolicyList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
+import java.util.Optional;
 
 public class Client {
     private static final String CLIENT_REGEX = "\\s+(?=[a-z]+\\/)";
@@ -32,6 +34,32 @@ public class Client {
         nric = detailsMap.get("id");
         phoneNumber = Integer.parseInt(detailsMap.get("c"));
         policyList.addPolicy(new Policy(detailsMap.get("p")));
+        assert this.name != null && !this.name.isEmpty() : "Client name should be initialized";
+        assert this.nric != null && !this.nric.isEmpty() : "Client NRIC should be initialized";
+    }
+    public Client(String arguments, ListContainer mainPolicyList) throws FinanceProPlusException {
+        assert arguments != null && !arguments.trim().isEmpty() : "Arguments for client creation cannot be null";
+        assert mainPolicyList != null : "Main policy list cannot be null for validation";
+        Map<String, String> detailsMap = parseClientDetails(arguments);
+        List<String> requiredKeys = List.of("n", "c", "id", "p");
+        for (String key : requiredKeys) {
+            if (!detailsMap.containsKey(key) || detailsMap.get(key).isEmpty()) {
+                throw new FinanceProPlusException("Invalid client details. Please provide all required fields: "
+                        + "n/NAME c/CONTACT id/NRIC p/POLICY");
+            }
+        }
+        String policyNumberToFind = detailsMap.get("p");
+        PolicyList companyPolicies = (PolicyList) mainPolicyList;
+        Optional<Policy> foundPolicyOpt = companyPolicies.findPolicyByName(policyNumberToFind);
+        if (foundPolicyOpt.isEmpty()) {
+            throw new FinanceProPlusException("Validation Error: Policy '" + policyNumberToFind
+                    + "' does not exist. Please add it to the main policy list first.");
+        }
+        this.name = detailsMap.get("n");
+        this.nric = detailsMap.get("id");
+        this.phoneNumber = Integer.parseInt(detailsMap.get("c"));
+        this.policyList = new PolicyList();
+        this.policyList.addPolicy(foundPolicyOpt.get());
         assert this.name != null && !this.name.isEmpty() : "Client name should be initialized";
         assert this.nric != null && !this.nric.isEmpty() : "Client NRIC should be initialized";
     }

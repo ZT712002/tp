@@ -4,6 +4,7 @@ import seedu.duke.container.ListContainer;
 import seedu.duke.exception.FinanceProPlusException;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class PolicyList implements ListContainer {
     private ArrayList<Policy> policies = new ArrayList<Policy>();
@@ -20,6 +21,11 @@ public class PolicyList implements ListContainer {
         addPolicy(policy);
         System.out.println("Noted. I've added this policy:");
         System.out.println(policy.toString());
+    }
+
+    @Override
+    public void addItem(String arguments, ListContainer listContainer) throws FinanceProPlusException {
+        throw new FinanceProPlusException("Implemented only on ClientList class");
     }
 
     @Override
@@ -70,5 +76,11 @@ public class PolicyList implements ListContainer {
             }
         }
         return result;
+    }
+    public Optional<Policy> findPolicyByName(String policyName) {
+        assert policyName != null && !policyName.isEmpty() : "Policy name to find cannot be null or empty";
+        return policies.stream()
+                .filter(policy -> policy.getName().equals(policyName))
+                .findFirst();
     }
 }
