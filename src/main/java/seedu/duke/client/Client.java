@@ -2,6 +2,7 @@ package seedu.duke.client;
 
 import seedu.duke.container.ListContainer;
 import seedu.duke.exception.FinanceProPlusException;
+import seedu.duke.policy.ClientPolicy;
 import seedu.duke.policy.Policy;
 import seedu.duke.policy.PolicyList;
 
@@ -115,7 +116,7 @@ public class Client {
      * Adds a validated policy to the client's personal policy list.
      * @param policy The Policy object to add.
      */
-    public void addPolicy(Policy policy) {
+    public void addPolicy(ClientPolicy policy) {
         if (!this.hasPolicy(policy.getName())) {
             this.policyList.addPolicy(policy);
         }

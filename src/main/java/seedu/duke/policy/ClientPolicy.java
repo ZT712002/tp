@@ -4,6 +4,8 @@ import seedu.duke.exception.FinanceProPlusException;
 
 import java.time.LocalDate;
 import java.math.BigDecimal;
+import java.time.format.DateTimeParseException;
+import java.util.Map;
 
 public class ClientPolicy extends Policy {
     private LocalDate startDate;
