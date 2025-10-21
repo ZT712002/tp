@@ -23,7 +23,7 @@ public class ClientList implements ListContainer {
         clients.add(client);
         assert clients.size() == oldSize + 1 : "Client list size should increase by 1 after adding a client";
         System.out.println("Noted. I've added this client:");
-        System.out.println(client.toString());
+        System.out.println(client);
     }
     public ArrayList<Client> getClientList() {
         return clients;
@@ -31,31 +31,28 @@ public class ClientList implements ListContainer {
 
     @Override
     public void addItem(String arguments) throws FinanceProPlusException {
-        Map<String, String> detailsMap = Client.parseClientDetails(arguments);
-        String nric = detailsMap.get("id");
-        if (nric == null || nric.isEmpty()) {
-            throw new FinanceProPlusException("Uniqueness Check Failed: NRIC (id/) must be provided.");
-        }
-        if (findClientByNric(nric).isPresent()) {
-            throw new FinanceProPlusException("Uniqueness Check Failed: A client with NRIC '"
-                    + nric + "' already exists.");
-        }
-        Client client = new Client(arguments);
-        addClient(client);
-        logger.info("Successfully added new client: " + client.getName());
+        throw new FinanceProPlusException("This method is not implemented for client list");
     }
 
     @Override
     public void addItem(String arguments, ListContainer policyList) throws FinanceProPlusException {
+        Map<String, String> detailsMap = Client.parseClientDetails(arguments);
+        String nric = detailsMap.get("id");
+        if (nric == null || nric.isEmpty()) {
+            throw new FinanceProPlusException("NRIC (id/) must be provided.");
+        }
+        if (findClientByNric(nric).isPresent()) {
+            throw new FinanceProPlusException("A client with NRIC '"
+                    + nric + "' already exists.");
+        }
         Client client = new Client(arguments, policyList);
-
         addClient(client);
         logger.info("Successfully added new client: " + client.getName());
     }
 
     @Override
     public void deleteItem(String arguments) throws FinanceProPlusException {
-        if(clients.size() == 0) {
+        if(clients.isEmpty()) {
             System.out.println("No clients to delete.");
             return;
         }
@@ -70,7 +67,7 @@ public class ClientList implements ListContainer {
 
     @Override
     public void listItems() {
-        if (clients.size() == 0) {
+        if (clients.isEmpty()) {
             System.out.println("No clients found.");
         } else {
             System.out.println("Here are the clients in your list:");
