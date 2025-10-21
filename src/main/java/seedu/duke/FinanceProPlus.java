@@ -49,7 +49,10 @@ public class FinanceProPlus {
                 c.execute(lookUpTable);
                 c.printExecutionMessage();
             } catch (FinanceProPlusException e) {
-                System.out.println(e.getMessage());
+                System.out.println("Error: " + e.getMessage());
+            } catch (Throwable t) {
+                System.out.println("An unexpected critical error occurred: " + t.getMessage());
+                t.printStackTrace();
             }
 
         }
