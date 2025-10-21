@@ -4,15 +4,15 @@ import seedu.duke.exception.FinanceProPlusException;
 
 import java.time.LocalDate;
 import java.math.BigDecimal;
-import java.time.format.DateTimeParseException;
-import java.util.Map;
+
 
 public class ClientPolicy extends Policy {
     private LocalDate startDate;
     private LocalDate expiryDate;
     private BigDecimal monthlyPremium;
 
-    public ClientPolicy(Policy basePolicy, LocalDate startDate, LocalDate expiryDate, BigDecimal monthlyPremium) throws FinanceProPlusException {
+    public ClientPolicy(Policy basePolicy, LocalDate startDate, LocalDate expiryDate, BigDecimal monthlyPremium)
+            throws FinanceProPlusException {
         super(basePolicy.getName(), false);
         this.startDate = startDate;
         this.expiryDate = expiryDate;
@@ -21,9 +21,9 @@ public class ClientPolicy extends Policy {
 
     public ClientPolicy(Policy basePolicy) throws FinanceProPlusException {
         super(basePolicy.getName(), false);
-        this.startDate = null;      // Initialize as null
-        this.expiryDate = null;     // Initialize as null
-        this.monthlyPremium = null; // Initialize as null
+        this.startDate = null;
+        this.expiryDate = null;
+        this.monthlyPremium = null;
     }
 
     public LocalDate getStartDate() {

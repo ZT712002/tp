@@ -11,3 +11,4 @@ list meeting
 list client
 list policy
 exit
+client updatepolicy id/T0329123L p/1234 s/1999-09-14

@@ -8,7 +8,6 @@ import seedu.duke.policy.ClientPolicy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.logging.Logger;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
@@ -47,7 +46,7 @@ public class ClientList implements ListContainer {
         if (nric == null || nric.isEmpty()) {
             throw new FinanceProPlusException("NRIC (id/) must be provided.");
         }
-        if (findClientByNric(nric).isPresent()) {
+        if (findClientByNric(nric) != null) {
             throw new FinanceProPlusException("A client with NRIC '"
                     + nric + "' already exists.");
         }
@@ -96,11 +95,16 @@ public class ClientList implements ListContainer {
         logger.fine("Validated delete index: " + index);
         return index;
     }
-    public Optional<Client> findClientByNric(String nric) {
-        assert nric != null && !nric.isEmpty() : "NRIC to find cannot be null or empty";
-        return clients.stream()
-                .filter(client -> client.getNric().equals(nric))
-                .findFirst();
+    public Client findClientByNric(String nric) throws FinanceProPlusException {
+        if (nric == null || nric.isEmpty()) {
+            throw new FinanceProPlusException("Error: NRIC to find cannot be null or empty.");
+        }
+        for (Client client : this.clients) {
+            if (client.getNric().equals(nric)) {
+                return client;
+            }
+        }
+        return null;
     }
 
     /**
@@ -112,10 +116,10 @@ public class ClientList implements ListContainer {
      * @throws FinanceProPlusException If any validation fails.
      */
     public void addPolicyToClient(String arguments, ListContainer mainPolicyList) throws FinanceProPlusException {
+
         Map<String, String> argsMap = parseAndValidateAddPolicyArgs(arguments);
         String nric = argsMap.get("id");
-        Client client = findClientByNric(nric)
-                .orElseThrow(() -> new FinanceProPlusException("Error: Client with NRIC '" + nric + "' not found."));
+        Client client = findClientByNric(nric);
         String basePolicyName = argsMap.get("p");
         Policy basePolicy = validateAndGetBasePolicy(client, mainPolicyList, basePolicyName);
         ClientPolicy newClientPolicy = createClientPolicyFromArgs(argsMap, basePolicy);
@@ -157,10 +161,11 @@ public class ClientList implements ListContainer {
     private Policy validateAndGetBasePolicy(Client client, ListContainer mainPolicyList, String basePolicyName)
             throws FinanceProPlusException {
         PolicyList companyPolicies = (PolicyList) mainPolicyList;
-        Policy basePolicy = companyPolicies.findPolicyByName(basePolicyName)
-                .orElseThrow(() -> new FinanceProPlusException("Error: Base policy '" + basePolicyName
-                        + "' not found in the main list."));
-
+        Policy basePolicy = companyPolicies.findPolicyByName(basePolicyName);
+        if (basePolicy == null) {
+            throw new FinanceProPlusException("Error: Base policy '" + basePolicyName
+                    + "' not found in the main list.");
+        }
         if (client.hasPolicy(basePolicyName)) {
             throw new FinanceProPlusException("Error: Client " + client.getNric()
                     + " already has a contract for policy '" + basePolicyName + "'.");
@@ -193,22 +198,14 @@ public class ClientList implements ListContainer {
      * @throws FinanceProPlusException If validation fails.
      */
     public void updatePolicyForClient(String arguments) throws FinanceProPlusException {
-        // Step 1: Parse and validate the structure of the update command.
         Map<String, String> argsMap = parseAndValidateUpdatePolicyArgs(arguments);
-
-        // Step 2: Find the specific client policy contract that needs to be updated.
         ClientPolicy clientPolicyToUpdate = findClientPolicyToUpdate(argsMap);
-
-        // Step 3: Apply the changes from the arguments to the policy object.
         boolean wasUpdated = applyPolicyUpdatesFromArgs(clientPolicyToUpdate, argsMap);
-
-        // Step 4: Provide feedback to the user.
         if (wasUpdated) {
             System.out.println("Successfully updated policy '" + clientPolicyToUpdate.getName()
                     + "' for client " + argsMap.get("id") + ".");
             System.out.println("New Details: " + clientPolicyToUpdate);
         } else {
-            // This case should not be hit due to validation in step 1, but it is good practice.
             System.out.println("No updates were applied.");
         }
     }
@@ -221,13 +218,12 @@ public class ClientList implements ListContainer {
      */
     private Map<String, String> parseAndValidateUpdatePolicyArgs(String arguments) throws FinanceProPlusException {
         Map<String, String> argsMap = Client.parseClientDetails(arguments);
-
         if (!argsMap.containsKey("id") || !argsMap.containsKey("p")) {
             throw new FinanceProPlusException("Invalid command. Both id/ and p/ are required to identify the policy.");
         }
-
         if (!argsMap.containsKey("s") && !argsMap.containsKey("e") && !argsMap.containsKey("m")) {
-            throw new FinanceProPlusException("Invalid command. You must provide at least one field to update: s/, e/, or m/.");
+            throw new FinanceProPlusException("Invalid command. You must provide at least one field to update: s/, " +
+                    "e/, or m/.");
         }
         return argsMap;
     }
@@ -241,16 +237,19 @@ public class ClientList implements ListContainer {
     private ClientPolicy findClientPolicyToUpdate(Map<String, String> argsMap) throws FinanceProPlusException {
         String nric = argsMap.get("id");
         String basePolicyName = argsMap.get("p");
+        Client client = findClientByNric(nric);
+        if (client == null) {
+            throw new FinanceProPlusException("Error: Client with NRIC '" + nric + "' not found.");
+        }
+        Policy clientPolicy = client.getPolicyList().findPolicyByName(basePolicyName);
 
-        Client client = findClientByNric(nric)
-                .orElseThrow(() -> new FinanceProPlusException("Error: Client with NRIC '" + nric + "' not found."));
-
-        Policy clientPolicy = client.getPolicyList().findPolicyByName(basePolicyName)
-                .orElseThrow(() -> new FinanceProPlusException("Error: Client " + nric + " does not have a contract for policy '"
-                        + basePolicyName + "'."));
-
+        if (clientPolicy == null) {
+            throw new FinanceProPlusException("Error: Client " + nric + " does not have a contract for policy '"
+                    + basePolicyName + "'.");
+        }
         if (!(clientPolicy instanceof ClientPolicy)) {
-            throw new FinanceProPlusException("Internal Error: Policy found is not a ClientPolicy and cannot be updated.");
+            throw new FinanceProPlusException("Internal Error: Policy found is not a ClientPolicy and cannot be " +
+                    "updated.");
         }
         return (ClientPolicy) clientPolicy;
     }

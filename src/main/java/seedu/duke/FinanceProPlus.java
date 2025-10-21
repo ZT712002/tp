@@ -40,22 +40,27 @@ public class FinanceProPlus {
     public void run() {
         ui.printWelcomeMessage();
 
-        while(runLoop){
+        while (this.runLoop) {
             try {
-                ui.setUserInput();
-                String unprocessedInput = ui.getUserInput();
+                String unprocessedInput = ui.readCommand();
+                if (unprocessedInput.equalsIgnoreCase("exit")) {
+                    this.terminate();
+                    continue;
+                }
                 Command c = Parser.parse(unprocessedInput);
                 assert c != null : "Command should not be null";
                 c.execute(lookUpTable);
                 c.printExecutionMessage();
-            } catch (FinanceProPlusException e) {
-                System.out.println("Error: " + e.getMessage());
-            } catch (Throwable t) {
-                System.out.println("An unexpected critical error occurred: " + t.getMessage());
-                t.printStackTrace();
-            }
 
+            } catch (FinanceProPlusException e) {
+                System.out.println( e.getMessage());
+            } catch (Exception e) {
+                System.out.println("An unexpected error occurred: " + e.getMessage());
+                e.printStackTrace();
+            }
         }
+
+
         ui.closeScanner();
         ui.printGoodbyeMessage();
 
@@ -63,7 +68,7 @@ public class FinanceProPlus {
     /**
      * Main entry-point for the java.duke.Duke application.
      */
-    public static void main(String[] args) throws FinanceProPlusException {
+    public static void main(String[] args)  {
         new FinanceProPlus().run();
     }
 }

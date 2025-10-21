@@ -4,7 +4,6 @@ import seedu.duke.container.ListContainer;
 import seedu.duke.exception.FinanceProPlusException;
 
 import java.util.ArrayList;
-import java.util.Optional;
 
 public class PolicyList implements ListContainer {
     private ArrayList<Policy> policies = new ArrayList<Policy>();
@@ -77,10 +76,15 @@ public class PolicyList implements ListContainer {
         }
         return result;
     }
-    public Optional<Policy> findPolicyByName(String policyName) {
-        assert policyName != null && !policyName.isEmpty() : "Policy name to find cannot be null or empty";
-        return policies.stream()
-                .filter(policy -> policy.getName().equals(policyName))
-                .findFirst();
+    public Policy findPolicyByName(String policyName) throws FinanceProPlusException {
+        if (policyName == null || policyName.isEmpty()) {
+            throw new FinanceProPlusException("Internal Error: Policy name to find cannot be null or empty.");
+        }
+        for (Policy policy : this.policies) {
+            if (policy.getName().equals(policyName)) {
+                return policy;
+            }
+        }
+        return null;
     }
 }

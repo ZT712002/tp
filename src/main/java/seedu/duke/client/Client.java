@@ -73,9 +73,11 @@ public class Client {
                 throw new FinanceProPlusException("Invalid command: Policy number (p/) cannot be empty.");
             }
             PolicyList companyPolicies = (PolicyList) mainPolicyList;
-            Policy basePolicy = companyPolicies.findPolicyByName(policyNumberToFind)
-                    .orElseThrow(() -> new FinanceProPlusException("Validation Error: Policy '" + policyNumberToFind
-                            + "' does not exist. Please add it to the main policy list first."));
+            Policy basePolicy = companyPolicies.findPolicyByName(policyNumberToFind);
+            if(basePolicy == null){
+                throw new FinanceProPlusException("Validation Error: Policy '" + policyNumberToFind
+                        + "' does not exist. Please add it to the main policy list first.");
+            }
             ClientPolicy placeholderPolicy = new ClientPolicy(basePolicy);
             this.policyList.addPolicy(placeholderPolicy);
         }
@@ -117,7 +119,7 @@ public class Client {
      * Adds a validated policy to the client's personal policy list.
      * @param policy The Policy object to add.
      */
-    public void addPolicy(ClientPolicy policy) {
+    public void addPolicy(ClientPolicy policy) throws FinanceProPlusException {
         if (!this.hasPolicy(policy.getName())) {
             this.policyList.addPolicy(policy);
         }
@@ -127,8 +129,8 @@ public class Client {
      * @param policyName The name of the policy to check.
      * @return true if the client already has the policy, false otherwise.
      */
-    public boolean hasPolicy(String policyName) {
-        return this.policyList.findPolicyByName(policyName).isPresent();
+    public boolean hasPolicy(String policyName) throws FinanceProPlusException {
+        return this.policyList.findPolicyByName(policyName) != null;
     }
 
     public PolicyList getPolicyList() {
