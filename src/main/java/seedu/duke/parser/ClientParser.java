@@ -1,6 +1,7 @@
 package seedu.duke.parser;
 
 import seedu.duke.command.AddCommand;
+import seedu.duke.command.AddPolicyCommand;
 import seedu.duke.command.Command;
 import seedu.duke.command.DeleteCommand;
 import seedu.duke.exception.FinanceProPlusException;
@@ -27,6 +28,8 @@ public class ClientParser extends Parser{
             return new AddCommand(commandType, args);
         case "delete":
             return new DeleteCommand(commandType, args);
+        case "addpolicy":
+            return new AddPolicyCommand(commandType, args);
         default:
             throw new FinanceProPlusException("Invalid command subtype, Please try again");
         }

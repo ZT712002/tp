@@ -2,8 +2,11 @@ package seedu.duke.client;
 
 import seedu.duke.container.ListContainer;
 import seedu.duke.exception.FinanceProPlusException;
+import seedu.duke.policy.Policy;
+import seedu.duke.policy.PolicyList;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -95,5 +98,50 @@ public class ClientList implements ListContainer {
         return clients.stream()
                 .filter(client -> client.getNric().equals(nric))
                 .findFirst();
+    }
+
+    /**
+     * Adds one or more policies to an existing client.
+     * Corresponds to the "client addpolicy" command.
+     * @param arguments The raw string arguments (e.g., "id/S123... p/P456...").
+     * @param mainPolicyList The main list of all company policies for validation.
+     * @throws FinanceProPlusException If client not found, policy not found, or input is invalid.
+     */
+    public void addPolicyToClient(String arguments, ListContainer mainPolicyList) throws FinanceProPlusException {
+        Map<String, String> detailsMap = Client.parseClientDetails(arguments);
+        if (!detailsMap.containsKey("id") || !detailsMap.containsKey("p")) {
+            throw new FinanceProPlusException("Invalid command. Both id/ and p/ prefixes are required.");
+        }
+        String nric = detailsMap.get("id");
+        String policyNumberToAdd = detailsMap.get("p");
+        Optional<Client> clientOpt = findClientByNric(nric);
+        if (clientOpt.isEmpty()) {
+            throw new FinanceProPlusException("Error: Client with NRIC '" + nric + "' not found.");
+        }
+        Client client = clientOpt.get();
+        List<String> policiesToAdd = new ArrayList<>();
+        policiesToAdd.add(policyNumberToAdd);
+        PolicyList companyPolicies = (PolicyList) mainPolicyList;
+        int policiesAddedCount = 0;
+        for (String policyName : policiesToAdd) {
+            if (client.hasPolicy(policyName)) {
+                System.out.println("Warning: Client " + nric + " already has policy '" + policyName + "'. Skipping.");
+                continue;
+            }
+            Optional<Policy> policyOpt = companyPolicies.findPolicyByName(policyName);
+            if (policyOpt.isEmpty()) {
+                System.out.println("Error: Policy '" + policyName + "' not found in the main list. Skipping.");
+                continue;
+            }
+            Policy policyToAdd = policyOpt.get();
+            client.addPolicy(policyToAdd);
+            System.out.println("Successfully added policy '" + policyName + "' to client " + nric + ".");
+            policiesAddedCount++;
+        }
+        if (policiesAddedCount > 0) {
+            System.out.println("Updated Client Details: " + client);
+        } else {
+            System.out.println("No new policies were added.");
+        }
     }
 }
