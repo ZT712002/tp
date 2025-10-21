@@ -24,12 +24,6 @@ public class LoggerConfig {
             fileHandler.setFormatter(new SimpleFormatter());
             fileHandler.setLevel(Level.ALL);
             appLogger.addHandler(fileHandler);
-
-            ConsoleHandler consoleHandler = new ConsoleHandler();
-            consoleHandler.setFormatter(new SimpleFormatter());
-            consoleHandler.setLevel(Level.INFO);
-            appLogger.addHandler(consoleHandler);
-
             appLogger.setLevel(Level.ALL);
 
             Logger.getLogger("seedu.duke").info("Logging has been set up successfully.");
