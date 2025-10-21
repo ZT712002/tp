@@ -13,12 +13,6 @@ public class Policy {
     private String name;
     private String details;
 
-    
-    public Policy(String policyNumber) {
-        this.name = policyNumber;
-        this.details = "";
-    }
-    
     public Policy(String arguments, boolean parseDetails) throws FinanceProPlusException {
         if (parseDetails) {
             Map<String, String> detailsMap = parsePolicyDetails(arguments);
@@ -36,7 +30,7 @@ public class Policy {
             this.details = "";
         }
     }
-    
+
     public static Map<String, String> parsePolicyDetails(String policyDetails) {
         Map<String, String> detailsMap = new HashMap<>();
         String trimmedDetails = policyDetails.trim();

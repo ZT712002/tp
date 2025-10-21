@@ -19,6 +19,12 @@ public class ClientPolicy extends Policy {
         this.monthlyPremium = monthlyPremium;
     }
 
+    public ClientPolicy(Policy basePolicy) throws FinanceProPlusException {
+        super(basePolicy.getName(), false);
+        this.startDate = null;      // Initialize as null
+        this.expiryDate = null;     // Initialize as null
+        this.monthlyPremium = null; // Initialize as null
+    }
 
     public LocalDate getStartDate() {
         return startDate;
@@ -46,8 +52,11 @@ public class ClientPolicy extends Policy {
 
     @Override
     public String toString() {
-        return super.toString() + " [Premium: $" + monthlyPremium
-                + ", Starts: " + startDate
-                + ", Expires: " + expiryDate + "]";
+        String premiumStr = (monthlyPremium != null) ? "$" + monthlyPremium : "Not set";
+        String startStr = (startDate != null) ? startDate.toString() : "Not set";
+        String expiryStr = (expiryDate != null) ? expiryDate.toString() : "Not set";
+        return super.toString() + " [Premium: " + premiumStr
+                + ", Starts: " + startStr
+                + ", Expires: " + expiryStr + "]";
     }
 }
