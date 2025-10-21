@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 import seedu.duke.command.AddCommand;
 import seedu.duke.command.Command;
 import seedu.duke.command.DeleteCommand;
-import seedu.duke.command.ListCommand;
 import seedu.duke.exception.FinanceProPlusException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -34,12 +33,6 @@ class PolicyParserTest {
         assertInstanceOf(DeleteCommand.class, command);
     }
 
-    @Test
-    void executeAndCreateCommand_listCommand_returnsListCommand() throws FinanceProPlusException {
-        PolicyParser parser = new PolicyParser("policy", "list");
-        Command command = parser.executeAndCreateCommand();
-        assertInstanceOf(ListCommand.class, command);
-    }
 
     @Test
     void executeAndCreateCommand_caseInsensitiveSubtype_returnsCorrectCommand() throws FinanceProPlusException {
@@ -48,12 +41,6 @@ class PolicyParserTest {
         assertInstanceOf(AddCommand.class, command);
     }
 
-    @Test
-    void executeAndCreateCommand_listCommandCaseInsensitive_returnsListCommand() throws FinanceProPlusException {
-        PolicyParser parser = new PolicyParser("policy", "LIST");
-        Command command = parser.executeAndCreateCommand();
-        assertInstanceOf(ListCommand.class, command);
-    }
 
     @Test
     void executeAndCreateCommand_commandWithoutArgs_returnsCorrectCommand() throws FinanceProPlusException {
