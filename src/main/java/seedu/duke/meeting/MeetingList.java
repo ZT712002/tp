@@ -30,6 +30,11 @@ public class MeetingList implements ListContainer {
     }
 
     @Override
+    public void addItem(String arguments, ListContainer listContainer) throws FinanceProPlusException {
+        throw new FinanceProPlusException("Implemented only on ClientList class");
+    }
+
+    @Override
     public void deleteItem(String arguments) throws FinanceProPlusException {
         if (meetings.size() == 0) {
             System.out.println("No meetings to delete.");

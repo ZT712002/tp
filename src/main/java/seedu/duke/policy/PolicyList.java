@@ -23,6 +23,11 @@ public class PolicyList implements ListContainer {
     }
 
     @Override
+    public void addItem(String arguments, ListContainer listContainer) throws FinanceProPlusException {
+        throw new FinanceProPlusException("Implemented only on ClientList class");
+    }
+
+    @Override
     public void deleteItem(String arguments) throws FinanceProPlusException {
         if(policies.size() == 0) {
             System.out.println("No policies to delete.");
@@ -70,5 +75,16 @@ public class PolicyList implements ListContainer {
             }
         }
         return result;
+    }
+    public Policy findPolicyByName(String policyName) throws FinanceProPlusException {
+        if (policyName == null || policyName.isEmpty()) {
+            throw new FinanceProPlusException("Internal Error: Policy name to find cannot be null or empty.");
+        }
+        for (Policy policy : this.policies) {
+            if (policy.getName().equals(policyName)) {
+                return policy;
+            }
+        }
+        return null;
     }
 }

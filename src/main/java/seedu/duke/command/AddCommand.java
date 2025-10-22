@@ -15,6 +15,11 @@ public class AddCommand extends Command {
     @Override
     public void execute(LookUpTable lookUpTable) throws FinanceProPlusException {
         ListContainer listContainer = lookUpTable.getList(subtype);
+        if(subtype.equals("client")){
+            ListContainer policyList = lookUpTable.getList("policy");
+            listContainer.addItem(arguments, policyList);
+            return;
+        }
         listContainer.addItem(arguments);
     }
     @Override

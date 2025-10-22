@@ -10,7 +10,6 @@ public class Ui {
     private boolean isActive;
     private String userInput;
 
-
     /**
      * Constructor for Ui class. Initializes the Scanner and sets the active flag to true.
      */
@@ -18,11 +17,14 @@ public class Ui {
         this.in = new Scanner(System.in);
         this.isActive = true;
     }
-    public String getUserInput() {
-        return userInput;
-    }
-    public void setUserInput() {
-        this.userInput = in.nextLine();
+    public String readCommand() {
+        System.out.print("> ");
+        if (in.hasNextLine()) {
+            return in.nextLine();
+        } else {
+            System.out.println("\nInput stream has been closed. Terminating application.");
+            return "exit";
+        }
     }
     public void closeScanner() {
         in.close();
