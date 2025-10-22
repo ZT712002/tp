@@ -4,7 +4,10 @@ package seedu.duke.user;
 import seedu.duke.container.ListContainer;
 import seedu.duke.exception.FinanceProPlusException;
 
+import java.util.logging.Logger;
+
 public class UserList implements ListContainer {
+    private static final Logger logger = Logger.getLogger(UserList.class.getName());
     private User user;
 
     public UserList() {
@@ -17,9 +20,11 @@ public class UserList implements ListContainer {
         assert arguments != null && !arguments.trim().isEmpty()
                 : "Arguments for adding a user cannot be null or empty";
         if (user != null) {
+            logger.warning("Attempted to add a new user when one already exists.");
             throw new FinanceProPlusException("A user already exists. Delete user before adding a new one.");
         }
         user = new User(arguments);
+        logger.info("User added: " + user.toString());
         assert user != null : "User object should have been successfully created";
         System.out.println("Noted. I've added this user:");
         System.out.println(user.toString());
@@ -36,6 +41,7 @@ public class UserList implements ListContainer {
             System.out.println("No user to delete.");
             return;
         }
+        logger.info("User deleted: " + user.toString());
         System.out.println("Noted. I've removed this user:");
         System.out.println(user.toString());
         user = null;
@@ -56,6 +62,7 @@ public class UserList implements ListContainer {
     public int checkDeleteIndex(String arguments) throws FinanceProPlusException {
 
         if (user == null) {
+            logger.warning("Delete index check failed: no user exists.");
             throw new FinanceProPlusException("No user to delete.");
         }
 
