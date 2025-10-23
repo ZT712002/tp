@@ -140,7 +140,7 @@ public class Client {
 
     public void viewDetails(){
         System.out.println("-------------------------------------");
-        System.out.println("         Client Details              ");
+        System.out.println("         Client Details");
         System.out.println("-------------------------------------");
         System.out.println("Name: " + this.name);
         System.out.println("NRIC: " + this.nric);
