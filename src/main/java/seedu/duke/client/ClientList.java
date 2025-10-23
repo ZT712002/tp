@@ -107,6 +107,16 @@ public class ClientList implements ListContainer {
         return null;
     }
 
+    public void searchClient(String nric) throws FinanceProPlusException {
+        Client foundClient = findClientByNric(nric);
+        if (foundClient != null) {
+            System.out.println("Client found:");
+            System.out.println(foundClient.toString());
+        } else {
+            System.out.println("No client found with NRIC: " + nric);
+        }
+    }
+
     /**
      * Adds a new policy contract to an existing client.
      * This method oversees the validation and creation process.

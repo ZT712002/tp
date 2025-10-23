@@ -5,6 +5,7 @@ import seedu.duke.command.AddPolicyCommand;
 import seedu.duke.command.Command;
 import seedu.duke.command.DeleteCommand;
 import seedu.duke.command.UpdatePolicyCommand;
+import seedu.duke.command.SearchCommand;
 import seedu.duke.exception.FinanceProPlusException;
 
 
@@ -33,6 +34,8 @@ public class ClientParser extends Parser{
             return new AddPolicyCommand(commandType, args);
         case "updatepolicy":
             return new UpdatePolicyCommand(commandType,args);
+        case "search":
+            return new SearchCommand(commandType, args);
         default:
             throw new FinanceProPlusException("Invalid command subtype, Please try again");
         }
