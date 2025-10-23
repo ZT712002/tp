@@ -36,7 +36,7 @@ New Details: 1234 [Premium: $300.05, Starts: 1999-09-14, Expires: 2010-09-14]
 Policy updated successfully!
 ----------------------------------------------------
 > -------------------------------------
-          Client Details
+         Client Details
 -------------------------------------
 Name: Zendne
 NRIC: T0329123L
