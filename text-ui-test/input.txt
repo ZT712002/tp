@@ -5,7 +5,8 @@ policy add n/1233 d/Full medical coverage with dental
 policy list
 client add n/ Zendne c/ 12345678 id/T0329123L p/1234
 client add n/ nednez c/ 12345678 id/T0329103L p/1233
-client updatepolicy id/T0329123L p/1234 s/1999-09-14
+client updatepolicy id/T0329123L p/1234 s/1999-09-14 e/ 2010-09-14 m/ 300.05
+client view id/T0329123L
 client delete 1
 meeting add t/TEST c/FOO d/ 18-02-2025 from/10:00 to/14:30
 list meeting
