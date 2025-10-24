@@ -39,12 +39,14 @@ public class Meeting {
 
         validateDateFormat(date);
         validateTimeFormat(startTime);
+        assert this.startTime != null && !startTime.isEmpty() : "Start time should not be empty";
         if (endTime != null) {
             validateTimeFormat(endTime);
         }
     }
 
     private void validateDateFormat(String dateString) throws FinanceProPlusException {
+        assert dateString != null && !dateString.isEmpty() : "Date string should not be empty";
         if (!dateString.matches("\\d{2}-\\d{2}-\\d{4}")) {
             throw new FinanceProPlusException("Invalid date format. Please use dd-MM-yyyy (e.g., 24-10-2025)");
         }
@@ -61,6 +63,7 @@ public class Meeting {
     }
 
     private void validateTimeFormat(String timeString) throws FinanceProPlusException {
+        assert timeString != null && !timeString.isEmpty() : "Time string should not be empty";
         if (!timeString.matches("\\d{2}:\\d{2}")) {
             throw new FinanceProPlusException("Invalid time format. Please use HH:mm (e.g., 14:30)");
         }
@@ -102,6 +105,7 @@ public class Meeting {
         assert title != null && !title.isEmpty() : "Title should not be null or empty";
         assert client != null && !client.isEmpty() : "Client should not be null or empty";
         assert date != null && !date.isEmpty() : "Date should not be null or empty";
+        assert startTime != null && !startTime.isEmpty() : "Start time should not be empty";
         String timeInfo = "";
         if (startTime != null && endTime != null) {
             timeInfo = ", Time: " + startTime + " to " + endTime;
