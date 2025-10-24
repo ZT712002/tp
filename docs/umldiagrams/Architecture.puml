@@ -1,0 +1,38 @@
+@startuml
+
+
+actor User
+
+rectangle "Application Logic" {
+
+    component UI
+    component Parser
+    component Storage
+    component Command
+    component Main
+    component Commons
+    component LookUpTable
+
+}
+
+
+
+
+
+
+User -right-> UI : interacts
+Main -up-> UI
+UI -right-> Parser
+Main -up-> Command
+Parser -down-> Command
+Command -> UI
+Command -> LookUpTable
+LookUpTable <-> Storage
+LookUpTable <- UI
+Parser -> Storage
+Main -> Storage
+Storage .> Command
+Storage -> HardDisk : reads/writes data
+Storage -[hidden]-> Commons
+
+@enduml
