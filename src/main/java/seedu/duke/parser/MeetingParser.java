@@ -33,7 +33,7 @@ public class MeetingParser extends Parser {
             return new ForecastCommand(commandType);
         default:
             throw new FinanceProPlusException("Invalid meeting command subtype. Please use one of: "
-                    + "'add', 'delete', 'list', or 'forecast'.");
+                    + "'add', 'delete', 'list' or 'forecast'.");
         }
     }
 }
