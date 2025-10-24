@@ -33,20 +33,20 @@ public class Meeting {
         client = detailsMap.get("c");
         startTime = detailsMap.get("from");
         endTime = detailsMap.get("to");
-        assert this.title != null && !title.isEmpty() : "Title should not be null or empty";
-        assert this.client != null && !client.isEmpty() : "Client should not be null or empty";
-        assert this.date != null && !date.isEmpty() : "Date should not be null or empty";
+        assert this.title != null && !title.isEmpty() : "Title should be initialised";
+        assert this.client != null && !client.isEmpty() : "Client should be initialised";
+        assert this.date != null && !date.isEmpty() : "Date should be initialised";
 
         validateDateFormat(date);
         validateTimeFormat(startTime);
-        assert this.startTime != null && !startTime.isEmpty() : "Start time should not be empty";
+        assert this.startTime != null && !startTime.isEmpty() : "Start time should be initialised";
         if (endTime != null) {
             validateTimeFormat(endTime);
         }
     }
 
     private void validateDateFormat(String dateString) throws FinanceProPlusException {
-        assert dateString != null && !dateString.isEmpty() : "Date string should not be empty";
+        assert dateString != null && !dateString.isEmpty() : "Date string should not be null";
         if (!dateString.matches("\\d{2}-\\d{2}-\\d{4}")) {
             throw new FinanceProPlusException("Invalid date format. Please use dd-MM-yyyy (e.g., 24-10-2025)");
         }
@@ -63,7 +63,7 @@ public class Meeting {
     }
 
     private void validateTimeFormat(String timeString) throws FinanceProPlusException {
-        assert timeString != null && !timeString.isEmpty() : "Time string should not be empty";
+        assert timeString != null && !timeString.isEmpty() : "Time string should not be null";
         if (!timeString.matches("\\d{2}:\\d{2}")) {
             throw new FinanceProPlusException("Invalid time format. Please use HH:mm (e.g., 14:30)");
         }
@@ -82,6 +82,11 @@ public class Meeting {
     public String getTitle() {
         return title;
     }
+
+    public String getDate() {
+        return date;
+    }
+
     public static Map<String, String> parseMeetingDetails(String meetingDetails) {
         assert meetingDetails != null : "Input string for parsing cannot be null";
         Map<String, String> detailsMap = new HashMap<>();
@@ -102,10 +107,10 @@ public class Meeting {
 
     @Override
     public String toString() {
-        assert title != null && !title.isEmpty() : "Title should not be null or empty";
-        assert client != null && !client.isEmpty() : "Client should not be null or empty";
-        assert date != null && !date.isEmpty() : "Date should not be null or empty";
-        assert startTime != null && !startTime.isEmpty() : "Start time should not be empty";
+        assert title != null && !title.isEmpty() : "Title should not be null";
+        assert client != null && !client.isEmpty() : "Client should not be null";
+        assert date != null && !date.isEmpty() : "Date should not be null";
+        assert startTime != null && !startTime.isEmpty() : "Start time should not be null";
         String timeInfo = "";
         if (startTime != null && endTime != null) {
             timeInfo = ", Time: " + startTime + " to " + endTime;
