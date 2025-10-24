@@ -5,6 +5,9 @@ import seedu.duke.command.AddCommand;
 import seedu.duke.command.Command;
 import seedu.duke.command.DeleteCommand;
 import seedu.duke.command.SearchCommand;
+import seedu.duke.command.ArchiveCommand;
+import seedu.duke.command.RestoreCommand;
+import seedu.duke.command.ListCommand;
 import seedu.duke.exception.FinanceProPlusException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -88,5 +91,49 @@ class ClientParserTest {
         Command command = parser.executeAndCreateCommand();
         assertInstanceOf(SearchCommand.class, command);
     }
+
+    @Test
+    void executeAndCreateCommand_archiveCommandWithArgs_returnsArchiveCommand() throws FinanceProPlusException {
+        ClientParser parser = new ClientParser("client", "archive 1");
+        Command command = parser.executeAndCreateCommand();
+        assertInstanceOf(ArchiveCommand.class, command);
+    }
+
+    @Test
+    void executeAndCreateCommand_archiveCommandWithoutArgs_returnsArchiveCommand() throws FinanceProPlusException {
+        ClientParser parser = new ClientParser("client", "archive");
+        Command command = parser.executeAndCreateCommand();
+        assertInstanceOf(ArchiveCommand.class, command);
+    }
+
+    @Test
+    void executeAndCreateCommand_restoreCommandWithArgs_returnsRestoreCommand() throws FinanceProPlusException {
+        ClientParser parser = new ClientParser("client", "restore 1");
+        Command command = parser.executeAndCreateCommand();
+        assertInstanceOf(RestoreCommand.class, command);
+    }
+
+    @Test
+    void executeAndCreateCommand_restoreCommandWithoutArgs_returnsRestoreCommand() throws FinanceProPlusException {
+        ClientParser parser = new ClientParser("client", "restore");
+        Command command = parser.executeAndCreateCommand();
+        assertInstanceOf(RestoreCommand.class, command);
+    }
+
+    @Test
+    void executeAndCreateCommand_listArchivedCommand_returnsListCommand() throws FinanceProPlusException {
+        ClientParser parser = new ClientParser("client", "listarchived");
+        Command command = parser.executeAndCreateCommand();
+        assertInstanceOf(ListCommand.class, command);
+    }
+
+    @Test
+    void executeAndCreateCommand_caseInsensitiveArchiveSubtype_returnsArchiveCommand() throws FinanceProPlusException {
+        ClientParser parser = new ClientParser("client", "ARCHIVE 1");
+        Command command = parser.executeAndCreateCommand();
+        assertInstanceOf(ArchiveCommand.class, command);
+    }
+
+
 
 }
