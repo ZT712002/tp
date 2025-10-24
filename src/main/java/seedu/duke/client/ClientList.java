@@ -97,7 +97,7 @@ public class ClientList implements ListContainer {
     }
     public Client findClientByNric(String nric) throws FinanceProPlusException {
         if (nric == null || nric.isEmpty()) {
-            throw new FinanceProPlusException("Error: NRIC to find cannot be null or empty.");
+            throw new FinanceProPlusException("Error: NRIC to find cannot be null or empty. make sure id/ isn't empty");
         }
         for (Client client : this.clients) {
             if (client.getNric().equals(nric)) {
@@ -285,7 +285,13 @@ public class ClientList implements ListContainer {
         return isUpdated;
     }
 
-
+    public Client getClientByID(String args) throws FinanceProPlusException {
+        Map<String, String> argsMap = Client.parseClientDetails(args);
+        String nric = argsMap.get("id");
+        Client client = findClientByNric(nric);
+        assert client != null : "Client should not be null in getClientById";
+        return client;
+    }
 }
 
 
