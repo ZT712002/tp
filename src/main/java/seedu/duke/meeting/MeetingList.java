@@ -79,8 +79,10 @@ public class MeetingList implements ListContainer {
     }
 
     public void listForecast() {
+        assert meetings != null : "Meetings list should not be null";
         LocalDate today = LocalDate.now();
         LocalDate forecastEnd = today.plusDays(7);
+        assert forecastEnd.isAfter(today) : "Forecast end date should be after today's date";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
         ArrayList<Meeting> forecastMeetings = new ArrayList<>();
