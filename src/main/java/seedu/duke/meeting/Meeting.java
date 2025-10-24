@@ -5,6 +5,10 @@ import seedu.duke.exception.FinanceProPlusException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.time.LocalTime;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class Meeting {
     private static final String MEETING_REGEX = "\\s+(?=[a-z]+/)";
@@ -42,13 +46,33 @@ public class Meeting {
 
     private void validateDateFormat(String dateString) throws FinanceProPlusException {
         if (!dateString.matches("\\d{2}-\\d{2}-\\d{4}")) {
-            throw new FinanceProPlusException("Invalid date format. Please use dd-MM-yyyy (e.g., 15-01-2024)");
+            throw new FinanceProPlusException("Invalid date format. Please use dd-MM-yyyy (e.g., 24-10-2025)");
+        }
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            LocalDate parsedDate = LocalDate.parse(dateString, formatter);
+            String reformatted = parsedDate.format(formatter);
+            if (!reformatted.equals(dateString)) {
+                throw new FinanceProPlusException("Invalid date: " + dateString + ". Please provide a valid date.");
+            }
+        } catch (DateTimeParseException e) {
+            throw new FinanceProPlusException("Invalid date: " + dateString + ". Please provide a valid date.");
         }
     }
 
     private void validateTimeFormat(String timeString) throws FinanceProPlusException {
         if (!timeString.matches("\\d{2}:\\d{2}")) {
-            throw new FinanceProPlusException("Invalid time format. Please use HH:MM (e.g., 14:30)");
+            throw new FinanceProPlusException("Invalid time format. Please use HH:mm (e.g., 14:30)");
+        }
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+            LocalTime parsedTime = LocalTime.parse(timeString, formatter);
+            String reformatted = parsedTime.format(formatter);
+            if (!reformatted.equals(timeString)) {
+                throw new FinanceProPlusException("Invalid time: " + timeString + ". Please provide a valid time.");
+            }
+        } catch (DateTimeParseException e) {
+            throw new FinanceProPlusException("Invalid time: " + timeString + ". Please provide a valid time.");
         }
     }
 
