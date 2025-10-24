@@ -6,6 +6,9 @@ import seedu.duke.command.Command;
 import seedu.duke.command.DeleteCommand;
 import seedu.duke.command.UpdatePolicyCommand;
 import seedu.duke.command.SearchCommand;
+import seedu.duke.command.ArchiveCommand;
+import seedu.duke.command.RestoreCommand;
+import seedu.duke.command.ListCommand;
 import seedu.duke.exception.FinanceProPlusException;
 
 
@@ -36,6 +39,12 @@ public class ClientParser extends Parser{
             return new UpdatePolicyCommand(commandType,args);
         case "search":
             return new SearchCommand(commandType, args);
+        case "archive":
+            return new ArchiveCommand(commandType, args);
+        case "restore":
+            return new RestoreCommand(commandType, args);
+        case "listarchived":
+            return new ListCommand("archived");
         default:
             throw new FinanceProPlusException("Invalid command subtype, Please try again");
         }
