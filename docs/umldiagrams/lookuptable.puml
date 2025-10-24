@@ -1,0 +1,46 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+
+interface ListContainer {
+  + void addItem(String arguments)
+  + void addItem(String arguments, ListContainer listContainer)
+  + void deleteItem(String arguments)
+  + void listItems()
+  + int checkDeleteIndex(String arguments)
+}
+
+class ClientList implements ListContainer {
+  - ArrayList<Client> clients
+  - <u>logger:Logger </u>
+  + void addClient(Client client)
+  + Client findClientByNric(String nric)
+  + void addPolicyToClient(String args, ListContainer mainList)
+  + void updatePolicyForClient(String args)
+}
+
+class PolicyList implements ListContainer {
+  - ArrayList<Policy> policies
+  + void addPolicy(Policy policy)
+  + Policy findPolicyByName(String policyName)
+}
+
+class MeetingList implements ListContainer {
+  - ArrayList<Meeting> meetings
+  - <u>logger:Logger </u>
+}
+
+class UserList implements ListContainer {
+
+}
+
+class LookUpTable {
+  - HashMap<String, ListContainer> map
+  + ListContainer getList(String key)
+}
+
+LookUpTable *-- MeetingList
+LookUpTable *-- UserList
+LookUpTable *-- ClientList
+LookUpTable *-- PolicyList
+@enduml
