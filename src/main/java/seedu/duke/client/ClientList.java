@@ -241,7 +241,7 @@ public class ClientList implements ListContainer {
         if (client == null) {
             throw new FinanceProPlusException("Error: Client with NRIC '" + nric + "' not found.");
         }
-        Policy clientPolicy = client.getPolicyList().findPolicyByName(basePolicyName);
+        Policy clientPolicy = client.getClientPolicyList().findPolicyByName(basePolicyName);
 
         if (clientPolicy == null) {
             throw new FinanceProPlusException("Error: Client " + nric + " does not have a contract for policy '"
