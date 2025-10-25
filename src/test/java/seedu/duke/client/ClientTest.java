@@ -202,7 +202,7 @@ class ClientTest {
 
         // Attempt to add the same policy again
         client.addPolicy(clientLifePolicy);
-        assertEquals(1, client.getClientPolicyList().getPolicyList().size()); // Size should not change
+        assertEquals(1, client.getClientPolicyList().getPolicyList().size());
     }
 
     @Test
