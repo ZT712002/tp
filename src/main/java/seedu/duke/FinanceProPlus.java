@@ -8,11 +8,9 @@ import seedu.duke.logger.LoggerConfig;
 import seedu.duke.meeting.MeetingList;
 import seedu.duke.parser.Parser;
 import seedu.duke.policy.PolicyList;
+import seedu.duke.task.TaskList;
 import seedu.duke.user.UserList;
 import seedu.duke.ui.Ui;
-
-
-
 
 public class FinanceProPlus {
     private static boolean runLoop;
@@ -20,6 +18,7 @@ public class FinanceProPlus {
     private MeetingList meetings;
     private PolicyList policies;
     private ClientList clients;
+    private TaskList tasks;
     private LookUpTable lookUpTable;
     private UserList user;
     public FinanceProPlus() {
@@ -28,9 +27,10 @@ public class FinanceProPlus {
         meetings = new MeetingList();
         policies = new PolicyList();
         clients = new ClientList();
+        tasks = new TaskList();
         user = new UserList();
         LoggerConfig.setup();
-        lookUpTable = new LookUpTable(clients, policies, meetings,user);
+        lookUpTable = new LookUpTable(clients, policies, meetings, tasks, user);
     }
 
     public static void terminate() {
