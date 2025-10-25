@@ -47,6 +47,7 @@ class AddPolicyCommandTest {
 
     static class StubPolicyList extends PolicyList {}
     static class StubMeetingList extends MeetingList {}
+    static class StubTaskList extends seedu.duke.task.TaskList {}
     static class StubUserList extends UserList {}
 
 
@@ -60,7 +61,8 @@ class AddPolicyCommandTest {
     void setUp() {
         spyClientList = new SpyClientList();
         stubPolicyList = new StubPolicyList();
-        lookUpTable = new LookUpTable(spyClientList, stubPolicyList, new StubMeetingList(), new StubUserList());
+        lookUpTable = new LookUpTable(spyClientList, stubPolicyList, new StubMeetingList(),
+                new StubTaskList(), new StubUserList());
 
         System.setOut(new PrintStream(outContent));
     }
