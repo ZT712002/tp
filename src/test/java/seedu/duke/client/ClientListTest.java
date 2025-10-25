@@ -238,7 +238,8 @@ class ClientListTest {
             Policy policy = client.getClientPolicyList().findPolicyByName("1233");
 
             assertEquals(LocalDate.parse("2025-12-31"), ((ClientPolicy) policy).getExpiryDate());
-            assertEquals(0, ((ClientPolicy) policy).getMonthlyPremium().compareTo(new java.math.BigDecimal("200.00")));
+            assertEquals(0, ((ClientPolicy) policy).getMonthlyPremium().compareTo(new
+                    java.math.BigDecimal("200.00")));
             assertTrue(outContent.toString().contains("Successfully updated policy"));
         }
 
@@ -263,7 +264,8 @@ class ClientListTest {
             String updateArgs = "p/1234 e/2025-12-31";
             FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
                     () -> clientList.updatePolicyForClient(updateArgs));
-            assertEquals("Invalid command. Both id/ and p/ are required to identify the policy.", e.getMessage());
+            assertEquals("Invalid command. Both id/ and p/ are required to identify the policy.",
+                    e.getMessage());
         }
 
         @Test
@@ -284,30 +286,30 @@ class ClientListTest {
     }
     @Nested
     class GetClientByIDTests {
-        private final String EXISTING_NRIC = "G1234567X";
-        private final String NON_EXISTENT_NRIC = "G7654321Z";
+        private final String realNric = "G1234567X";
+        private final String fakeNric = "G7654321Z";
 
         @BeforeEach
         void setupClient() throws FinanceProPlusException {
-            clientList.addItem("n/James Bond c/007 id/" + EXISTING_NRIC, mainPolicyList);
+            clientList.addItem("n/James Bond c/007 id/" + realNric, mainPolicyList);
             outContent.reset();
         }
 
         @Test
         void getClientByID_existingClient_returnsCorrectClient() throws FinanceProPlusException {
-            String args = "id/" + EXISTING_NRIC;
+            String args = "id/" + realNric;
             Client foundClient = clientList.getClientByID(args);
             assertNotNull(foundClient);
             assertEquals("James Bond", foundClient.getName());
-            assertEquals(EXISTING_NRIC, foundClient.getNric());
+            assertEquals(realNric, foundClient.getNric());
         }
 
         @Test
         void getClientByID_nonExistentClient_throwsSpecificException() {
-            String args = "id/" + NON_EXISTENT_NRIC;
+            String args = "id/" + fakeNric;
             FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
                     () -> clientList.getClientByID(args));
-            assertEquals("Error: Client with NRIC '" + NON_EXISTENT_NRIC + "' not found.", e.getMessage());
+            assertEquals("Error: Client with NRIC '" + fakeNric + "' not found.", e.getMessage());
         }
 
         @Test
@@ -315,7 +317,8 @@ class ClientListTest {
             String args = "n/Some Name";
             FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
                     () -> clientList.getClientByID(args));
-            assertEquals("Error: NRIC to find cannot be null or empty. make sure id/ isn't empty", e.getMessage());
+            assertEquals("Error: NRIC to find cannot be null or empty. make sure id/ isn't empty"
+                    , e.getMessage());
         }
 
         @Test
@@ -329,18 +332,18 @@ class ClientListTest {
 
         @Test
         void getClientByID_argsWithExtraData_returnsCorrectClient() throws FinanceProPlusException {
-            String args = "n/Irrelevant c/999 id/" + EXISTING_NRIC + " p/SomePolicy";
+            String args = "n/Irrelevant c/999 id/" + realNric + " p/SomePolicy";
             Client foundClient = clientList.getClientByID(args);
             assertNotNull(foundClient);
-            assertEquals(EXISTING_NRIC, foundClient.getNric());
+            assertEquals(realNric, foundClient.getNric());
         }
 
         @Test
         void getClientByID_argsWithWhitespace_returnsCorrectClient() throws FinanceProPlusException {
-            String args = "  id/ " + EXISTING_NRIC + "  ";
+            String args = "  id/ " + realNric + "  ";
             Client foundClient = clientList.getClientByID(args);
             assertNotNull(foundClient);
-            assertEquals(EXISTING_NRIC, foundClient.getNric());
+            assertEquals(realNric, foundClient.getNric());
         }
     }
 }
