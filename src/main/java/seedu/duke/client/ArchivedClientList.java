@@ -16,7 +16,8 @@ public class ArchivedClientList implements ListContainer {
         assert client != null : "Client to archive cannot be null";
         int oldSize = archivedClients.size();
         archivedClients.add(client);
-        assert archivedClients.size() == oldSize + 1 : "Archived clients list size should increase by 1 after archiving a client";
+        assert archivedClients.size() == oldSize + 1 :
+                "Archived clients list size should increase by 1 after archiving a client";
         System.out.println("Noted. I've archived this client:");
         System.out.println(client);
     }
@@ -27,7 +28,8 @@ public class ArchivedClientList implements ListContainer {
         }
         int oldSize = archivedClients.size();
         Client restoredClient = archivedClients.remove(index);
-        assert archivedClients.size() == oldSize + 1 : "Archived clients list size should decrease by 1 after restoring a client";
+        assert archivedClients.size() == oldSize - 1 :
+                "Archived clients list size should decrease by 1 after restoring a client";
         return restoredClient;
     }
 
