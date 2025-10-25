@@ -56,7 +56,7 @@ public class ClientPolicy extends Policy {
         String premiumStr = (monthlyPremium != null) ? "$" + monthlyPremium : "Not set";
         String startStr = (startDate != null) ? startDate.toString() : "Not set";
         String expiryStr = (expiryDate != null) ? expiryDate.toString() : "Not set";
-        return super.toString() + " [Premium: " + premiumStr
+        return "Policy: "+ super.toString() + " [Premium: " + premiumStr
                 + ", Starts: " + startStr
                 + ", Expires: " + expiryStr + "]";
     }
