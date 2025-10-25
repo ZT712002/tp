@@ -37,7 +37,7 @@ public class ClientParser extends Parser{
         case "addpolicy":
             return new AddPolicyCommand(commandType, args);
         case "updatepolicy":
-            return new UpdatePolicyCommand(commandType,args);
+            return new UpdateClientPolicyCommand(commandType,args);
         case "view":
             return new ViewClientCommand(commandType,args);    
         case "search":
