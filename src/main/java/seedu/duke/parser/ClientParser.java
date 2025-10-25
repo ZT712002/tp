@@ -5,6 +5,7 @@ import seedu.duke.command.AddPolicyCommand;
 import seedu.duke.command.Command;
 import seedu.duke.command.DeleteCommand;
 import seedu.duke.command.UpdatePolicyCommand;
+import seedu.duke.command.ViewClientCommand;
 import seedu.duke.command.SearchCommand;
 import seedu.duke.command.ArchiveCommand;
 import seedu.duke.command.RestoreCommand;
@@ -37,6 +38,8 @@ public class ClientParser extends Parser{
             return new AddPolicyCommand(commandType, args);
         case "updatepolicy":
             return new UpdatePolicyCommand(commandType,args);
+        case "view":
+            return new ViewClientCommand(commandType,args);    
         case "search":
             return new SearchCommand(commandType, args);
         case "archive":
