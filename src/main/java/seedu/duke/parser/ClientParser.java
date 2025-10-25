@@ -4,7 +4,7 @@ import seedu.duke.command.AddCommand;
 import seedu.duke.command.AddPolicyCommand;
 import seedu.duke.command.Command;
 import seedu.duke.command.DeleteCommand;
-import seedu.duke.command.UpdatePolicyCommand;
+import seedu.duke.command.UpdateClientPolicyCommand;
 import seedu.duke.command.ViewClientCommand;
 import seedu.duke.command.SearchCommand;
 import seedu.duke.command.ArchiveCommand;
