@@ -10,7 +10,6 @@ public class Task {
     private static final String TASK_REGEX = "\\s+(?=[a-z]+/)";
     private String description;
     private String dueDate;
-    private boolean isCompleted;
 
     public Task(String arguments) throws FinanceProPlusException {
         assert arguments != null && !arguments.trim().isEmpty() : "Arguments for task creation cannot be null";
@@ -24,7 +23,6 @@ public class Task {
         }
         description = detailsMap.get("d");
         dueDate = detailsMap.get("by");
-        isCompleted = false;
         assert this.description != null && !description.isEmpty() : "Description should not be null or empty";
         assert this.dueDate != null && !dueDate.isEmpty() : "Due date should not be null or empty";
 
@@ -45,18 +43,6 @@ public class Task {
         return dueDate;
     }
 
-    public boolean isCompleted() {
-        return isCompleted;
-    }
-
-    public void markAsCompleted() {
-        this.isCompleted = true;
-    }
-
-    public void markAsIncomplete() {
-        this.isCompleted = false;
-    }
-
     public static Map<String, String> parseTaskDetails(String taskDetails) {
         assert taskDetails != null : "Input string for parsing cannot be null";
         Map<String, String> detailsMap = new HashMap<>();
@@ -74,15 +60,11 @@ public class Task {
         return detailsMap;
     }
 
-    public String getStatusIcon() {
-        return isCompleted ? "[X]" : "[ ]";
-    }
-
     @Override
     public String toString() {
         assert description != null && !description.isEmpty() : "Description should not be null or empty";
         assert dueDate != null && !dueDate.isEmpty() : "Due date should not be null or empty";
-        return getStatusIcon() + " " + description + " (by: " + dueDate + ")";
+        return description + " (by: " + dueDate + ")";
     }
 }
 
