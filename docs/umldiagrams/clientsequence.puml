@@ -1,0 +1,82 @@
+@startuml
+
+
+title Sequence Diagram: Add New Client
+
+
+actor User as "Financial Advisor"
+participant UI
+participant Parser
+participant ClientParser
+participant Command as "AddCommand"
+participant ClientList
+participant Client
+
+
+User -> UI: enters "add client /n John Doe ..."
+activate UI
+UI -> Parser :parse();
+activate Parser
+
+
+    Parser -> Parser: executeAndCreateCommand();
+    activate Parser
+    Parser --> Parser:
+    deactivate Parser
+    Parser -> ClientParser**: ClientParser();
+    activate ClientParser
+
+    ClientParser -> ClientParser:splitCommand();
+    activate ClientParser
+    ClientParser --> ClientParser
+    deactivate ClientParser
+
+    ClientParser -> Command**:
+    activate Command
+    Command -> Command:AddCommand();
+    activate Command
+    Command --> Command
+    deactivate Command
+    Command -->ClientParser
+    deactivate Command
+    ClientParser --> Parser
+    deactivate ClientParser
+    Parser --> UI
+    deactivate Parser
+    UI->Command :execute();
+    activate Command
+    Command -> ClientList
+    activate ClientList
+    ClientList -> ClientList:AddItem();
+    activate ClientList
+
+    ClientList ->Client**
+    activate Client
+
+    Client -> Client: Client();
+    activate Client
+    Client -->Client
+    deactivate Client
+    Client -->ClientList
+    deactivate Client
+    ClientList -> ClientList: AddClient(Client);
+    activate ClientList
+    ClientList --> ClientList
+    deactivate ClientList
+    ClientList -->ClientList
+    deactivate ClientList
+    ClientList --> Command
+    deactivate ClientList
+    Command --> UI
+    deactivate Command
+    UI ->Command :printExecutionMessage();
+    Activate Command
+    Command --> UI
+    deactivate Command
+
+
+    UI --> User: Displays "Client added successfully"
+
+deactivate Parser
+
+@enduml

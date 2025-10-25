@@ -5,10 +5,10 @@ import seedu.duke.container.ListContainer;
 import seedu.duke.container.LookUpTable;
 import seedu.duke.exception.FinanceProPlusException;
 
-public class UpdatePolicyCommand extends Command {
+public class UpdateClientPolicyCommand extends UpdateCommand {
     private String arguments;
 
-    public UpdatePolicyCommand(String subtype, String args) {
+    public UpdateClientPolicyCommand(String subtype, String args) {
         this.subtype = subtype;
         this.arguments = args;
     }

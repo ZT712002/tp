@@ -6,6 +6,7 @@ import seedu.duke.policy.ClientPolicy;
 import seedu.duke.policy.Policy;
 import seedu.duke.policy.PolicyList;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
@@ -135,5 +136,24 @@ public class Client {
 
     public PolicyList getPolicyList() {
         return policyList;
+    }
+
+    public void viewDetails(){
+        System.out.println("-------------------------------------");
+        System.out.println("         Client Details");
+        System.out.println("-------------------------------------");
+        System.out.println("Name: " + this.name);
+        System.out.println("NRIC: " + this.nric);
+        System.out.println("Contact: " + this.phoneNumber);
+        System.out.println("\n--- Policies ---");
+        ArrayList<Policy> policies = this.policyList.getPolicyList();
+        if (policies.isEmpty()) {
+            System.out.println("This client currently has no policies.");
+        } else {
+            for (int i = 0; i < policies.size(); i++) {
+                ClientPolicy policy = (ClientPolicy) policies.get(i);
+                System.out.println((i + 1) + ". " + policy.viewDetails());
+            }
+        }
     }
 }
