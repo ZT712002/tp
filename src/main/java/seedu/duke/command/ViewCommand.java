@@ -1,5 +1,5 @@
 package seedu.duke.command;
 
-public class ViewCommand extends Command {
+public abstract class ViewCommand extends Command {
 
 }

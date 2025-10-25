@@ -24,15 +24,15 @@ Added successfully!
 ----------------------------------------------------
 > Invalid command subtype, Please try again
 > Noted. I've added this client:
-Name: Zendne, ID: T0329123L, Contact: 12345678, Policies: 1. 1234 [Premium: Not set, Starts: Not set, Expires: Not set]
+Name: Zendne, ID: T0329123L, Contact: 12345678, Policies: 1. Policy: 1234 [Premium: Not set, Starts: Not set, Expires: Not set]
 Added successfully!
 ----------------------------------------------------
 > Noted. I've added this client:
-Name: nednez, ID: T0329103L, Contact: 12345678, Policies: 1. 1233 [Premium: Not set, Starts: Not set, Expires: Not set]
+Name: nednez, ID: T0329103L, Contact: 12345678, Policies: 1. Policy: 1233 [Premium: Not set, Starts: Not set, Expires: Not set]
 Added successfully!
 ----------------------------------------------------
 > Successfully updated policy '1234' for client T0329123L.
-New Details: 1234 [Premium: $300.05, Starts: 1999-09-14, Expires: 2010-09-14]
+New Details: Policy: 1234 [Premium: $300.05, Starts: 1999-09-14, Expires: 2010-09-14]
 Policy updated successfully!
 ----------------------------------------------------
 > -------------------------------------
@@ -49,7 +49,7 @@ Contact: 12345678
     - Expiry Date: 14 Sep 2010
 ----------------------------------------------------
 > Noted. I've removed this client:
-Name: Zendne, ID: T0329123L, Contact: 12345678, Policies: 1. 1234 [Premium: $300.05, Starts: 1999-09-14, Expires: 2010-09-14]
+Name: Zendne, ID: T0329123L, Contact: 12345678, Policies: 1. Policy: 1234 [Premium: $300.05, Starts: 1999-09-14, Expires: 2010-09-14]
 ----------------------------------------------------
 > Noted. I've added this meeting:
 Title: TEST, Client: FOO, Date: 18-02-2025, Time: 10:00 to 14:30
@@ -58,7 +58,7 @@ Added successfully!
 > Here are the meetings in your list:
 1. Title: TEST, Client: FOO, Date: 18-02-2025, Time: 10:00 to 14:30
 > Here are the clients in your list:
-1. Name: nednez, ID: T0329103L, Contact: 12345678, Policies: 1. 1233 [Premium: Not set, Starts: Not set, Expires: Not set]
+1. Name: nednez, ID: T0329103L, Contact: 12345678, Policies: 1. Policy: 1233 [Premium: Not set, Starts: Not set, Expires: Not set]
 > Here are the policies in your list:
 1. Name: 1234, Details: Comprehensive life insurance with 500k coverage
 2. Name: 1233, Details: Full medical coverage with dental
