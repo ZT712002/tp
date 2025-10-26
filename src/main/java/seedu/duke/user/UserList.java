@@ -83,14 +83,18 @@ public class UserList implements ListContainer {
     }
 
     public void loadFromStorage(List<String> lines) throws FinanceProPlusException {
-        if (lines.isEmpty()){ return;}
+        if (lines.isEmpty()) {
+            return;
+        }
         user = new User(lines.get(0)); // only one user
     }
 
     public List<String[]> toCSVFormat() {
         List<String[]> rows = new ArrayList<>();
         rows.add(new String[]{"Name", "Email", "Phone", "Representative"});
-        if (user != null) {rows.add(user.toCSVRow());}
+        if (user != null) {
+            rows.add(user.toCSVRow());
+        }
         return rows;
     }
 
