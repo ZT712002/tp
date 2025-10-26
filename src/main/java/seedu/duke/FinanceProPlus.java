@@ -11,8 +11,7 @@ import seedu.duke.policy.PolicyList;
 import seedu.duke.user.UserList;
 import seedu.duke.ui.Ui;
 import seedu.duke.storage.StorageManager;
-
-
+import java.util.logging.Logger;
 
 
 public class FinanceProPlus {
@@ -24,6 +23,8 @@ public class FinanceProPlus {
     private ClientList clients;
     private LookUpTable lookUpTable;
     private UserList user;
+    private static final Logger logger = Logger.getLogger(FinanceProPlus.class.getName());
+
     public FinanceProPlus() {
         ui = new Ui();
         runLoop = true;
@@ -39,12 +40,11 @@ public class FinanceProPlus {
             clients.loadFromStorage(storage.loadFromFile("client.txt"),policies);
             user.loadFromStorage(storage.loadFromFile("user.txt"));
             meetings.loadFromStorage(storage.loadFromFile("meeting.txt"));
-            System.out.println("Data loaded successfully.");
+            logger.info("Data loaded successfully.");
         } catch (Exception e) {
-            System.out.println("Some data failed to load.");
+            logger.info("Some data failed to load: " + e.getMessage());
         }
     }
-
 
     public static void terminate() {
         runLoop = false;
@@ -71,26 +71,29 @@ public class FinanceProPlus {
                 System.out.println("An unexpected error occurred: " + e.getMessage());
                 e.printStackTrace();
             }
-            try {
-                storage.saveToFile("user.txt", user.toStorageFormat());
-                storage.exportToCSV("user.csv", user.toCSVFormat());
-                storage.saveToFile("client.txt", clients.toStorageFormat());
-                storage.exportToCSV("client.csv", clients.toCSVFormat());
-                storage.saveToFile("policy.txt", policies.toStorageFormat());
-                storage.exportToCSV("policy.csv", policies.toCSVFormat());
-                storage.saveToFile("meeting.txt", meetings.toStorageFormat());
-                storage.exportToCSV("meeting.csv", meetings.toCSVFormat());
-
-
-            } catch (Exception e) {
-                System.out.println("Error saving user data: " + e.getMessage());
-            }
+            saveAllData();
         }
 
         ui.closeScanner();
         ui.printGoodbyeMessage();
 
     }
+
+    private void saveAllData() {
+        try {
+            storage.saveToFile("user.txt", user.toStorageFormat());
+            storage.exportToCSV("user.csv", user.toCSVFormat());
+            storage.saveToFile("client.txt", clients.toStorageFormat());
+            storage.exportToCSV("client.csv", clients.toCSVFormat());
+            storage.saveToFile("policy.txt", policies.toStorageFormat());
+            storage.exportToCSV("policy.csv", policies.toCSVFormat());
+            storage.saveToFile("meeting.txt", meetings.toStorageFormat());
+            storage.exportToCSV("meeting.csv", meetings.toCSVFormat());
+        } catch (Exception e) {
+            logger.info("Error saving data: " + e.getMessage());
+        }
+    }
+
     /**
      * Main entry-point for the java.duke.Duke application.
      */
