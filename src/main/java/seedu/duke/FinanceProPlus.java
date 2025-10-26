@@ -16,6 +16,7 @@ import java.util.logging.Logger;
 
 public class FinanceProPlus {
     private static boolean runLoop;
+    private static final Logger logger = Logger.getLogger(FinanceProPlus.class.getName());
     private Ui ui;
     private StorageManager storage;
     private MeetingList meetings;
@@ -23,7 +24,6 @@ public class FinanceProPlus {
     private ClientList clients;
     private LookUpTable lookUpTable;
     private UserList user;
-    private static final Logger logger = Logger.getLogger(FinanceProPlus.class.getName());
 
     public FinanceProPlus() {
         ui = new Ui();
