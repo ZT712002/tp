@@ -60,4 +60,15 @@ public class Policy {
         }
         return "Name: " + name + ", Details: " + details;
     }
+
+    public String toStorageString() {
+
+        return String.format("n/%s d/%s", name, details);
+    }
+
+    public String[] toCSVRow() {
+
+        return new String[]{name, details};
+    }
+
 }

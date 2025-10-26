@@ -156,4 +156,20 @@ public class Client {
             }
         }
     }
+
+    public String toStorageString() {
+        String policyName = "none";
+        if (!policyList.getPolicyList().isEmpty()) {
+            policyName = policyList.getPolicyList().get(0).getName();
+        }
+        return String.format("n/%s c/%d id/%s p/%s", name, phoneNumber, nric, policyName);
+    }
+
+    public String[] toCSVRow() {
+        String policyName = "none";
+        if (!policyList.getPolicyList().isEmpty()) {
+            policyName = policyList.getPolicyList().get(0).getName();
+        }
+        return new String[]{name, String.valueOf(phoneNumber), nric, policyName};
+    }
 }

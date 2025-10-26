@@ -4,6 +4,7 @@ import seedu.duke.container.ListContainer;
 import seedu.duke.exception.FinanceProPlusException;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PolicyList implements ListContainer {
     private ArrayList<Policy> policies = new ArrayList<Policy>();
@@ -87,4 +88,30 @@ public class PolicyList implements ListContainer {
         }
         return null;
     }
+
+    public List<String> toStorageFormat() {
+        List<String> lines = new ArrayList<>();
+        for (Policy p : policies) {
+            lines.add(p.toStorageString());
+        }
+        return lines;
+    }
+
+    public void loadFromStorage(List<String> lines) throws FinanceProPlusException {
+        for (String line : lines) {
+
+            policies.add(new Policy(line, true));
+        }
+    }
+
+    public List<String[]> toCSVFormat() {
+        List<String[]> rows = new ArrayList<>();
+        rows.add(new String[]{"Name", "Details"});
+        for (Policy p : policies) {
+            rows.add(p.toCSVRow());
+        }
+        return rows;
+    }
+
+
 }
