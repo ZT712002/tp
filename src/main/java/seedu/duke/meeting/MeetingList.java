@@ -5,6 +5,8 @@ import seedu.duke.exception.FinanceProPlusException;
 
 import java.util.ArrayList;
 import java.util.logging.Logger;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 
 public class MeetingList implements ListContainer {
@@ -74,5 +76,30 @@ public class MeetingList implements ListContainer {
         }
         logger.fine("Validated delete index: " + index);
         return index;
+    }
+
+    public void listForecast() {
+        assert meetings != null : "Meetings list should not be null";
+        LocalDate today = LocalDate.now();
+        LocalDate forecastEnd = today.plusDays(7);
+        assert forecastEnd.isAfter(today) : "Forecast end date should be after today's date";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
+        ArrayList<Meeting> forecastMeetings = new ArrayList<>();
+        for (Meeting meeting : meetings) {
+            LocalDate meetingDate = LocalDate.parse(meeting.getDate(), formatter);
+            if (!meetingDate.isBefore(today) && !meetingDate.isAfter(forecastEnd)) {
+                forecastMeetings.add(meeting);
+            }
+        }
+
+        if (forecastMeetings.isEmpty()) {
+            System.out.println("No meetings scheduled in the next 7 days.");
+        } else {
+            System.out.println("Meetings in the next 7 days:");
+            for (int i = 0; i < forecastMeetings.size(); i++) {
+                System.out.println((i + 1) + ". " + forecastMeetings.get(i).toString());
+            }
+        }
     }
 }

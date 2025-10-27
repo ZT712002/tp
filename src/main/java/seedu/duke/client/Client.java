@@ -134,7 +134,7 @@ public class Client {
         return this.policyList.findPolicyByName(policyName) != null;
     }
 
-    public PolicyList getPolicyList() {
+    public PolicyList getClientPolicyList() {
         return policyList;
     }
 
