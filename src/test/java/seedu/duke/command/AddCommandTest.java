@@ -3,6 +3,7 @@ package seedu.duke.command;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import seedu.duke.client.ArchivedClientList;
 import seedu.duke.client.ClientList;
 import seedu.duke.container.ListContainer;
 import seedu.duke.container.LookUpTable;
@@ -93,6 +94,7 @@ class AddCommandTest {
     }
     static class StubMeetingList extends MeetingList {}
     static class StubUserList extends UserList {}
+    static class StubArchivedClientList extends ArchivedClientList{}
     private LookUpTable lookUpTable;
     private SpyClientList spyClientList;
     private SpyPolicyList spyPolicyList;
@@ -108,7 +110,8 @@ class AddCommandTest {
         StubUserList stubUserList = new StubUserList();
 
 
-        lookUpTable = new LookUpTable(spyClientList, spyPolicyList, stubMeetingList, stubUserList);
+        lookUpTable = new LookUpTable(spyClientList, spyPolicyList, stubMeetingList, stubUserList,
+                new StubArchivedClientList());
 
 
         System.setOut(new PrintStream(outContent));
