@@ -107,6 +107,16 @@ public class ClientList implements ListContainer {
         return null;
     }
 
+    public void searchClient(String nric) throws FinanceProPlusException {
+        Client foundClient = findClientByNric(nric);
+        if (foundClient != null) {
+            System.out.println("Client found:");
+            System.out.println(foundClient.toString());
+        } else {
+            System.out.println("No client found with NRIC: " + nric);
+        }
+    }
+
     /**
      * Adds a new policy contract to an existing client.
      * This method oversees the validation and creation process.
@@ -120,6 +130,9 @@ public class ClientList implements ListContainer {
         Map<String, String> argsMap = parseAndValidateAddPolicyArgs(arguments);
         String nric = argsMap.get("id");
         Client client = findClientByNric(nric);
+        if(client == null){
+            throw new FinanceProPlusException("Client with NRIC '" + nric+ "' does not exist.");
+        }
         String basePolicyName = argsMap.get("p");
         Policy basePolicy = validateAndGetBasePolicy(client, mainPolicyList, basePolicyName);
         ClientPolicy newClientPolicy = createClientPolicyFromArgs(argsMap, basePolicy);
@@ -241,7 +254,7 @@ public class ClientList implements ListContainer {
         if (client == null) {
             throw new FinanceProPlusException("Error: Client with NRIC '" + nric + "' not found.");
         }
-        Policy clientPolicy = client.getPolicyList().findPolicyByName(basePolicyName);
+        Policy clientPolicy = client.getClientPolicyList().findPolicyByName(basePolicyName);
 
         if (clientPolicy == null) {
             throw new FinanceProPlusException("Error: Client " + nric + " does not have a contract for policy '"
@@ -289,6 +302,9 @@ public class ClientList implements ListContainer {
         Map<String, String> argsMap = Client.parseClientDetails(args);
         String nric = argsMap.get("id");
         Client client = findClientByNric(nric);
+        if(client==null) {
+            throw new FinanceProPlusException("Error: Client with NRIC '" + nric+"' not found.");
+        }
         assert client != null : "Client should not be null in getClientById";
         return client;
     }

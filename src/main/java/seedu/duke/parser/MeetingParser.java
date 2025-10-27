@@ -4,6 +4,7 @@ import seedu.duke.command.AddCommand;
 import seedu.duke.command.DeleteCommand;
 import seedu.duke.command.Command;
 import seedu.duke.command.ListCommand;
+import seedu.duke.command.ForecastCommand;
 import seedu.duke.exception.FinanceProPlusException;
 
 public class MeetingParser extends Parser {
@@ -32,9 +33,11 @@ public class MeetingParser extends Parser {
             return new DeleteCommand(commandType, arguments);
         case "list":
             return new ListCommand(commandType);
+        case "forecast":
+            return new ForecastCommand(commandType);
         default:
             throw new FinanceProPlusException("Invalid meeting command subtype. Please use one of: "
-                    + "'add' or 'delete'.");
+                    + "'add', 'delete', 'list' or 'forecast'.");
         }
     }
 }

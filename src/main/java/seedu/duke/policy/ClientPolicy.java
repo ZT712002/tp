@@ -15,13 +15,28 @@ public class ClientPolicy extends Policy {
     public ClientPolicy(Policy basePolicy, LocalDate startDate, LocalDate expiryDate, BigDecimal monthlyPremium)
             throws FinanceProPlusException {
         super(basePolicy.getName(), false);
+        
+        assert basePolicy != null : "Base policy cannot be null";
+        assert startDate != null : "Start date cannot be null";
+        assert expiryDate != null : "Expiry date cannot be null";
+        assert monthlyPremium != null : "Monthly premium cannot be null";
+        assert monthlyPremium.compareTo(BigDecimal.ZERO) >= 0 : "Monthly premium must be non-negative";
+        assert !startDate.isAfter(expiryDate) : "Start date must be before or equal to expiry date";
+        
         this.startDate = startDate;
         this.expiryDate = expiryDate;
         this.monthlyPremium = monthlyPremium;
+        
+        assert this.startDate != null : "Start date was not set properly";
+        assert this.expiryDate != null : "Expiry date was not set properly";
+        assert this.monthlyPremium != null : "Monthly premium was not set properly";
     }
 
     public ClientPolicy(Policy basePolicy) throws FinanceProPlusException {
         super(basePolicy.getName(), false);
+        
+        assert basePolicy != null : "Base policy cannot be null";
+        
         this.startDate = null;
         this.expiryDate = null;
         this.monthlyPremium = null;
@@ -40,14 +55,24 @@ public class ClientPolicy extends Policy {
     }
 
     public void setStartDate(LocalDate startDate) {
+        assert startDate != null : "Start date cannot be null";
+        if (this.expiryDate != null) {
+            assert !startDate.isAfter(this.expiryDate) : "Start date must be before or equal to expiry date";
+        }
         this.startDate = startDate;
     }
 
     public void setExpiryDate(LocalDate expiryDate) {
+        assert expiryDate != null : "Expiry date cannot be null";
+        if (this.startDate != null) {
+            assert !this.startDate.isAfter(expiryDate) : "Expiry date must be after or equal to start date";
+        }
         this.expiryDate = expiryDate;
     }
 
     public void setMonthlyPremium(BigDecimal monthlyPremium) {
+        assert monthlyPremium != null : "Monthly premium cannot be null";
+        assert monthlyPremium.compareTo(BigDecimal.ZERO) >= 0 : "Monthly premium must be non-negative";
         this.monthlyPremium = monthlyPremium;
     }
 
@@ -56,7 +81,7 @@ public class ClientPolicy extends Policy {
         String premiumStr = (monthlyPremium != null) ? "$" + monthlyPremium : "Not set";
         String startStr = (startDate != null) ? startDate.toString() : "Not set";
         String expiryStr = (expiryDate != null) ? expiryDate.toString() : "Not set";
-        return super.toString() + " [Premium: " + premiumStr
+        return "Policy: "+ super.toString() + " [Premium: " + premiumStr
                 + ", Starts: " + startStr
                 + ", Expires: " + expiryStr + "]";
     }

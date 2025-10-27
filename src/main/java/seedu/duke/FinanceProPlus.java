@@ -1,5 +1,6 @@
 package seedu.duke;
 
+import seedu.duke.client.ArchivedClientList;
 import seedu.duke.client.ClientList;
 import seedu.duke.command.Command;
 import seedu.duke.container.LookUpTable;
@@ -22,6 +23,7 @@ public class FinanceProPlus {
     private MeetingList meetings;
     private PolicyList policies;
     private ClientList clients;
+    private ArchivedClientList archivedClients;
     private LookUpTable lookUpTable;
     private UserList user;
 
@@ -32,9 +34,10 @@ public class FinanceProPlus {
         meetings = new MeetingList();
         policies = new PolicyList();
         clients = new ClientList();
+        archivedClients = new ArchivedClientList();
         user = new UserList();
         LoggerConfig.setup();
-        lookUpTable = new LookUpTable(clients, policies, meetings,user);
+        lookUpTable = new LookUpTable(clients, policies, meetings,user, archivedClients);
         try {
             policies.loadFromStorage(storage.loadFromFile("policy.txt"));
             clients.loadFromStorage(storage.loadFromFile("client.txt"),policies);
@@ -44,6 +47,7 @@ public class FinanceProPlus {
         } catch (Exception e) {
             logger.info("Some data failed to load: " + e.getMessage());
         }
+       
     }
 
     public static void terminate() {
