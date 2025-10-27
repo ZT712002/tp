@@ -13,8 +13,12 @@ public class Policy {
     private String details;
 
     public Policy(String arguments, boolean parseDetails) throws FinanceProPlusException {
+        assert arguments != null : "Arguments cannot be null";
+        
         if (parseDetails) {
             Map<String, String> detailsMap = parsePolicyDetails(arguments);
+            assert detailsMap != null : "Parsed details map cannot be null";
+            
             List<String> requiredKeys = List.of("n", "d");
             for (String key : requiredKeys) {
                 if (!detailsMap.containsKey(key) || detailsMap.get(key).isEmpty()) {
@@ -28,12 +32,21 @@ public class Policy {
             this.name = arguments;
             this.details = "";
         }
+        
+        assert this.name != null : "Policy name must be set after construction";
+        assert this.details != null : "Policy details must be set after construction";
+        assert !this.name.isEmpty() : "Policy name cannot be empty";
     }
 
     public static Map<String, String> parsePolicyDetails(String policyDetails) {
+        assert policyDetails != null : "Policy details cannot be null";
+        
         Map<String, String> detailsMap = new HashMap<>();
         String trimmedDetails = policyDetails.trim();
         String[] parts = trimmedDetails.split(POLICY_REGEX);
+        
+        assert parts != null : "Split parts cannot be null";
+        
         for (String part : parts) {
             String[] keyValue = part.split("/", 2);
             if (keyValue.length == 2) {
@@ -42,6 +55,8 @@ public class Policy {
                 detailsMap.put(key, value);
             }
         }
+        
+        assert detailsMap != null : "Details map must not be null";
         return detailsMap;
     }
     
