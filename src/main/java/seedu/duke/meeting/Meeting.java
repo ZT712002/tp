@@ -119,4 +119,23 @@ public class Meeting {
         }
         return "Title: " + title + ", Client: " + client + ", Date: " + date + timeInfo;
     }
+
+    public String toStorageString() {
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("t/").append(title)
+                .append(" c/").append(client)
+                .append(" d/").append(date)
+                .append(" from/").append(startTime);
+        if (endTime != null && !endTime.isEmpty()) {
+            sb.append(" to/").append(endTime);
+        }
+        return sb.toString();
+    }
+
+    public String[] toCSVRow() {
+
+        return new String[]{title, client, date, startTime, endTime == null ? "" : endTime};
+    }
+
 }

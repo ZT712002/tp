@@ -6,6 +6,10 @@ import seedu.duke.exception.FinanceProPlusException;
 
 import java.util.logging.Logger;
 
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class UserList implements ListContainer {
     private static final Logger logger = Logger.getLogger(UserList.class.getName());
     private User user;
@@ -68,4 +72,30 @@ public class UserList implements ListContainer {
 
         return 0;
     }
+
+    // ========== STORAGE HELPERS ==========
+    public List<String> toStorageFormat() {
+        List<String> lines = new ArrayList<>();
+        if (user != null) {
+            lines.add(user.toStorageString());
+        }
+        return lines;
+    }
+
+    public void loadFromStorage(List<String> lines) throws FinanceProPlusException {
+        if (lines.isEmpty()) {
+            return;
+        }
+        user = new User(lines.get(0)); // only one user
+    }
+
+    public List<String[]> toCSVFormat() {
+        List<String[]> rows = new ArrayList<>();
+        rows.add(new String[]{"Name", "Email", "Phone", "Representative"});
+        if (user != null) {
+            rows.add(user.toCSVRow());
+        }
+        return rows;
+    }
+
 }
