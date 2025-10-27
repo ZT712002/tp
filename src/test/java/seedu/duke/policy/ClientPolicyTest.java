@@ -87,7 +87,7 @@ class ClientPolicyTest {
         ClientPolicy policy = new ClientPolicy(basePolicy, startDate, expiryDate, premium);
         String expected = "Policy Name: 1234\n" +
                 "    - Monthly Premium: $123.46\n" +
-                "    - Start Date: 14 Sept 1999\n" +
+                "    - Start Date: 14 Sep 1999\n" +
                 "    - Expiry Date: 01 Jan 2030";
         String result = policy.viewDetails();
         assertEquals(expected, result);
