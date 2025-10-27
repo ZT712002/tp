@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import seedu.duke.command.AddCommand;
 import seedu.duke.command.Command;
 import seedu.duke.command.DeleteCommand;
+import seedu.duke.command.SearchCommand;
 import seedu.duke.exception.FinanceProPlusException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -66,4 +67,26 @@ class ClientParserTest {
                 ""));
         assertEquals("Client commands should have arguments", error.getMessage());
     }
+
+    @Test
+    void executeAndCreateCommand_searchCommandWithArgs_returnsSearchCommand() throws FinanceProPlusException {
+        ClientParser parser = new ClientParser("client", "search T1234567A");
+        Command command = parser.executeAndCreateCommand();
+        assertInstanceOf(SearchCommand.class, command);
+    }
+
+    @Test
+    void executeAndCreateCommand_searchCommandWithoutArgs_returnsSearchCommand() throws FinanceProPlusException {
+        ClientParser parser = new ClientParser("client", "search");
+        Command command = parser.executeAndCreateCommand();
+        assertInstanceOf(SearchCommand.class, command);
+    }
+
+    @Test
+    void executeAndCreateCommand_caseInsensitiveSearchSubtype_returnsSearchCommand() throws FinanceProPlusException {
+        ClientParser parser = new ClientParser("client", "SEARCH T1234567A");
+        Command command = parser.executeAndCreateCommand();
+        assertInstanceOf(SearchCommand.class, command);
+    }
+
 }

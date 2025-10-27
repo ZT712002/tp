@@ -4,6 +4,7 @@ import seedu.duke.command.AddCommand;
 import seedu.duke.command.AddPolicyCommand;
 import seedu.duke.command.Command;
 import seedu.duke.command.DeleteCommand;
+import seedu.duke.command.SearchCommand;
 import seedu.duke.command.UpdateClientPolicyCommand;
 import seedu.duke.command.ViewClientCommand;
 import seedu.duke.exception.FinanceProPlusException;
@@ -34,6 +35,8 @@ public class ClientParser extends Parser{
             return new AddPolicyCommand(commandType, args);
         case "updatepolicy":
             return new UpdateClientPolicyCommand(commandType,args);
+        case "search":
+            return new SearchCommand(commandType, args);
         case "view":
             return new ViewClientCommand(commandType,args);
         default:
