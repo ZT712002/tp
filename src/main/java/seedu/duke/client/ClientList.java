@@ -23,7 +23,6 @@ public class ClientList implements ListContainer {
         assert clients != null : "Client list should be initialized properly";
     }
 
-
     public void addClient(Client client) {
         assert client != null : "Client to be added should not be null";
         int oldSize = clients.size();
@@ -44,14 +43,13 @@ public class ClientList implements ListContainer {
 
     @Override
     public void addItem(String arguments, ListContainer policyList) throws FinanceProPlusException {
-        Map<String, String> detailsMap = Client.parseClientDetails(arguments);
-        String nric = detailsMap.get("id");
+        Map<String, List<String>> detailsMap = Client.parseClientDetails(arguments);
+        String nric = detailsMap.get("id").get(0);
         if (nric == null || nric.isEmpty()) {
             throw new FinanceProPlusException("NRIC (id/) must be provided.");
         }
         if (findClientByNric(nric) != null) {
-            throw new FinanceProPlusException("A client with NRIC '"
-                    + nric + "' already exists.");
+            throw new FinanceProPlusException("A client with NRIC '" + nric + "' already exists.");
         }
         Client client = new Client(arguments, policyList);
         addClient(client);
@@ -131,14 +129,13 @@ public class ClientList implements ListContainer {
      * @throws FinanceProPlusException If any validation fails.
      */
     public void addPolicyToClient(String arguments, ListContainer mainPolicyList) throws FinanceProPlusException {
-
-        Map<String, String> argsMap = parseAndValidateAddPolicyArgs(arguments);
-        String nric = argsMap.get("id");
+        Map<String, List<String>> argsMap = parseAndValidateAddPolicyArgs(arguments);
+        String nric = argsMap.get("id").get(0);
         Client client = findClientByNric(nric);
         if (client == null) {
             throw new FinanceProPlusException("Client with NRIC '" + nric + "' does not exist.");
         }
-        String basePolicyName = argsMap.get("p");
+        String basePolicyName = argsMap.get("p").get(0);
         Policy basePolicy = validateAndGetBasePolicy(client, mainPolicyList, basePolicyName);
         ClientPolicy newClientPolicy = createClientPolicyFromArgs(argsMap, basePolicy);
         client.addPolicy(newClientPolicy);
@@ -146,21 +143,12 @@ public class ClientList implements ListContainer {
         System.out.println("Updated Client Details: " + client);
     }
 
-    /**
-     * Creates a ClientPolicy instance from the parsed arguments map.
-     *
-     * @param argsMap    The map of parsed arguments.
-     * @param basePolicy The base Policy this contract is based on.
-     * @return A new ClientPolicy object.
-     * @throws FinanceProPlusException If date or premium formats are invalid.
-     */
-    private ClientPolicy createClientPolicyFromArgs(Map<String, String> argsMap, Policy basePolicy)
+    private ClientPolicy createClientPolicyFromArgs(Map<String, List<String>> argsMap, Policy basePolicy)
             throws FinanceProPlusException {
         try {
-            LocalDate startDate = LocalDate.parse(argsMap.get("s")); // Assumes YYYY-MM-DD
-            LocalDate expiryDate = LocalDate.parse(argsMap.get("e"));
-            BigDecimal premium = new BigDecimal(argsMap.get("m"));
-
+            LocalDate startDate = LocalDate.parse(argsMap.get("s").get(0)); // Assumes YYYY-MM-DD
+            LocalDate expiryDate = LocalDate.parse(argsMap.get("e").get(0));
+            BigDecimal premium = new BigDecimal(argsMap.get("m").get(0));
             return new ClientPolicy(basePolicy, startDate, expiryDate, premium);
         } catch (DateTimeParseException e) {
             throw new FinanceProPlusException("Invalid date format. Please use YYYY-MM-DD.");
@@ -169,15 +157,6 @@ public class ClientList implements ListContainer {
         }
     }
 
-    /**
-     * Finds the base policy in the main list and ensures the client doesn't already own it.
-     *
-     * @param client         The client to check against.
-     * @param mainPolicyList The main list of company policies.
-     * @param basePolicyName The name of the policy to validate.
-     * @return The validated base Policy object.
-     * @throws FinanceProPlusException If the policy doesn't exist or the client already has it.
-     */
     private Policy validateAndGetBasePolicy(Client client, ListContainer mainPolicyList, String basePolicyName)
             throws FinanceProPlusException {
         PolicyList companyPolicies = (PolicyList) mainPolicyList;
@@ -193,15 +172,8 @@ public class ClientList implements ListContainer {
         return basePolicy;
     }
 
-    /**
-     * Parses the argument string and validates that all required keys are present.
-     *
-     * @param arguments The raw command arguments.
-     * @return A map of the parsed arguments.
-     * @throws FinanceProPlusException If any required key is missing.
-     */
-    private Map<String, String> parseAndValidateAddPolicyArgs(String arguments) throws FinanceProPlusException {
-        Map<String, String> argsMap = Client.parseClientDetails(arguments);
+    private Map<String, List<String>> parseAndValidateAddPolicyArgs(String arguments) throws FinanceProPlusException {
+        Map<String, List<String>> argsMap = Client.parseClientDetails(arguments);
         List<String> requiredKeys = List.of("id", "p", "s", "e", "m");
         for (String key : requiredKeys) {
             if (!argsMap.containsKey(key) || argsMap.get(key).isEmpty()) {
@@ -212,35 +184,22 @@ public class ClientList implements ListContainer {
         return argsMap;
     }
 
-    /**
-     * Updates an existing policy contract for a specific client.
-     * This method orchestrates the parsing, validation, and update process.
-     *
-     * @param arguments The raw string arguments from the user.
-     * @throws FinanceProPlusException If validation fails.
-     */
     public void updatePolicyForClient(String arguments) throws FinanceProPlusException {
-        Map<String, String> argsMap = parseAndValidateUpdatePolicyArgs(arguments);
+        Map<String, List<String>> argsMap = parseAndValidateUpdatePolicyArgs(arguments);
         ClientPolicy clientPolicyToUpdate = findClientPolicyToUpdate(argsMap);
         boolean wasUpdated = applyPolicyUpdatesFromArgs(clientPolicyToUpdate, argsMap);
         if (wasUpdated) {
             System.out.println("Successfully updated policy '" + clientPolicyToUpdate.getName()
-                    + "' for client " + argsMap.get("id") + ".");
+                    + "' for client " + argsMap.get("id").get(0) + ".");
             System.out.println("New Details: " + clientPolicyToUpdate);
         } else {
             System.out.println("No updates were applied.");
         }
     }
 
-    /**
-     * Parses the arguments for an update command and validates its structure.
-     *
-     * @param arguments The raw command arguments.
-     * @return A map of the parsed arguments.
-     * @throws FinanceProPlusException If mandatory keys are missing or no update keys are provided.
-     */
-    private Map<String, String> parseAndValidateUpdatePolicyArgs(String arguments) throws FinanceProPlusException {
-        Map<String, String> argsMap = Client.parseClientDetails(arguments);
+    private Map<String, List<String>> parseAndValidateUpdatePolicyArgs(String arguments)
+            throws FinanceProPlusException {
+        Map<String, List<String>> argsMap = Client.parseClientDetails(arguments);
         if (!argsMap.containsKey("id") || !argsMap.containsKey("p")) {
             throw new FinanceProPlusException("Invalid command. Both id/ and p/ are required to identify the policy.");
         }
@@ -251,16 +210,9 @@ public class ClientList implements ListContainer {
         return argsMap;
     }
 
-    /**
-     * Finds the specific ClientPolicy object based on the client's NRIC and policy name.
-     *
-     * @param argsMap The map of parsed arguments containing the 'id' and 'p' keys.
-     * @return The specific ClientPolicy object to be updated.
-     * @throws FinanceProPlusException If the client or their policy contract cannot be found.
-     */
-    private ClientPolicy findClientPolicyToUpdate(Map<String, String> argsMap) throws FinanceProPlusException {
-        String nric = argsMap.get("id");
-        String basePolicyName = argsMap.get("p");
+    private ClientPolicy findClientPolicyToUpdate(Map<String, List<String>> argsMap) throws FinanceProPlusException {
+        String nric = argsMap.get("id").get(0);
+        String basePolicyName = argsMap.get("p").get(0);
         Client client = findClientByNric(nric);
         if (client == null) {
             throw new FinanceProPlusException("Error: Client with NRIC '" + nric + "' not found.");
@@ -278,28 +230,20 @@ public class ClientList implements ListContainer {
         return (ClientPolicy) clientPolicy;
     }
 
-    /**
-     * Applies the updates from the arguments map to the ClientPolicy object using its setters.
-     *
-     * @param clientPolicy The policy object to modify.
-     * @param argsMap      The map of parsed arguments.
-     * @return true if any field was successfully updated.
-     * @throws FinanceProPlusException If date or premium formats are invalid.
-     */
-    private boolean applyPolicyUpdatesFromArgs(ClientPolicy clientPolicy, Map<String, String> argsMap)
+    private boolean applyPolicyUpdatesFromArgs(ClientPolicy clientPolicy, Map<String, List<String>> argsMap)
             throws FinanceProPlusException {
         boolean isUpdated = false;
         try {
             if (argsMap.containsKey("s")) {
-                clientPolicy.setStartDate(LocalDate.parse(argsMap.get("s")));
+                clientPolicy.setStartDate(LocalDate.parse(argsMap.get("s").get(0)));
                 isUpdated = true;
             }
             if (argsMap.containsKey("e")) {
-                clientPolicy.setExpiryDate(LocalDate.parse(argsMap.get("e")));
+                clientPolicy.setExpiryDate(LocalDate.parse(argsMap.get("e").get(0)));
                 isUpdated = true;
             }
             if (argsMap.containsKey("m")) {
-                clientPolicy.setMonthlyPremium(new BigDecimal(argsMap.get("m")));
+                clientPolicy.setMonthlyPremium(new BigDecimal(argsMap.get("m").get(0)));
                 isUpdated = true;
             }
         } catch (DateTimeParseException e) {
@@ -311,8 +255,8 @@ public class ClientList implements ListContainer {
     }
 
     public Client getClientByID(String args) throws FinanceProPlusException {
-        Map<String, String> argsMap = Client.parseClientDetails(args);
-        String nric = argsMap.get("id");
+        Map<String, List<String>> argsMap = Client.parseClientDetails(args);
+        String nric = argsMap.get("id").get(0);
         Client client = findClientByNric(nric);
         if (client == null) {
             throw new FinanceProPlusException("Error: Client with NRIC '" + nric + "' not found.");
@@ -344,7 +288,7 @@ public class ClientList implements ListContainer {
         }
         return rows;
     }
-
 }
+
 
 
