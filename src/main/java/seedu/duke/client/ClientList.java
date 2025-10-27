@@ -5,6 +5,7 @@ import seedu.duke.exception.FinanceProPlusException;
 import seedu.duke.policy.Policy;
 import seedu.duke.policy.PolicyList;
 import seedu.duke.policy.ClientPolicy;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -14,8 +15,9 @@ import java.time.format.DateTimeParseException;
 import java.math.BigDecimal;
 
 public class ClientList implements ListContainer {
-    private static final Logger logger =Logger.getLogger(ClientList.class.getName());
+    private static final Logger logger = Logger.getLogger(ClientList.class.getName());
     private ArrayList<Client> clients;
+
     public ClientList() {
         this.clients = new ArrayList<Client>();
         assert clients != null : "Client list should be initialized properly";
@@ -30,6 +32,7 @@ public class ClientList implements ListContainer {
         System.out.println("Noted. I've added this client:");
         System.out.println(client);
     }
+
     public ArrayList<Client> getClientList() {
         return clients;
     }
@@ -57,7 +60,7 @@ public class ClientList implements ListContainer {
 
     @Override
     public void deleteItem(String arguments) throws FinanceProPlusException {
-        if(clients.isEmpty()) {
+        if (clients.isEmpty()) {
             System.out.println("No clients to delete.");
             return;
         }
@@ -81,6 +84,7 @@ public class ClientList implements ListContainer {
             }
         }
     }
+
     @Override
     public int checkDeleteIndex(String arguments) throws FinanceProPlusException {
         int index;
@@ -95,6 +99,7 @@ public class ClientList implements ListContainer {
         logger.fine("Validated delete index: " + index);
         return index;
     }
+
     public Client findClientByNric(String nric) throws FinanceProPlusException {
         if (nric == null || nric.isEmpty()) {
             throw new FinanceProPlusException("Error: NRIC to find cannot be null or empty. make sure id/ isn't empty");
@@ -121,7 +126,7 @@ public class ClientList implements ListContainer {
      * Adds a new policy contract to an existing client.
      * This method oversees the validation and creation process.
      *
-     * @param arguments The raw string arguments from the user.
+     * @param arguments      The raw string arguments from the user.
      * @param mainPolicyList The main list of all company policies for validation.
      * @throws FinanceProPlusException If any validation fails.
      */
@@ -130,8 +135,8 @@ public class ClientList implements ListContainer {
         Map<String, String> argsMap = parseAndValidateAddPolicyArgs(arguments);
         String nric = argsMap.get("id");
         Client client = findClientByNric(nric);
-        if(client == null){
-            throw new FinanceProPlusException("Client with NRIC '" + nric+ "' does not exist.");
+        if (client == null) {
+            throw new FinanceProPlusException("Client with NRIC '" + nric + "' does not exist.");
         }
         String basePolicyName = argsMap.get("p");
         Policy basePolicy = validateAndGetBasePolicy(client, mainPolicyList, basePolicyName);
@@ -140,10 +145,11 @@ public class ClientList implements ListContainer {
         System.out.println("Successfully added new policy contract to client " + nric + ".");
         System.out.println("Updated Client Details: " + client);
     }
+
     /**
      * Creates a ClientPolicy instance from the parsed arguments map.
      *
-     * @param argsMap The map of parsed arguments.
+     * @param argsMap    The map of parsed arguments.
      * @param basePolicy The base Policy this contract is based on.
      * @return A new ClientPolicy object.
      * @throws FinanceProPlusException If date or premium formats are invalid.
@@ -162,10 +168,11 @@ public class ClientList implements ListContainer {
             throw new FinanceProPlusException("Invalid premium format. Please enter a valid number (e.g., 150.75).");
         }
     }
+
     /**
      * Finds the base policy in the main list and ensures the client doesn't already own it.
      *
-     * @param client The client to check against.
+     * @param client         The client to check against.
      * @param mainPolicyList The main list of company policies.
      * @param basePolicyName The name of the policy to validate.
      * @return The validated base Policy object.
@@ -185,6 +192,7 @@ public class ClientList implements ListContainer {
         }
         return basePolicy;
     }
+
     /**
      * Parses the argument string and validates that all required keys are present.
      *
@@ -203,6 +211,7 @@ public class ClientList implements ListContainer {
         }
         return argsMap;
     }
+
     /**
      * Updates an existing policy contract for a specific client.
      * This method orchestrates the parsing, validation, and update process.
@@ -222,6 +231,7 @@ public class ClientList implements ListContainer {
             System.out.println("No updates were applied.");
         }
     }
+
     /**
      * Parses the arguments for an update command and validates its structure.
      *
@@ -240,6 +250,7 @@ public class ClientList implements ListContainer {
         }
         return argsMap;
     }
+
     /**
      * Finds the specific ClientPolicy object based on the client's NRIC and policy name.
      *
@@ -266,11 +277,12 @@ public class ClientList implements ListContainer {
         }
         return (ClientPolicy) clientPolicy;
     }
+
     /**
      * Applies the updates from the arguments map to the ClientPolicy object using its setters.
      *
      * @param clientPolicy The policy object to modify.
-     * @param argsMap The map of parsed arguments.
+     * @param argsMap      The map of parsed arguments.
      * @return true if any field was successfully updated.
      * @throws FinanceProPlusException If date or premium formats are invalid.
      */
@@ -302,12 +314,13 @@ public class ClientList implements ListContainer {
         Map<String, String> argsMap = Client.parseClientDetails(args);
         String nric = argsMap.get("id");
         Client client = findClientByNric(nric);
-        if(client==null) {
-            throw new FinanceProPlusException("Error: Client with NRIC '" + nric+"' not found.");
+        if (client == null) {
+            throw new FinanceProPlusException("Error: Client with NRIC '" + nric + "' not found.");
         }
         assert client != null : "Client should not be null in getClientById";
         return client;
     }
+
     public List<String> toStorageFormat() {
         List<String> lines = new ArrayList<>();
         for (Client c : clients) {

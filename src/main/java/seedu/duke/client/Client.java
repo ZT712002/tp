@@ -23,7 +23,7 @@ public class Client {
      * Returns constructor for creating a Client, where the policy is OPTIONAL.
      * It validates required fields (n, c, id) and optionally validates and adds a policy.
      *
-     * @param arguments The raw string of client details.
+     * @param arguments      The raw string of client details.
      * @param mainPolicyList The ListContainer holding all company policies for validation.
      * @throws FinanceProPlusException if required details are missing or an optional policy is invalid.
      *
@@ -62,7 +62,7 @@ public class Client {
     /**
      * Handles the creation of a "placeholder" ClientPolicy if the 'p/' prefix is provided.
      *
-     * @param detailsMap The map of parsed arguments.
+     * @param detailsMap     The map of parsed arguments.
      * @param mainPolicyList The main list of company policies to validate against.
      * @throws FinanceProPlusException If the policy number is empty or the policy doesn't exist.
      */
@@ -75,7 +75,7 @@ public class Client {
             }
             PolicyList companyPolicies = (PolicyList) mainPolicyList;
             Policy basePolicy = companyPolicies.findPolicyByName(policyNumberToFind);
-            if(basePolicy == null){
+            if (basePolicy == null) {
                 throw new FinanceProPlusException("Validation Error: Policy '" + policyNumberToFind
                         + "' does not exist. Please add it to the main policy list first.");
             }
@@ -101,6 +101,7 @@ public class Client {
         assert detailsMap != null : "The resulting details map should not be null";
         return detailsMap;
     }
+
     @Override
     public String toString() {
         assert name != null : "Name should not be null when calling toString";
@@ -113,11 +114,14 @@ public class Client {
     public String getName() {
         return name;
     }
+
     public String getNric() {
         return nric;
     }
+
     /**
      * Adds a validated policy to the client's personal policy list.
+     *
      * @param policy The Policy object to add.
      */
     public void addPolicy(ClientPolicy policy) throws FinanceProPlusException {
@@ -125,8 +129,10 @@ public class Client {
             this.policyList.addPolicy(policy);
         }
     }
+
     /**
      * Checks if the client already owns a policy with the given name.
+     *
      * @param policyName The name of the policy to check.
      * @return true if the client already has the policy, false otherwise.
      */
@@ -138,7 +144,7 @@ public class Client {
         return policyList;
     }
 
-    public void viewDetails(){
+    public void viewDetails() {
         System.out.println("-------------------------------------");
         System.out.println("         Client Details");
         System.out.println("-------------------------------------");
