@@ -93,6 +93,7 @@ class AddCommandTest {
         }
     }
     static class StubMeetingList extends MeetingList {}
+    static class StubTaskList extends seedu.duke.task.TaskList {}
     static class StubUserList extends UserList {}
     static class StubArchivedClientList extends ArchivedClientList{}
     private LookUpTable lookUpTable;
@@ -107,13 +108,11 @@ class AddCommandTest {
         spyClientList = new SpyClientList();
         spyPolicyList = new SpyPolicyList();
         StubMeetingList stubMeetingList = new StubMeetingList();
+        StubTaskList stubTaskList = new StubTaskList();
         StubUserList stubUserList = new StubUserList();
-
-
-        lookUpTable = new LookUpTable(spyClientList, spyPolicyList, stubMeetingList, stubUserList,
-                new StubArchivedClientList());
-
-
+      
+        lookUpTable = new LookUpTable(spyClientList, spyPolicyList, stubMeetingList, 
+                                      stubTaskList, stubUserList, new StubArchivedClientList());
         System.setOut(new PrintStream(outContent));
 
     }

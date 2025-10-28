@@ -9,12 +9,12 @@ import seedu.duke.logger.LoggerConfig;
 import seedu.duke.meeting.MeetingList;
 import seedu.duke.parser.Parser;
 import seedu.duke.policy.PolicyList;
+import seedu.duke.task.TaskList;
 import seedu.duke.user.UserList;
 import seedu.duke.ui.Ui;
 import seedu.duke.storage.StorageManager;
 
 import java.util.logging.Logger;
-
 
 public class FinanceProPlus {
     private static boolean runLoop;
@@ -24,6 +24,7 @@ public class FinanceProPlus {
     private MeetingList meetings;
     private PolicyList policies;
     private ClientList clients;
+    private TaskList tasks;
     private ArchivedClientList archivedClients;
     private LookUpTable lookUpTable;
     private UserList user;
@@ -35,10 +36,11 @@ public class FinanceProPlus {
         meetings = new MeetingList();
         policies = new PolicyList();
         clients = new ClientList();
-        archivedClients = new ArchivedClientList();
+        tasks = new TaskList();
         user = new UserList();
+        archivedClients = new ArchivedClientList();
         LoggerConfig.setup();
-        lookUpTable = new LookUpTable(clients, policies, meetings, user, archivedClients);
+        lookUpTable = new LookUpTable(clients, policies, meetings, tasks, user, archivedClients);
         try {
             policies.loadFromStorage(storage.loadFromFile("policy.txt"));
             clients.loadFromStorage(storage.loadFromFile("client.txt"), policies);
@@ -48,8 +50,7 @@ public class FinanceProPlus {
             logger.info("Data loaded successfully.");
         } catch (Exception e) {
             logger.info("Some data failed to load: " + e.getMessage());
-        }
-
+        }  
     }
 
     public static void terminate() {
