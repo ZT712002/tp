@@ -4,6 +4,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import seedu.duke.client.ClientList;
+import seedu.duke.client.ArchivedClientList;
 import seedu.duke.container.ListContainer;
 import seedu.duke.container.LookUpTable;
 import seedu.duke.exception.FinanceProPlusException;
@@ -49,6 +50,7 @@ class AddPolicyCommandTest {
     static class StubMeetingList extends MeetingList {}
     static class StubTaskList extends seedu.duke.task.TaskList {}
     static class StubUserList extends UserList {}
+    static class StubArchivedClientList extends ArchivedClientList {}
 
 
     private LookUpTable lookUpTable;
@@ -62,7 +64,7 @@ class AddPolicyCommandTest {
         spyClientList = new SpyClientList();
         stubPolicyList = new StubPolicyList();
         lookUpTable = new LookUpTable(spyClientList, stubPolicyList, new StubMeetingList(),
-                new StubTaskList(), new StubUserList());
+                new StubTaskList(), new StubUserList(), new StubArchivedClientList());
 
         System.setOut(new PrintStream(outContent));
     }

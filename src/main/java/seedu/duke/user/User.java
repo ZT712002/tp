@@ -75,4 +75,14 @@ public class User {
                 + "Phone: " + phoneNumber
                 + "\n" + "Representative No.: " + representativeNumber;
     }
+
+    // ========== STORAGE HELPERS ==========
+    public String toStorageString() {
+        return String.format("n/%s e/%s p/%d r/%s", name, email, phoneNumber, representativeNumber);
+    }
+
+    public String[] toCSVRow() {
+        return new String[]{name, email, String.valueOf(phoneNumber), representativeNumber};
+    }
+
 }
