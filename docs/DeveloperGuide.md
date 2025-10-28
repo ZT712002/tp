@@ -44,6 +44,31 @@ and hands back the control signal to Client Parser. ClientParser hands back sign
 In the Additem function it creates a new Client Object. In the Client Object Constructor it does the verification and instantiates the attributes. The client object then returns the control signal back to ClientList.
 ClientList then does a callback method AddClient to add the client into the clientlist object  and then the additem callback is finished. ClientList then hands back control to Add Command and Add Command adds gives back the control to UI.
 UI then calls the method printExecutionMessage() to AddCommand and AddCommand returns control back to UI with data. UI then displays the success message to the user.
+
+### Task Management Feature
+
+The Task Management feature allows financial advisors to create and manage standalone tasks with due dates. This feature enables users to track action items, deadlines, and follow-ups independently of clients or policies, providing a comprehensive task management system within FinanceProPlus.
+
+#### Implementation
+
+The task management feature is implemented through several key components that work together to parse user input, validate task details, and persist task data. The implementation follows the existing architecture pattern established for other entities (clients, policies, meetings) in the system.
+
+##### Architecture-Level Design
+
+At the architecture level, the task feature integrates seamlessly with the existing components:
+
+1. UI Component: Receives the user's task command (e.g., task add d/Report by/15-01-2024)
+2. Parser Component: Routes the command to TaskParser, which interprets the command subtype and extracts arguments
+3. Command Component: Creates and executes an AddCommand with the task subtype
+4. LookUpTable Component: Retrieves the appropriate TaskList to handle the operation
+5. Model Component: Task objects encapsulate task data including description and due date
+
+##### Task Creation Process
+
+When a user creates a new task, the following sequence of operations occurs:
+
+![Task Add Sequence Diagram](./umldiagrams/tasksequence.png)
+
 ### List Features
 
 ## Product scope
