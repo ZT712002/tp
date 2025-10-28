@@ -9,6 +9,7 @@ import seedu.duke.container.LookUpTable;
 import seedu.duke.exception.FinanceProPlusException;
 import seedu.duke.meeting.MeetingList;
 import seedu.duke.policy.PolicyList;
+import seedu.duke.task.TaskList;
 import seedu.duke.user.UserList;
 
 import java.io.ByteArrayOutputStream;
@@ -39,6 +40,7 @@ class UpdateClientPolicyCommandTest {
     }
     static class StubPolicyList extends PolicyList {}
     static class StubMeetingList extends MeetingList {}
+    static class StubTaskList extends TaskList {}
     static class StubUserList extends UserList {}
     static class StubArchivedClientList extends ArchivedClientList {}
     private LookUpTable lookUpTable;
@@ -49,8 +51,9 @@ class UpdateClientPolicyCommandTest {
     @BeforeEach
     void setUp() {
         spyClientList = new SpyClientList();
-        lookUpTable = new LookUpTable(spyClientList, new StubPolicyList(), new StubMeetingList(), new StubUserList(),
-                new StubArchivedClientList());
+        lookUpTable = new LookUpTable(spyClientList, new StubPolicyList(), new StubMeetingList(),
+                new StubTaskList(), new StubUserList(), new StubArchivedClientList());
+
         System.setOut(new PrintStream(outContent));
     }
 

@@ -29,6 +29,8 @@ public class Parser {
             return new PolicyParser(commandType, commandArgs);
         case "meeting":
             return new MeetingParser(commandType, commandArgs);
+        case "task":
+            return new TaskParser(commandType, commandArgs);
         case "exit":
             return new ExitParser();
         default:

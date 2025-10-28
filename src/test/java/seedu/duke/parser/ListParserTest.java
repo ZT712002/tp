@@ -20,6 +20,13 @@ class ListParserTest {
     }
 
     @Test
+    void executeAndCreateCommand_validTaskSubtype_returnsListCommand() throws FinanceProPlusException {
+        ListParser parser = new ListParser("list", "task");
+        Command command = parser.executeAndCreateCommand();
+        assertInstanceOf(ListCommand.class, command);
+    }
+
+    @Test
     void constructor_caseInsensitiveSubtype_convertsToLowerCase() throws FinanceProPlusException {
         ListParser parser = new ListParser("list", "CLIENT");
         Command command = parser.executeAndCreateCommand();
@@ -31,7 +38,7 @@ class ListParserTest {
         ListParser parser = new ListParser("list", "appointment");
         Exception exception = assertThrows(FinanceProPlusException.class, parser::executeAndCreateCommand);
         String expectedMessage = "Invalid list command subtype. Please use this format" +
-                "'list <client/meeting/policy>'";
+                "'list <client/meeting/policy/task>'";
         assertEquals(expectedMessage, exception.getMessage());
     }
 
@@ -41,7 +48,7 @@ class ListParserTest {
             new ListParser("list", "client details");
         });
         String expectedMessage = "Too many arguments for list command. Please use this format" +
-                "'list <client/meeting/policy>'";
+                "'list <client/meeting/policy/task>'";
         assertEquals(expectedMessage, exception.getMessage());
     }
 
@@ -50,7 +57,7 @@ class ListParserTest {
         ListParser parser = new ListParser("list", "");
         Exception exception = assertThrows(FinanceProPlusException.class, parser::executeAndCreateCommand);
         String expectedMessage = "Invalid list command subtype. Please use this format" +
-                "'list <client/meeting/policy>'";
+                "'list <client/meeting/policy/task>'";
         assertEquals(expectedMessage, exception.getMessage());
     }
 }
