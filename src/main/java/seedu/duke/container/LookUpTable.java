@@ -15,7 +15,8 @@ import java.util.HashMap;
  */
 public class LookUpTable {
     private HashMap<String, ListContainer> map;
-    public LookUpTable(ClientList clients, PolicyList policies, MeetingList meetings, TaskList tasks, UserList user, ArchivedClientList archived) {
+    public LookUpTable(ClientList clients, PolicyList policies, MeetingList meetings, 
+                       TaskList tasks, UserList user, ArchivedClientList archived) {
         map = new HashMap<String, ListContainer>();
         map.put("client", clients);
         map.put("policy", policies);
