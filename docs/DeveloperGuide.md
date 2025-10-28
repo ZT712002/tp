@@ -23,6 +23,91 @@ The App is consisted of the following four components:
 * Commons: Consists of various classes that interact with other components
 * LookUpTable: Consists a Look Up Table of various lists that store data
 * Command: The command executer
+
+### Storage Component
+
+The **StorageManager** class is responsible for all file operations in the application, including reading, writing, and exporting data.  
+It ensures that user data, client data, archived clients, tasks, policies, and meeting records are automatically persisted to disk after every command execution  minimizing data loss risks even during unexpected shutdowns.
+
+![Storage Component Autosave Sequence](./umldiagrams/Storage.png)
+
+#### Design Overview
+The `FinanceProPlus` class manages the autosave feature through its `saveAllData()` method, which is triggered after each executed command.  
+This guarantees that all updates made during runtime  including new tasks, meetings, or clients — are immediately written to disk without requiring explicit user action to save.
+
+Each dataset (User, Client, ArchivedClient, Policy, Meeting, and Task) is stored in both:
+- **Text format** (`.txt`) – for reliable internal persistence and reloading.
+- **CSV format** (`.csv`) – for user-friendly export and analysis.
+
+All saved data resides within two primary directories:
+- `data/` — used for internal save and load operations.
+- `exports/` — used for external CSV exports (e.g., viewing in Excel).
+
+#### Key Data Files
+| Data Type | Text File | CSV File |
+|------------|------------|----------|
+| User | `user.txt` | `user.csv` |
+| Client | `client.txt` | `client.csv` |
+| Archived Clients | `archived_clients.txt` | `archived_clients.csv` |
+| Policy | `policy.txt` | `policy.csv` |
+| Meeting | `meeting.txt` | `meeting.csv` |
+| Task | `task.txt` | `task.csv` |
+#### Workflow Description (Autosave)
+1. After the user enters a command, `Parser.parse()` creates a `Command` object.
+2. The command executes and updates the respective data list(s).
+3. `FinanceProPlus` automatically invokes `saveAllData()`.
+4. Each list’s data is written to `.txt` and `.csv` files via `StorageManager`.
+5. The `StorageManager` logs a success message (`logger.info("Data saved successfully.")`).
+
+Errors during saving are logged internally and not printed to the user — keeping the UI clean but traceable through logs.
+
+#### Rationale for Design
+- **Autosave per command** guarantees maximum reliability — no manual save needed.
+- **Centralized save logic** inside `FinanceProPlus` keeps design modular and testable.
+- **Logging instead of printing** ensures users aren’t spammed with system messages.
+
+---
+
+### Storage Initialization on Startup
+
+When the program launches, previously saved data is automatically loaded into memory.  
+This allows users to seamlessly continue from where they left off without manually restoring files.
+
+![Storage Loading Sequence](./umldiagrams/Storage_Loading.png)
+
+#### Design Overview
+On startup, the `FinanceProPlus` constructor initializes the `StorageManager` and sequentially loads data from disk into each component:
+- **PolicyList**
+- **ClientList**
+- **UserList**
+- **MeetingList**
+- **ArchivedClientList**
+- **TaskList**
+
+If any file is missing or unreadable, the app logs the issue but continues loading other data, ensuring robust operation even with partial data.
+
+#### Workflow Description (Startup Loading)
+1. `FinanceProPlus` is instantiated.
+2. `StorageManager` is initialized, creating necessary folders.
+3. The following load sequence occurs:
+    - `policies.loadFromStorage(storage.loadFromFile("policy.txt"));`
+    - `clients.loadFromStorage(storage.loadFromFile("client.txt"), policies);`
+    - `user.loadFromStorage(storage.loadFromFile("user.txt"));`
+    - `meetings.loadFromStorage(storage.loadFromFile("meeting.txt"));`
+    - `archivedClients.loadFromStorage(storage.loadFromFile("archived_clients.txt"));`
+    - `tasks.loadFromStorage(storage.loadFromFile("task.txt"));`
+4. Each list reconstructs its objects from text lines.
+5. `Logger.info("Data loaded successfully.")` confirms successful initialization.
+
+If no files exist (first launch), blank lists are created and files will be generated automatically upon the first autosave.
+
+#### Rationale for Design
+- Guarantees users always resume with consistent data.
+- Prevents startup failure even if a single data file is missing.
+- Keeps all load logic centralized within `FinanceProPlus` for easier debugging and maintenance.
+
+---
+
 ### LookUpTable Component
 
 API: [LookUpTable](./seedu/duke/container/LookUpTable.java)
@@ -138,6 +223,44 @@ ListContainer (like ClientList, PolicyList, etc.) guarantees it will have a list
 6. **LookUpTable**
 * **Role**:: A centralized registry for all ListContainer instances.
 * **Responsibility**: It provides a single point of access for commands to retrieve the data containers they need to operate on, decoupling the command from the storage details of the lists.
+ClientList then does a callback method AddClient to add the client into the clientlist object  and then the additem callback is finished. ClientList then hands back control to Add Command and Add Command adds gives back the control to UI.
+UI then calls the method printExecutionMessage() to AddCommand and AddCommand returns control back to UI with data. UI then displays the success message to the user.
+
+### Task Management Feature
+
+The Task Management feature allows financial advisors to create and manage standalone tasks with due dates. This feature enables users to track action items, deadlines, and follow-ups independently of clients or policies, providing a comprehensive task management system within FinanceProPlus.
+
+#### Implementation
+
+The task management feature is implemented through several key components that work together to parse user input, validate task details, and persist task data. The implementation follows the existing architecture pattern established for other entities (clients, policies, meetings) in the system.
+
+##### Architecture-Level Design
+
+At the architecture level, the task feature integrates seamlessly with the existing components:
+
+1. UI Component: Receives the user's task command (e.g., task add d/Report by/15-01-2024)
+2. Parser Component: Routes the command to TaskParser, which interprets the command subtype and extracts arguments
+3. Command Component: Creates and executes an AddCommand with the task subtype
+4. LookUpTable Component: Retrieves the appropriate TaskList to handle the operation
+5. Model Component: Task objects encapsulate task data including description and due date
+
+##### Task Creation Process
+
+When a user creates a new task, the following sequence of operations occurs:
+
+![Task Add Sequence Diagram](./umldiagrams/tasksequence.png)
+
+
+### Meeting Features
+When the command "meeting forecast" is invoked by a user, here is a sequence diagram depicting the overall flow of the program.
+
+![Figure of Meeting Forecast Command SQ](./umldiagrams/meeting_sequence_diagram_Forecast.png)
+
+When the user issues the command "meeting forecast" the command is first passed through the UI class. The UI then calls for the Parser which determines the command type as "meeting" and creates a new MeetingParser instance with the command arguments.
+The MeetingParser processes the command by calling executeAndCreateCommand() method which identifies this as a forecast operation and instantiates a new ForecastCommand object. Control is returned to the UI, which then calls execute() on the ForecastCommand.
+The ForecastCommand invokes listForecast() on the MeetingList to retrieve the upcoming meetings. The MeetingList iterates through all the stored meetings, and calls getDate() on each Meeting object to verify if it falls within the next 7 days from the current date.
+The MeetingList then returns all valid results to the ForecastCommand which formats the output and returns it to the UI. The UI finally displays the forecast results to the user, showing all meetings scheduled for the upcoming week.
+
 ## Product scope
 ### Target user profile
 

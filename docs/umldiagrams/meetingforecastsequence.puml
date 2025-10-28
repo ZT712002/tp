@@ -1,0 +1,59 @@
+@startuml meeting-sequence_diagram_Forecast
+!theme plain
+
+actor User
+participant UI
+participant Parser
+participant MeetingParser
+participant ForecastCommand
+participant MeetingList
+participant Meeting
+
+User -> UI: "meeting forecast"
+activate UI
+
+UI -> Parser: parse()
+activate Parser
+
+Parser -> Parser: selectParserType("meeting")
+Parser -> MeetingParser: MeetingParser()
+activate MeetingParser
+
+MeetingParser -> MeetingParser: executeAndCreateCommand()
+MeetingParser -> ForecastCommand: new ForecastCommand("meeting")
+activate ForecastCommand
+
+ForecastCommand --> MeetingParser:
+deactivate ForecastCommand
+
+MeetingParser --> Parser:
+deactivate MeetingParser
+
+Parser --> UI:
+deactivate Parser
+
+UI -> ForecastCommand: execute()
+activate ForecastCommand
+
+ForecastCommand -> MeetingList: listForecast()
+activate MeetingList
+
+loop for each meeting in meetings
+MeetingList -> Meeting: getDate()
+activate Meeting
+Meeting --> MeetingList:
+deactivate Meeting
+
+note right: Parse date and check if within next 7 days
+end
+
+MeetingList --> ForecastCommand:
+deactivate MeetingList
+
+ForecastCommand --> UI:
+deactivate ForecastCommand
+
+UI -> User: "Meetings in the next 7 days: 1. Title: ..."
+deactivate UI
+
+@enduml

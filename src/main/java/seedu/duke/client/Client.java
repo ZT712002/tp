@@ -5,6 +5,7 @@ import seedu.duke.exception.FinanceProPlusException;
 import seedu.duke.policy.ClientPolicy;
 import seedu.duke.policy.Policy;
 import seedu.duke.policy.PolicyList;
+import seedu.duke.task.TaskList;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,6 +17,7 @@ public class Client {
     private static final String CLIENT_REGEX = "\\s+(?=[a-z]+\\/)";
     private String name;
     private PolicyList policyList;
+    private TaskList todoList;
     private String nric;
     private int phoneNumber;
 
@@ -32,8 +34,12 @@ public class Client {
         assert arguments != null && !arguments.trim().isEmpty() : "Arguments for client creation cannot be null";
         assert mainPolicyList != null : "Main policy list cannot be null for validation";
         this.policyList = new PolicyList();
+        this.todoList = new TaskList();
         assert this.policyList != null : "policyList should not be null after initialization";
+        assert this.todoList != null : "todoList should not be null after initialization";
+
         Map<String, List<String>> detailsMap = parseClientDetails(arguments);
+      
         initialiseMainDetails(detailsMap);
         initialiseOptionalPolicy(detailsMap, mainPolicyList);
         if (this.name == null || this.name.isEmpty() ||
@@ -171,6 +177,35 @@ public class Client {
         }
     }
 
+    /**
+     * Returns the todo list for this client.
+     *
+     * @return The TaskList containing this client's todos.
+     */
+    public TaskList getTodoList() {
+        return this.todoList;
+    }
+
+    /**
+     * Adds a todo to this client's todo list.
+     *
+     * @param todoArguments The todo details in the format d/DESCRIPTION by/DUE_DATE
+     * @throws FinanceProPlusException If the todo details are invalid.
+     */
+    public void addTodo(String todoArguments) throws FinanceProPlusException {
+        this.todoList.addItem(todoArguments);
+    }
+
+    /**
+     * Lists all todos for this client.
+     *
+     * @throws FinanceProPlusException If there's an error listing the todos.
+     */
+    public void listTodos() throws FinanceProPlusException {
+        System.out.println("To-dos for client " + this.name + " (NRIC: " + this.nric + "):");
+        this.todoList.listItems();
+    }
+  
     public String toStorageString() {
         StringBuilder sb = new StringBuilder();
         sb.append(String.format("n/%s c/%d id/%s", name, phoneNumber, nric));

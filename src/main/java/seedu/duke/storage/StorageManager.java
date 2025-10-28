@@ -30,7 +30,6 @@ public class StorageManager {
         }
     }
 
-    // ========== TEXT STORAGE ==========
     public void saveToFile(String filename, List<String> lines) throws IOException {
         if (filename == null || filename.isEmpty()) {
             throw new IllegalArgumentException("Filename cannot be null or empty");
@@ -59,7 +58,7 @@ public class StorageManager {
         return Files.readAllLines(Path.of(DATA_FOLDER + filename));
     }
 
-    // ========== CSV EXPORT ==========
+
     public void exportToCSV(String filename, List<String[]> rows) throws IOException {
         if (filename == null || filename.isEmpty()) {
             throw new IllegalArgumentException("CSV filename cannot be null or empty");
