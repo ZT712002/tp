@@ -141,7 +141,7 @@ The primary classes in this component are:
 * ClientList: The manager for all active clients.
 * ArchivedClientList: A specialized manager for inactive/archived clients.
 * ListContainer: An interface defining a standard contract for list operations.
-#### 2. Class Breakdown
+#### 1. Client Class Breakdown
    **Responsibility:** Acts as the data model for a single client. It encapsulates all information related to a client, including their personal details and associated insurance policies.
    
 **Key Attributes:** 
@@ -151,7 +151,7 @@ The primary classes in this component are:
      - The constructor `Client(String arguments, ...) ` is responsible for parsing a formatted string to populate the client's details.
      - `addPolicy()` allows adding a new ClientPolicy to its internal policyList.
      - `toStorageString()` and `toCSVRow()` provide standardized ways to serialize client data for file storage and export.
-#### ClientList
+#### 2. ClientList Class Breakdown
    **Responsibility**: Manages the collection of all active clients. It serves as the primary entry point for all operations on active clients, such as adding, searching, and updating them.
 
    **Relationship**: Implements the ListContainer interface.
@@ -165,7 +165,7 @@ The primary classes in this component are:
    * `deleteItem(arguments)`: Removes a client from the active list based on their index. This client would typically be moved to the ArchivedClientList by a higher-level command handler.
    * `findClientByNric(nric)`: A crucial lookup method to retrieve a specific client.
    * `addPolicyToClient(...)` & `updatePolicyForClient(...)`: Contains the business logic to modify a client's policy details. It first finds the client and then delegates the policy update to the Client and ClientPolicy objects.
-#### Archived ClientList
+#### 3. Archived ClientList Class Breakdown
 **Responsibility**: Manages clients who are no longer active. It provides a limited, more secure set of interactions compared to ClientList.
    **Relationship**: Implements the ListContainer interface.
    **Key Behaviors**:
@@ -174,14 +174,16 @@ The primary classes in this component are:
    * **Responsibility**: Acts as a centralized registry or service locator for all major ListContainer instances in the application (clients, policies, meetings, etc.).
    * **Relationship**: It holds a HashMap mapping string keys (e.g., "client", "policy") to their corresponding ListContainer objects. 
    * **Usage**: Instead of passing multiple list objects through many method calls, a command can simply request the required list from the LookUpTable using a key (e.g., lookupTable.getList("client")).
-### 3. Key Interactions and Data Flow
+### 4. Key Interactions and Data Flow
    **Client Creation**: A command parses user input and calls ClientList.addItem(). ClientList creates a new Client instance, which in turn parses the detailed arguments. The main PolicyList is passed during creation for validation purposes.
    
 **Archiving a Client**: A client object is removed from the ClientList and passed to the ArchivedClientList.archiveClient() method.
    
 **Adding a Policy**: A command calls ClientList.addPolicyToClient(). ClientList finds the client by NRIC, validates the new policy against the main PolicyList, creates a ClientPolicy instance, and then calls the client.addPolicy() method to add it to the client's internal list.
-### 4. Error Handling
+### 5. Error Handling
    **FinanceProPlusException**: This custom exception is used consistently across all classes to signal errors related to business logic (e.g., duplicate client, invalid index) or data validation (e.g., malformed input, missing fields). This standardizes error handling throughout the component.
+
+### 6.Example of Adding a Client
 When a command with the prefix "client" is invoked by the user, here is a sequence diagram depicting the overall flow of the program.
 
 ![Figure of Client Add Command SQ](./umldiagrams/clientsequence-Sequence_Diagram__Add_New_Client.png)
@@ -221,7 +223,7 @@ The list command is designed based on key software engineering principle, Polymo
 ListContainer (like ClientList, PolicyList, etc.) guarantees it will have a listItems() method, which is crucial for the ListCommand to function.
 
 6. **LookUpTable**
-* **Role**:: A centralized registry for all ListContainer instances.
+* **Role**: A centralized registry for all ListContainer instances.
 * **Responsibility**: It provides a single point of access for commands to retrieve the data containers they need to operate on, decoupling the command from the storage details of the lists.
 ClientList then does a callback method AddClient to add the client into the clientlist object  and then the additem callback is finished. ClientList then hands back control to Add Command and Add Command adds gives back the control to UI.
 UI then calls the method printExecutionMessage() to AddCommand and AddCommand returns control back to UI with data. UI then displays the success message to the user.
