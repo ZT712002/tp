@@ -1,0 +1,129 @@
+@startuml
+
+title UML Class Diagram for FinancePro+ Client Management
+
+' Set skin parameters for better readability
+skinparam classAttributeIconSize 0
+skinparam packageStyle rect
+hide empty members
+
+
+package seedu.duke.container {
+    interface ListContainer {
+        + addItem(arguments: String)
+        + addItem(arguments: String, listContainer: ListContainer)
+        + deleteItem(arguments: String)
+        + listItems()
+        + checkDeleteIndex(arguments: String): int
+    }
+
+    class LookUpTable {
+        - map: HashMap<String, ListContainer>
+        + LookUpTable(clients: ClientList, policies: PolicyList, ...)
+        + getList(key: String): ListContainer
+    }
+}
+
+package seedu.duke.client {
+    class ClientList {
+        - clients: ArrayList<Client>
+        --
+        + ClientList()
+        + addClient(client: Client)
+        + addItem(arguments: String, policyList: ListContainer)
+        + deleteItem(arguments: String)
+        + findClientByNric(nric: String): Client
+        + addPolicyToClient(arguments: String, mainPolicyList: ListContainer)
+        + updatePolicyForClient(arguments: String)
+        + getClientByID(args: String): Client
+        ' Other methods omitted for brevity
+    }
+
+    class ArchivedClientList {
+        - archivedClients: ArrayList<Client>
+        --
+        + ArchivedClientList()
+        + archiveClient(client: Client)
+        + restoreClient(index: int): Client
+        ' Other methods omitted for brevity
+    }
+
+    class Client {
+        - name: String
+        - nric: String
+        - phoneNumber: int
+        - policyList: PolicyList
+        --
+        + Client(arguments: String, mainPolicyList: ListContainer)
+        + {static} parseClientDetails(clientDetails: String): Map
+        + addPolicy(policy: ClientPolicy)
+        + hasPolicy(policyName: String): boolean
+        + getClientPolicyList(): PolicyList
+        + viewDetails()
+    }
+}
+
+package seedu.duke.exception {
+    class FinanceProPlusException << (E,red) >> {
+    }
+}
+
+' Placeholder classes inferred from context to show relationships
+package seedu.duke.policy {
+    class Policy {
+        # name: String
+    }
+    class ClientPolicy {
+        - startDate: LocalDate
+        - expiryDate: LocalDate
+        - monthlyPremium: BigDecimal
+    }
+    class PolicyList implements ListContainer {
+        - policies: ArrayList<Policy>
+        + findPolicyByName(name: String): Policy
+    }
+}
+
+' Placeholder classes inferred from LookUpTable constructor
+class MeetingList implements ListContainer
+class TaskList implements ListContainer
+class UserList implements ListContainer
+
+
+
+' Implementation:
+ClientList ..|> ListContainer
+ArchivedClientList ..|> ListContainer
+
+' Composition:
+ClientList "1" *-- "0..*" Client
+ArchivedClientList "1" *-- "0..*" Client
+Client "1" *-- "1" PolicyList
+
+
+' Association:
+LookUpTable --> ClientList
+LookUpTable --> ArchivedClientList
+LookUpTable --> PolicyList
+LookUpTable --> MeetingList
+LookUpTable --> TaskList
+LookUpTable --> UserList
+
+' Dependency:
+ClientList ..> Client : manages >
+ClientList ..> PolicyList : uses >
+ClientList ..> ClientPolicy : creates >
+ArchivedClientList ..> Client : manages >
+Client ..> PolicyList : uses >
+Client ..> ClientPolicy : uses >
+
+' Exception usage
+ClientList ..> FinanceProPlusException : throws >
+ArchivedClientList ..> FinanceProPlusException : throws >
+Client ..> FinanceProPlusException : throws >
+
+' Inheritance
+Policy <|-- ClientPolicy
+PolicyList "1" *-- "0..*" Policy
+
+@enduml
