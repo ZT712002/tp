@@ -5,6 +5,7 @@ import seedu.duke.exception.FinanceProPlusException;
 
 import java.util.ArrayList;
 import java.util.logging.Logger;
+import java.util.List;
 
 public class TaskList implements ListContainer {
     private static final Logger logger = Logger.getLogger(TaskList.class.getName());
@@ -78,5 +79,35 @@ public class TaskList implements ListContainer {
     public int getSize() {
         return tasks.size();
     }
+
+
+    public List<String> toStorageFormat() {
+        List<String> lines = new ArrayList<>();
+        for (Task t : tasks) {
+            lines.add(t.toStorageString());
+        }
+        return lines;
+    }
+
+    public List<String[]> toCSVFormat() {
+        List<String[]> rows = new ArrayList<>();
+        rows.add(new String[]{"Title", "Due Date", "Status"});
+        for (Task t : tasks) {
+            rows.add(t.toCSVRow());
+        }
+        return rows;
+    }
+
+    public void loadFromStorage(List<String> lines) {
+        for (String line : lines) {
+            try {
+                tasks.add(new Task(line));
+            } catch (FinanceProPlusException e) {
+                logger.warning("Skipped invalid task entry: " + e.getMessage());
+            }
+        }
+    }
+
+
 }
 
