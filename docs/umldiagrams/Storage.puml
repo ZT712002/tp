@@ -1,0 +1,60 @@
+@startuml
+title Sequence Diagram: Autosave Triggered by FinanceProPlus (with Logging & Archived Clients)
+
+actor User
+participant "UI" as UI
+participant "FinanceProPlus" as App
+participant "Parser" as Parser
+participant "Command" as Command
+participant "StorageManager" as Storage
+participant "Logger" as Logger
+
+User -> UI: enters command (e.g., "add client n/John c/91234567 id/S1234567A")
+activate UI
+
+UI -> App: readCommand()
+activate App
+
+App -> Parser: parse(unprocessedInput)
+activate Parser
+Parser --> App: Command object (e.g., AddCommand)
+deactivate Parser
+
+App -> Command: execute(lookUpTable)
+activate Command
+Command -> Command: ... (internal logic not shown)
+
+UI ->Command :printExecutionMessage();
+    Activate Command
+    Command --> UI
+    deactivate Command
+activate UI
+UI --> User: Displays "Client added successfully"
+deactivate UI
+
+== Autosave triggered ==
+
+App -> Storage: saveToFile("client.txt", clients.toStorageFormat())
+activate Storage
+Storage -> File: write line-by-line
+File --> Storage:
+deactivate Storage
+
+App -> Storage: exportToCSV("client.csv", clients.toCSVFormat())
+activate Storage
+Storage -> File: write line-by-line
+File --> Storage:
+deactivate Storage
+
+
+App -> Logger: info("Data saved successfully.")
+activate Logger
+Logger --> App:
+deactivate Logger
+
+
+deactivate App
+@enduml
+
+
+

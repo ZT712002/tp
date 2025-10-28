@@ -23,6 +23,91 @@ The App is consisted of the following four components:
 * Commons: Consists of various classes that interact with other components
 * LookUpTable: Consists a Look Up Table of various lists that store data
 * Command: The command executer
+
+### Storage Component
+
+The **StorageManager** class is responsible for all file operations in the application, including reading, writing, and exporting data.  
+It ensures that user data, client data, archived clients, tasks, policies, and meeting records are automatically persisted to disk after every command execution  minimizing data loss risks even during unexpected shutdowns.
+
+![Storage Component Autosave Sequence](./umldiagrams/Storage.png)
+
+#### Design Overview
+The `FinanceProPlus` class manages the autosave feature through its `saveAllData()` method, which is triggered after each executed command.  
+This guarantees that all updates made during runtime  including new tasks, meetings, or clients — are immediately written to disk without requiring explicit user action to save.
+
+Each dataset (User, Client, ArchivedClient, Policy, Meeting, and Task) is stored in both:
+- **Text format** (`.txt`) – for reliable internal persistence and reloading.
+- **CSV format** (`.csv`) – for user-friendly export and analysis.
+
+All saved data resides within two primary directories:
+- `data/` — used for internal save and load operations.
+- `exports/` — used for external CSV exports (e.g., viewing in Excel).
+
+#### Key Data Files
+| Data Type | Text File | CSV File |
+|------------|------------|----------|
+| User | `user.txt` | `user.csv` |
+| Client | `client.txt` | `client.csv` |
+| Archived Clients | `archived_clients.txt` | `archived_clients.csv` |
+| Policy | `policy.txt` | `policy.csv` |
+| Meeting | `meeting.txt` | `meeting.csv` |
+| Task | `task.txt` | `task.csv` |
+#### Workflow Description (Autosave)
+1. After the user enters a command, `Parser.parse()` creates a `Command` object.
+2. The command executes and updates the respective data list(s).
+3. `FinanceProPlus` automatically invokes `saveAllData()`.
+4. Each list’s data is written to `.txt` and `.csv` files via `StorageManager`.
+5. The `StorageManager` logs a success message (`logger.info("Data saved successfully.")`).
+
+Errors during saving are logged internally and not printed to the user — keeping the UI clean but traceable through logs.
+
+#### Rationale for Design
+- **Autosave per command** guarantees maximum reliability — no manual save needed.
+- **Centralized save logic** inside `FinanceProPlus` keeps design modular and testable.
+- **Logging instead of printing** ensures users aren’t spammed with system messages.
+
+---
+
+### Storage Initialization on Startup
+
+When the program launches, previously saved data is automatically loaded into memory.  
+This allows users to seamlessly continue from where they left off without manually restoring files.
+
+![Storage Loading Sequence](./umldiagrams/Storage_Loading.png)
+
+#### Design Overview
+On startup, the `FinanceProPlus` constructor initializes the `StorageManager` and sequentially loads data from disk into each component:
+- **PolicyList**
+- **ClientList**
+- **UserList**
+- **MeetingList**
+- **ArchivedClientList**
+- **TaskList**
+
+If any file is missing or unreadable, the app logs the issue but continues loading other data, ensuring robust operation even with partial data.
+
+#### Workflow Description (Startup Loading)
+1. `FinanceProPlus` is instantiated.
+2. `StorageManager` is initialized, creating necessary folders.
+3. The following load sequence occurs:
+    - `policies.loadFromStorage(storage.loadFromFile("policy.txt"));`
+    - `clients.loadFromStorage(storage.loadFromFile("client.txt"), policies);`
+    - `user.loadFromStorage(storage.loadFromFile("user.txt"));`
+    - `meetings.loadFromStorage(storage.loadFromFile("meeting.txt"));`
+    - `archivedClients.loadFromStorage(storage.loadFromFile("archived_clients.txt"));`
+    - `tasks.loadFromStorage(storage.loadFromFile("task.txt"));`
+4. Each list reconstructs its objects from text lines.
+5. `Logger.info("Data loaded successfully.")` confirms successful initialization.
+
+If no files exist (first launch), blank lists are created and files will be generated automatically upon the first autosave.
+
+#### Rationale for Design
+- Guarantees users always resume with consistent data.
+- Prevents startup failure even if a single data file is missing.
+- Keeps all load logic centralized within `FinanceProPlus` for easier debugging and maintenance.
+
+---
+
 ### LookUpTable Component
 API: [LookUpTable](./seedu/duke/container/LookUpTable.java)
 ![Figure of LookUpTable](./umldiagrams/lookuptable.png "Class Diagram of LookUpTable")
