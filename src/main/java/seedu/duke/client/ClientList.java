@@ -24,7 +24,9 @@ public class ClientList implements ListContainer {
     }
 
     private static String safeGetFirst(Map<String, List<String>> map, String key) {
-        if (map == null) return "";
+        if (map == null) {
+            return "";
+        }
         List<String> values = map.get(key);
         if (values == null || values.isEmpty()) return "";
         return values.get(0);
