@@ -6,6 +6,8 @@ import seedu.duke.command.Command;
 import seedu.duke.command.DeleteCommand;
 import seedu.duke.command.UpdateClientPolicyCommand;
 import seedu.duke.command.ViewClientCommand;
+import seedu.duke.command.AddClientTodoCommand;
+import seedu.duke.command.ListClientTodosCommand;
 import seedu.duke.exception.FinanceProPlusException;
 
 
@@ -36,6 +38,10 @@ public class ClientParser extends Parser{
             return new UpdateClientPolicyCommand(commandType,args);
         case "view":
             return new ViewClientCommand(commandType,args);
+        case "addtodo":
+            return new AddClientTodoCommand(commandType, args);
+        case "listtodos":
+            return new ListClientTodosCommand(commandType, args);
         default:
             throw new FinanceProPlusException("Invalid command subtype, Please try again");
         }
