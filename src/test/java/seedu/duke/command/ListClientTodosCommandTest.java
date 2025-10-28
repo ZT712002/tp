@@ -11,6 +11,7 @@ import seedu.duke.meeting.MeetingList;
 import seedu.duke.policy.PolicyList;
 import seedu.duke.task.TaskList;
 import seedu.duke.user.UserList;
+import seedu.duke.client.ArchivedClientList;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
