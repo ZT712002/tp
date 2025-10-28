@@ -36,8 +36,16 @@ public class Client {
         Map<String, List<String>> detailsMap = parseClientDetails(arguments);
         initialiseMainDetails(detailsMap);
         initialiseOptionalPolicy(detailsMap, mainPolicyList);
+        if (this.name == null || this.name.isEmpty() ||
+                this.phoneNumber == 0||
+                this.nric == null || this.nric.isEmpty()) {
+            throw new FinanceProPlusException("Required fields are missing");
+        }
+
         assert this.name != null && !this.name.isEmpty() : "Client name should be initialized";
         assert this.nric != null && !this.nric.isEmpty() : "Client NRIC should be initialized";
+
+
     }
 
     /**

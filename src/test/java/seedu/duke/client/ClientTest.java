@@ -13,6 +13,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -20,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class ClientTest {
+class   ClientTest {
 
     private ListContainer mainPolicyList;
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -128,48 +129,48 @@ class ClientTest {
     @Test
     void parseClientDetails_standardInput_returnsCorrectMap() {
         String details = "n/John Doe c/12345678 id/S1234567A p/1234";
-        Map<String, String> detailsMap = Client.parseClientDetails(details);
+        Map<String, List<String>> detailsMap = Client.parseClientDetails(details);
         assertEquals(4, detailsMap.size());
-        assertEquals("John Doe", detailsMap.get("n"));
-        assertEquals("12345678", detailsMap.get("c"));
-        assertEquals("S1234567A", detailsMap.get("id"));
-        assertEquals("1234", detailsMap.get("p"));
+        assertEquals("John Doe", detailsMap.get("n").get(0));
+        assertEquals("12345678", detailsMap.get("c").get(0));
+        assertEquals("S1234567A", detailsMap.get("id").get(0));
+        assertEquals("1234", detailsMap.get("p").get(0));
     }
 
     @Test
     void parseClientDetails_differentOrder_returnsCorrectMap() {
         String details = "id/S1234567A c/12345678 n/John Doe";
-        Map<String, String> detailsMap = Client.parseClientDetails(details);
+        Map<String, List<String>> detailsMap = Client.parseClientDetails(details);
         assertEquals(3, detailsMap.size());
-        assertEquals("John Doe", detailsMap.get("n"));
-        assertEquals("12345678", detailsMap.get("c"));
-        assertEquals("S1234567A", detailsMap.get("id"));
+        assertEquals("John Doe", detailsMap.get("n").get(0));
+        assertEquals("12345678", detailsMap.get("c").get(0));
+        assertEquals("S1234567A", detailsMap.get("id").get(0));
     }
 
     @Test
     void parseClientDetails_extraWhitespace_returnsTrimmedValues() {
         String details = " n/  John Doe   c/ 12345678  id/S1234567A ";
-        Map<String, String> detailsMap = Client.parseClientDetails(details);
+        Map<String, List<String>> detailsMap = Client.parseClientDetails(details);
         assertEquals(3, detailsMap.size());
-        assertEquals("John Doe", detailsMap.get("n"));
-        assertEquals("12345678", detailsMap.get("c"));
-        assertEquals("S1234567A", detailsMap.get("id"));
+        assertEquals("John Doe", detailsMap.get("n").get(0));
+        assertEquals("12345678", detailsMap.get("c").get(0));
+        assertEquals("S1234567A", detailsMap.get("id").get(0));
     }
 
     @Test
     void parseClientDetails_emptyInput_returnsEmptyMap() {
         String details = "";
-        Map<String, String> detailsMap = Client.parseClientDetails(details);
+        Map<String, List<String>> detailsMap = Client.parseClientDetails(details);
         assertTrue(detailsMap.isEmpty());
     }
 
     @Test
     void parseClientDetails_emptyValueForKey_returnsKeyWithEmptyString() {
         String details = "n/ c/123";
-        Map<String, String> detailsMap = Client.parseClientDetails(details);
+        Map<String, List<String>> detailsMap = Client.parseClientDetails(details);
         assertEquals(2, detailsMap.size());
-        assertEquals("", detailsMap.get("n"));
-        assertEquals("123", detailsMap.get("c"));
+        assertEquals("", detailsMap.get("n").get(0));
+        assertEquals("123", detailsMap.get("c").get(0));
     }
 
     @Test

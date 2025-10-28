@@ -23,6 +23,13 @@ public class ClientList implements ListContainer {
         assert clients != null : "Client list should be initialized properly";
     }
 
+    private static String safeGetFirst(Map<String, List<String>> map, String key) {
+        if (map == null) return "";
+        List<String> values = map.get(key);
+        if (values == null || values.isEmpty()) return "";
+        return values.get(0);
+    }
+
     public void addClient(Client client) {
         assert client != null : "Client to be added should not be null";
         int oldSize = clients.size();
@@ -44,8 +51,8 @@ public class ClientList implements ListContainer {
     @Override
     public void addItem(String arguments, ListContainer policyList) throws FinanceProPlusException {
         Map<String, List<String>> detailsMap = Client.parseClientDetails(arguments);
-        String nric = detailsMap.get("id").get(0);
-        if (nric == null || nric.isEmpty()) {
+        String nric = safeGetFirst(detailsMap, "id");
+        if (nric.isEmpty()) {
             throw new FinanceProPlusException("NRIC (id/) must be provided.");
         }
         if (findClientByNric(nric) != null) {
@@ -256,7 +263,7 @@ public class ClientList implements ListContainer {
 
     public Client getClientByID(String args) throws FinanceProPlusException {
         Map<String, List<String>> argsMap = Client.parseClientDetails(args);
-        String nric = argsMap.get("id").get(0);
+        String nric = safeGetFirst(argsMap, "id");
         Client client = findClientByNric(nric);
         if (client == null) {
             throw new FinanceProPlusException("Error: Client with NRIC '" + nric + "' not found.");
