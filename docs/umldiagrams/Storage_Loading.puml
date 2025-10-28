@@ -12,7 +12,9 @@ participant ClientList
 participant UserList
 participant MeetingList
 participant ArchivedClientList
+participant TaskList
 participant Logger
+
 
 == Initialization ==
 
@@ -32,7 +34,7 @@ StorageManager --> FinanceProPlus: List<String> policyData
 deactivate StorageManager
 FinanceProPlus -> PolicyList: loadFromStorage(policyData)
 activate PolicyList
-PolicyList --> FinanceProPlus: success
+PolicyList --> FinanceProPlus:
 deactivate PolicyList
 
 FinanceProPlus -> StorageManager: loadFromFile("client.txt")
@@ -41,7 +43,7 @@ StorageManager --> FinanceProPlus: List<String> clientData
 deactivate StorageManager
 FinanceProPlus -> ClientList: loadFromStorage(clientData, policies)
 activate ClientList
-ClientList --> FinanceProPlus: success
+ClientList --> FinanceProPlus:
 deactivate ClientList
 
 FinanceProPlus -> StorageManager: loadFromFile("user.txt")
@@ -50,7 +52,7 @@ StorageManager --> FinanceProPlus: List<String> userData
 deactivate StorageManager
 FinanceProPlus -> UserList: loadFromStorage(userData)
 activate UserList
-UserList --> FinanceProPlus: success
+UserList --> FinanceProPlus:
 deactivate UserList
 
 FinanceProPlus -> StorageManager: loadFromFile("meeting.txt")
@@ -59,7 +61,7 @@ StorageManager --> FinanceProPlus: List<String> meetingData
 deactivate StorageManager
 FinanceProPlus -> MeetingList: loadFromStorage(meetingData)
 activate MeetingList
-MeetingList --> FinanceProPlus: success
+MeetingList --> FinanceProPlus:
 deactivate MeetingList
 
 FinanceProPlus -> StorageManager: loadFromFile("archived_clients.txt")
@@ -68,8 +70,17 @@ StorageManager --> FinanceProPlus: List<String> archivedClientData
 deactivate StorageManager
 FinanceProPlus -> ArchivedClientList: loadFromStorage(archivedClientData)
 activate ArchivedClientList
-ArchivedClientList --> FinanceProPlus: success
+ArchivedClientList --> FinanceProPlus:
 deactivate ArchivedClientList
+
+FinanceProPlus -> StorageManager: loadFromFile("task.txt")
+activate StorageManager
+StorageManager --> FinanceProPlus: List<String> taskData
+deactivate StorageManager
+FinanceProPlus ->TaskList: loadFromStorage(archivedClientData)
+activate TaskList
+TaskList --> FinanceProPlus:
+deactivate TaskList
 
 FinanceProPlus -> Logger: info("Data loaded successfully.")
 deactivate FinanceProPlus

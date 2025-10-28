@@ -26,20 +26,22 @@ The App is consisted of the following four components:
 
 ### Storage Component
 
-The **StorageManager** class is responsible for all file operations in the application, including reading, writing, and exporting data. It ensures that user data, client data, archived clients, policies, and meeting records are automatically persisted to disk after every command execution minimizing data loss risks even during unexpected shutdowns.
+The **StorageManager** class is responsible for all file operations in the application, including reading, writing, and exporting data.  
+It ensures that user data, client data, archived clients, tasks, policies, and meeting records are automatically persisted to disk after every command execution  minimizing data loss risks even during unexpected shutdowns.
 
 ![Storage Component Autosave Sequence](./umldiagrams/Storage.png)
 
 #### Design Overview
-The `FinanceProPlus` class directly manages the autosave feature by calling the `saveAllData()` method after every command execution. This design ensures that all updates made during runtime are immediately written to disk, without requiring explicit user action to save.
+The `FinanceProPlus` class manages the autosave feature through its `saveAllData()` method, which is triggered after each executed command.  
+This guarantees that all updates made during runtime  including new tasks, meetings, or clients — are immediately written to disk without requiring explicit user action to save.
 
-Each dataset (User, Client, ArchivedClient, Policy, and Meeting) is stored in both:
-- **Text format** (`.txt`) – for internal data recovery and reloading.
-- **CSV format** (`.csv`) – for easier external analysis (e.g., Excel viewing).
+Each dataset (User, Client, ArchivedClient, Policy, Meeting, and Task) is stored in both:
+- **Text format** (`.txt`) – for reliable internal persistence and reloading.
+- **CSV format** (`.csv`) – for user-friendly export and analysis.
 
-These files are located in:
-- `data/` — persistent program storage
-- `exports/` — user-friendly exported CSVs
+All saved data resides within two primary directories:
+- `data/` — used for internal save and load operations.
+- `exports/` — used for external CSV exports (e.g., viewing in Excel).
 
 #### Key Data Files
 | Data Type | Text File | CSV File |
@@ -49,7 +51,7 @@ These files are located in:
 | Archived Clients | `archived_clients.txt` | `archived_clients.csv` |
 | Policy | `policy.txt` | `policy.csv` |
 | Meeting | `meeting.txt` | `meeting.csv` |
-
+| Task | `task.txt` | `task.csv` |
 #### Workflow Description (Autosave)
 1. After the user enters a command, `Parser.parse()` creates a `Command` object.
 2. The command executes and updates the respective data list(s).
@@ -80,6 +82,7 @@ On startup, the `FinanceProPlus` constructor initializes the `StorageManager` an
 - **UserList**
 - **MeetingList**
 - **ArchivedClientList**
+- **TaskList**
 
 If any file is missing or unreadable, the app logs the issue but continues loading other data, ensuring robust operation even with partial data.
 
@@ -92,6 +95,7 @@ If any file is missing or unreadable, the app logs the issue but continues loadi
     - `user.loadFromStorage(storage.loadFromFile("user.txt"));`
     - `meetings.loadFromStorage(storage.loadFromFile("meeting.txt"));`
     - `archivedClients.loadFromStorage(storage.loadFromFile("archived_clients.txt"));`
+    - `tasks.loadFromStorage(storage.loadFromFile("task.txt"));`
 4. Each list reconstructs its objects from text lines.
 5. `Logger.info("Data loaded successfully.")` confirms successful initialization.
 
