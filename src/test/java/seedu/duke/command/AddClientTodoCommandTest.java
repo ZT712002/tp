@@ -64,6 +64,7 @@ class AddClientTodoCommandTest {
     static class StubMeetingList extends MeetingList {}
     static class StubTaskList extends TaskList {}
     static class StubUserList extends UserList {}
+    static class StubArchivedClientList extends ArchivedClientList {}
 
     private LookUpTable lookUpTable;
     private SpyClientList spyClientList;
@@ -78,7 +79,7 @@ class AddClientTodoCommandTest {
         spyClientList.setClientToReturn(spyClient);
 
         lookUpTable = new LookUpTable(spyClientList, new StubPolicyList(), new StubMeetingList(),
-                new StubTaskList(), new StubUserList());
+                new StubTaskList(), new StubUserList(), new StubArchivedClientList());
 
         System.setOut(new PrintStream(outContent));
     }
