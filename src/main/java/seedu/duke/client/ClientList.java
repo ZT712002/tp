@@ -28,7 +28,9 @@ public class ClientList implements ListContainer {
             return "";
         }
         List<String> values = map.get(key);
-        if (values == null || values.isEmpty()) return "";
+        if (values == null || values.isEmpty()) {
+            return "";
+        }
         return values.get(0);
     }
 
