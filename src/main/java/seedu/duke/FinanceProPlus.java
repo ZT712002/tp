@@ -47,6 +47,7 @@ public class FinanceProPlus {
             user.loadFromStorage(storage.loadFromFile("user.txt"));
             meetings.loadFromStorage(storage.loadFromFile("meeting.txt"));
             archivedClients.loadFromStorage(storage.loadFromFile("archived_clients.txt"), policies);
+            tasks.loadFromStorage(storage.loadFromFile("task.txt"));
             logger.info("Data loaded successfully.");
         } catch (Exception e) {
             logger.info("Some data failed to load: " + e.getMessage());
@@ -98,6 +99,9 @@ public class FinanceProPlus {
             storage.exportToCSV("meeting.csv", meetings.toCSVFormat());
             storage.saveToFile("archived_clients.txt", archivedClients.toStorageFormat());
             storage.exportToCSV("archived_clients.csv", archivedClients.toCSVFormat());
+            storage.saveToFile("task.txt", tasks.toStorageFormat());
+            storage.exportToCSV("task.csv", tasks.toCSVFormat());
+
         } catch (Exception e) {
             logger.info("Error saving data: " + e.getMessage());
         }

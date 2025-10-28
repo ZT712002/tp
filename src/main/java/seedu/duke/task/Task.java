@@ -66,5 +66,14 @@ public class Task {
         assert dueDate != null && !dueDate.isEmpty() : "Due date should not be null or empty";
         return description + " (by: " + dueDate + ")";
     }
+
+    public String toStorageString() {
+        return String.format("d/%s by/%s", description, dueDate);
+    }
+
+    public String[] toCSVRow() {
+        return new String[]{description, dueDate, "Pending"};
+    }
+
 }
 
