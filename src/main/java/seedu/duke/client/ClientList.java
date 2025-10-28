@@ -107,6 +107,16 @@ public class ClientList implements ListContainer {
         return null;
     }
 
+    public void searchClient(String nric) throws FinanceProPlusException {
+        Client foundClient = findClientByNric(nric);
+        if (foundClient != null) {
+            System.out.println("Client found:");
+            System.out.println(foundClient.toString());
+        } else {
+            System.out.println("No client found with NRIC: " + nric);
+        }
+    }
+
     /**
      * Adds a new policy contract to an existing client.
      * This method oversees the validation and creation process.
@@ -298,6 +308,30 @@ public class ClientList implements ListContainer {
         assert client != null : "Client should not be null in getClientById";
         return client;
     }
+    public List<String> toStorageFormat() {
+        List<String> lines = new ArrayList<>();
+        for (Client c : clients) {
+            lines.add(c.toStorageString());
+        }
+        return lines;
+    }
+
+    public void loadFromStorage(List<String> lines, ListContainer mainPolicyList)
+            throws FinanceProPlusException {
+        for (String line : lines) {
+            clients.add(new Client(line, mainPolicyList));
+        }
+    }
+
+    public List<String[]> toCSVFormat() {
+        List<String[]> rows = new ArrayList<>();
+        rows.add(new String[]{"Name", "Contact", "NRIC", "Policy"});
+        for (Client c : clients) {
+            rows.add(c.toCSVRow());
+        }
+        return rows;
+    }
+
 }
 
 
