@@ -111,7 +111,8 @@ class AddCommandTest {
         StubTaskList stubTaskList = new StubTaskList();
         StubUserList stubUserList = new StubUserList();
       
-        lookUpTable = new LookUpTable(spyClientList, spyPolicyList, stubMeetingList, stubTaskList, stubUserList, new StubArchivedClientList());
+        lookUpTable = new LookUpTable(spyClientList, spyPolicyList, stubMeetingList, 
+                                      stubTaskList, stubUserList, new StubArchivedClientList());
         System.setOut(new PrintStream(outContent));
 
     }
