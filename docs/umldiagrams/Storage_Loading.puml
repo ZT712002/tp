@@ -1,0 +1,77 @@
+### UML Sequence Diagram (Storage_Loading.puml)
+
+```plantuml
+@startuml
+title Sequence Diagram: Application Startup Data Loading
+
+actor User as "System Launch"
+participant FinanceProPlus
+participant StorageManager
+participant PolicyList
+participant ClientList
+participant UserList
+participant MeetingList
+participant ArchivedClientList
+participant Logger
+
+== Initialization ==
+
+User -> FinanceProPlus: start application
+activate FinanceProPlus
+
+FinanceProPlus -> StorageManager: new StorageManager()
+activate StorageManager
+StorageManager -> StorageManager: createFolder("data/")\ncreateFolder("exports/")
+deactivate StorageManager
+
+== Data Loading ==
+
+FinanceProPlus -> StorageManager: loadFromFile("policy.txt")
+activate StorageManager
+StorageManager --> FinanceProPlus: List<String> policyData
+deactivate StorageManager
+FinanceProPlus -> PolicyList: loadFromStorage(policyData)
+activate PolicyList
+PolicyList --> FinanceProPlus: success
+deactivate PolicyList
+
+FinanceProPlus -> StorageManager: loadFromFile("client.txt")
+activate StorageManager
+StorageManager --> FinanceProPlus: List<String> clientData
+deactivate StorageManager
+FinanceProPlus -> ClientList: loadFromStorage(clientData, policies)
+activate ClientList
+ClientList --> FinanceProPlus: success
+deactivate ClientList
+
+FinanceProPlus -> StorageManager: loadFromFile("user.txt")
+activate StorageManager
+StorageManager --> FinanceProPlus: List<String> userData
+deactivate StorageManager
+FinanceProPlus -> UserList: loadFromStorage(userData)
+activate UserList
+UserList --> FinanceProPlus: success
+deactivate UserList
+
+FinanceProPlus -> StorageManager: loadFromFile("meeting.txt")
+activate StorageManager
+StorageManager --> FinanceProPlus: List<String> meetingData
+deactivate StorageManager
+FinanceProPlus -> MeetingList: loadFromStorage(meetingData)
+activate MeetingList
+MeetingList --> FinanceProPlus: success
+deactivate MeetingList
+
+FinanceProPlus -> StorageManager: loadFromFile("archived_clients.txt")
+activate StorageManager
+StorageManager --> FinanceProPlus: List<String> archivedClientData
+deactivate StorageManager
+FinanceProPlus -> ArchivedClientList: loadFromStorage(archivedClientData)
+activate ArchivedClientList
+ArchivedClientList --> FinanceProPlus: success
+deactivate ArchivedClientList
+
+FinanceProPlus -> Logger: info("Data loaded successfully.")
+deactivate FinanceProPlus
+
+@enduml

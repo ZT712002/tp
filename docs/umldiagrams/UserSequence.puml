@@ -1,0 +1,79 @@
+@startuml
+
+title Sequence Diagram: Add New User (FA vs UserEntity disambiguated)
+
+actor FA as "Financial Advisor"
+participant UI
+participant Parser
+participant UserParser
+participant Command as "AddCommand"
+participant UserList
+participant UserEntity as "User"
+
+FA -> UI: enters "add user n/Alex Tan e/alex@example.com p/91234567 r/FA-001"
+activate UI
+UI -> Parser : parse()
+activate Parser
+
+    Parser -> Parser: executeAndCreateCommand()
+    activate Parser
+    Parser --> Parser
+    deactivate Parser
+
+    Parser -> UserParser**: UserParser()
+    activate UserParser
+
+    UserParser -> UserParser: splitCommand()
+    activate UserParser
+    UserParser --> UserParser
+    deactivate UserParser
+
+    UserParser -> Command**
+    activate Command
+    Command -> Command: AddCommand()
+    activate Command
+    Command --> Command
+    deactivate Command
+    Command --> UserParser
+    deactivate Command
+
+    UserParser --> Parser
+    deactivate UserParser
+
+Parser --> UI
+deactivate Parser
+
+UI -> Command : execute()
+activate Command
+Command -> UserList
+activate UserList
+UserList -> UserList: addItem(arguments)
+activate UserList
+
+    UserList -> UserEntity**
+    activate UserEntity
+    UserEntity -> UserEntity: User(arguments)
+    activate UserEntity
+    UserEntity --> UserEntity
+    deactivate UserEntity
+    UserEntity --> UserList
+    deactivate UserEntity
+
+    UserList -> UserList: AddUser(UserEntity)
+    activate UserList
+    UserList --> UserList
+    deactivate UserList
+
+UserList --> Command
+deactivate UserList
+Command --> UI
+deactivate Command
+
+UI -> Command : printExecutionMessage()
+activate Command
+Command --> UI
+deactivate Command
+
+UI --> FA: Displays "User added successfully"
+
+@enduml
