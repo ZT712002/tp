@@ -2,7 +2,9 @@ package seedu.duke.client;
 
 import seedu.duke.container.ListContainer;
 import seedu.duke.exception.FinanceProPlusException;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class ArchivedClientList implements ListContainer {
     private ArrayList<Client> archivedClients;
@@ -76,5 +78,32 @@ public class ArchivedClientList implements ListContainer {
 
     public ArrayList<Client> getArchivedClients() {
         return archivedClients;
+    }
+
+    public List<String> toStorageFormat() {
+        List<String> lines = new ArrayList<>();
+        for (Client client : archivedClients) {
+            lines.add(client.toStorageString());
+        }
+        return lines;
+    }
+
+    public void loadFromStorage(List<String> lines, ListContainer policyList) throws FinanceProPlusException {
+        if (lines == null || lines.isEmpty()) {
+            return;
+        }
+        for (String line : lines) {
+            Client client = new Client(line, policyList);
+            archivedClients.add(client);
+        }
+    }
+
+    public List<String[]> toCSVFormat() {
+        List<String[]> rows = new ArrayList<>();
+        rows.add(new String[]{"Name", "Contact", "NRIC", "Policies"});
+        for (Client client : archivedClients) {
+            rows.add(client.toCSVRow());
+        }
+        return rows;
     }
 }

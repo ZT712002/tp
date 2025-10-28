@@ -13,6 +13,7 @@ import seedu.duke.task.TaskList;
 import seedu.duke.user.UserList;
 import seedu.duke.ui.Ui;
 import seedu.duke.storage.StorageManager;
+
 import java.util.logging.Logger;
 
 public class FinanceProPlus {
@@ -42,9 +43,10 @@ public class FinanceProPlus {
         lookUpTable = new LookUpTable(clients, policies, meetings, tasks, user, archivedClients);
         try {
             policies.loadFromStorage(storage.loadFromFile("policy.txt"));
-            clients.loadFromStorage(storage.loadFromFile("client.txt"),policies);
+            clients.loadFromStorage(storage.loadFromFile("client.txt"), policies);
             user.loadFromStorage(storage.loadFromFile("user.txt"));
             meetings.loadFromStorage(storage.loadFromFile("meeting.txt"));
+            archivedClients.loadFromStorage(storage.loadFromFile("archived_clients.txt"), policies);
             logger.info("Data loaded successfully.");
         } catch (Exception e) {
             logger.info("Some data failed to load: " + e.getMessage());
@@ -71,7 +73,7 @@ public class FinanceProPlus {
                 c.printExecutionMessage();
 
             } catch (FinanceProPlusException e) {
-                System.out.println( e.getMessage());
+                System.out.println(e.getMessage());
             } catch (Exception e) {
                 System.out.println("An unexpected error occurred: " + e.getMessage());
                 e.printStackTrace();
@@ -94,6 +96,8 @@ public class FinanceProPlus {
             storage.exportToCSV("policy.csv", policies.toCSVFormat());
             storage.saveToFile("meeting.txt", meetings.toStorageFormat());
             storage.exportToCSV("meeting.csv", meetings.toCSVFormat());
+            storage.saveToFile("archived_clients.txt", archivedClients.toStorageFormat());
+            storage.exportToCSV("archived_clients.csv", archivedClients.toCSVFormat());
         } catch (Exception e) {
             logger.info("Error saving data: " + e.getMessage());
         }
@@ -102,7 +106,7 @@ public class FinanceProPlus {
     /**
      * Main entry-point for the java.duke.Duke application.
      */
-    public static void main(String[] args)  {
+    public static void main(String[] args) {
         new FinanceProPlus().run();
     }
 }

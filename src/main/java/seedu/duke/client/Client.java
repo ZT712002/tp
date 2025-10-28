@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
-
+import java.util.stream.Collectors;
 
 public class Client {
     private static final String CLIENT_REGEX = "\\s+(?=[a-z]+\\/)";
@@ -23,7 +23,7 @@ public class Client {
      * Returns constructor for creating a Client, where the policy is OPTIONAL.
      * It validates required fields (n, c, id) and optionally validates and adds a policy.
      *
-     * @param arguments The raw string of client details.
+     * @param arguments      The raw string of client details.
      * @param mainPolicyList The ListContainer holding all company policies for validation.
      * @throws FinanceProPlusException if required details are missing or an optional policy is invalid.
      *
@@ -33,11 +33,19 @@ public class Client {
         assert mainPolicyList != null : "Main policy list cannot be null for validation";
         this.policyList = new PolicyList();
         assert this.policyList != null : "policyList should not be null after initialization";
-        Map<String, String> detailsMap = parseClientDetails(arguments);
+        Map<String, List<String>> detailsMap = parseClientDetails(arguments);
         initialiseMainDetails(detailsMap);
         initialiseOptionalPolicy(detailsMap, mainPolicyList);
+        if (this.name == null || this.name.isEmpty() ||
+                this.phoneNumber == 0||
+                this.nric == null || this.nric.isEmpty()) {
+            throw new FinanceProPlusException("Required fields are missing");
+        }
+
         assert this.name != null && !this.name.isEmpty() : "Client name should be initialized";
         assert this.nric != null && !this.nric.isEmpty() : "Client NRIC should be initialized";
+
+
     }
 
     /**
@@ -46,7 +54,7 @@ public class Client {
      * @param detailsMap The map of parsed arguments.
      * @throws FinanceProPlusException If any required key is missing.
      */
-    private void initialiseMainDetails(Map<String, String> detailsMap) throws FinanceProPlusException {
+    private void initialiseMainDetails(Map<String, List<String>> detailsMap) throws FinanceProPlusException {
         List<String> requiredKeys = List.of("n", "c", "id");
         for (String key : requiredKeys) {
             if (!detailsMap.containsKey(key) || detailsMap.get(key).isEmpty()) {
@@ -54,29 +62,32 @@ public class Client {
                         + "Please provide: n/NAME c/CONTACT id/NRIC");
             }
         }
-        this.name = detailsMap.get("n");
-        this.nric = detailsMap.get("id");
-        this.phoneNumber = Integer.parseInt(detailsMap.get("c"));
+        this.name = detailsMap.get("n").get(0);
+        this.nric = detailsMap.get("id").get(0);
+        this.phoneNumber = Integer.parseInt(detailsMap.get("c").get(0));
     }
 
     /**
      * Handles the creation of a "placeholder" ClientPolicy if the 'p/' prefix is provided.
      *
-     * @param detailsMap The map of parsed arguments.
+     * @param detailsMap     The map of parsed arguments.
      * @param mainPolicyList The main list of company policies to validate against.
      * @throws FinanceProPlusException If the policy number is empty or the policy doesn't exist.
      */
-    private void initialiseOptionalPolicy(Map<String, String> detailsMap, ListContainer mainPolicyList)
+    private void initialiseOptionalPolicy(Map<String, List<String>> detailsMap, ListContainer mainPolicyList)
             throws FinanceProPlusException {
-        if (detailsMap.containsKey("p")) {
-            String policyNumberToFind = detailsMap.get("p");
-            if (policyNumberToFind.isEmpty()) {
+        if (!detailsMap.containsKey("p")) {
+            return;
+        }
+
+        PolicyList companyPolicies = (PolicyList) mainPolicyList;
+        for (String policyName : detailsMap.get("p")) {
+            if (policyName.isEmpty()) {
                 throw new FinanceProPlusException("Invalid command: Policy number (p/) cannot be empty.");
             }
-            PolicyList companyPolicies = (PolicyList) mainPolicyList;
-            Policy basePolicy = companyPolicies.findPolicyByName(policyNumberToFind);
-            if(basePolicy == null){
-                throw new FinanceProPlusException("Validation Error: Policy '" + policyNumberToFind
+            Policy basePolicy = companyPolicies.findPolicyByName(policyName);
+            if (basePolicy == null) {
+                throw new FinanceProPlusException("Validation Error: Policy '" + policyName
                         + "' does not exist. Please add it to the main policy list first.");
             }
             ClientPolicy placeholderPolicy = new ClientPolicy(basePolicy);
@@ -84,10 +95,9 @@ public class Client {
         }
     }
 
-
-    public static Map<String, String> parseClientDetails(String clientDetails) {
+    public static Map<String, List<String>> parseClientDetails(String clientDetails) {
         assert clientDetails != null : "Input string for parsing cannot be null";
-        Map<String, String> detailsMap = new HashMap<>();
+        Map<String, List<String>> detailsMap = new HashMap<>();
         String trimmedDetails = clientDetails.trim();
         String[] parts = trimmedDetails.split(CLIENT_REGEX);
         for (String part : parts) {
@@ -95,12 +105,13 @@ public class Client {
             if (keyValue.length == 2) {
                 String key = keyValue[0];
                 String value = keyValue[1].trim();
-                detailsMap.put(key, value);
+                detailsMap.computeIfAbsent(key, k -> new ArrayList<>()).add(value);
             }
         }
         assert detailsMap != null : "The resulting details map should not be null";
         return detailsMap;
     }
+
     @Override
     public String toString() {
         assert name != null : "Name should not be null when calling toString";
@@ -113,9 +124,11 @@ public class Client {
     public String getName() {
         return name;
     }
+
     public String getNric() {
         return nric;
     }
+
     /**
      * Adds a validated policy to the client's personal policy list.
      * @param policy The Policy object to add.
@@ -125,6 +138,7 @@ public class Client {
             this.policyList.addPolicy(policy);
         }
     }
+
     /**
      * Checks if the client already owns a policy with the given name.
      * @param policyName The name of the policy to check.
@@ -138,7 +152,7 @@ public class Client {
         return policyList;
     }
 
-    public void viewDetails(){
+    public void viewDetails() {
         System.out.println("-------------------------------------");
         System.out.println("         Client Details");
         System.out.println("-------------------------------------");
@@ -158,18 +172,21 @@ public class Client {
     }
 
     public String toStorageString() {
-        String policyName = "none";
-        if (!policyList.getPolicyList().isEmpty()) {
-            policyName = policyList.getPolicyList().get(0).getName();
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("n/%s c/%d id/%s", name, phoneNumber, nric));
+        for (Policy policy : policyList.getPolicyList()) {
+            sb.append(" p/").append(policy.getName());
         }
-        return String.format("n/%s c/%d id/%s p/%s", name, phoneNumber, nric, policyName);
+        return sb.toString();
     }
 
     public String[] toCSVRow() {
-        String policyName = "none";
-        if (!policyList.getPolicyList().isEmpty()) {
-            policyName = policyList.getPolicyList().get(0).getName();
-        }
-        return new String[]{name, String.valueOf(phoneNumber), nric, policyName};
+        String joinedPolicies = policyList.getPolicyList().isEmpty()
+                ? "none"
+                : policyList.getPolicyList().stream()
+                .map(Policy::getName)
+                .collect(Collectors.joining(", "));
+        return new String[]{name, String.valueOf(phoneNumber), nric, joinedPolicies};
     }
 }
+
