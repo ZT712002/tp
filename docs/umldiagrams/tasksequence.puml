@@ -1,0 +1,98 @@
+@startuml
+
+
+title Sequence Diagram: Add New Task
+
+
+actor User as "Financial Advisor"
+participant UI
+participant App as "FinanceProPlus"
+participant Parser
+participant TaskParser
+participant Command as "AddCommand"
+participant LookUpTable
+participant TaskList
+participant Task
+participant Console
+
+
+User -> UI: enters "task add d/Report by/15-01-2024"
+activate UI
+App -> UI: readCommand()
+activate App
+activate UI
+UI --> App: "task add d/Report by/15-01-2024"
+deactivate UI
+App -> Parser: parse(input)
+activate Parser
+
+
+    Parser -> Parser: selectParserType()
+    activate Parser
+    Parser --> Parser
+    deactivate Parser
+    Parser -> TaskParser**: TaskParser(type, commandArgs)
+    activate TaskParser
+
+    TaskParser -> TaskParser: splitCommand() [inside constructor]
+    activate TaskParser
+    TaskParser --> TaskParser
+    deactivate TaskParser
+
+    Parser -> TaskParser: executeAndCreateCommand()
+    TaskParser -> Command**: new AddCommand("task", arguments)
+    activate Command
+    Command -> Command: AddCommand()
+    activate Command
+    Command --> Command
+    deactivate Command
+    Command --> TaskParser
+    deactivate Command
+    TaskParser --> Parser: return Command
+    deactivate TaskParser
+    Parser --> App: return Command
+    deactivate Parser
+    App -> Command: execute(lookUpTable)
+    activate Command
+    Command -> LookUpTable: getList("task")
+    activate LookUpTable
+    LookUpTable --> Command: TaskList
+    deactivate LookUpTable
+    Command -> TaskList: addItem(arguments)
+    activate TaskList
+
+    TaskList -> Task**: new Task(arguments)
+    activate Task
+
+    Task -> Task: Task()
+    activate Task
+    Task --> Task
+    deactivate Task
+    Task --> TaskList
+    deactivate Task
+    TaskList -> TaskList: tasks.add(task)
+    activate TaskList
+    TaskList --> TaskList
+    deactivate TaskList
+    TaskList --> TaskList
+    deactivate TaskList
+    TaskList -> Console: print "Noted. I've added this task:"
+    TaskList -> Console: print task.toString()
+    TaskList --> Command
+    deactivate TaskList
+    Command --> App
+    deactivate Command
+    App -> Command: printExecutionMessage()
+    Activate Command
+    Command -> Console: print "Added successfully!"
+    Command --> App
+    deactivate Command
+
+
+    Console --> User: Shows console output
+
+deactivate Parser
+deactivate App
+
+@enduml
+
