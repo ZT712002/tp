@@ -111,8 +111,33 @@ ClientList then does a callback method AddClient to add the client into the clie
 
 ClientList then hands back control to Add Command and Add Command adds gives back the control to UI.
 UI then calls the method printExecutionMessage() to AddCommand and AddCommand returns control back to UI with data. UI then displays the success message to the user.
-### List Features
+### List Feature, Design and Implementation
+The list command is designed based on key software engineering principle, Polymorphism. This architecture ensures that the command is both robust and easily extensible.
 
+![Class Diagram of List Command](./umldiagrams/list_cd.png)
+
+1. **Parser**
+   * **Role**: The entry point for command parsing
+   * **Responsibility**: It determines the general command type from user input (e.g., "list", "client", "add") and delegates the detailed parsing to a specialized parser subclass.
+2. **ListParser** 
+    * **Role**: The specialized parser for the list command.
+   * **Responsibility**: It is responsible for validating the arguments of the list command (e.g., ensuring list client is valid but list product is not). Its primary goal is to instantiate a correctly configured ListCommand object.
+3. **Command**
+    * **Role**: The base class for all executable commands.
+   * **Responsibility**: Defines a common execute() method, ensuring that the main application loop can execute any command object polymorphically without needing to know its specific type.
+
+4. **ListCommand**
+* **Role**: The object that encapsulates all information needed to execute a list request.
+* **Responsibility**: When its execute() method is called, it uses its stored argument (e.g., "client") to retrieve the appropriate data container from the LookUpTable and then calls the listItems() method on that container. It is completely decoupled from the specific type of list it is operating on.
+
+5. **ListContainer**
+* **Role**: A contract for all data-holding classes.
+* **Responsibility**: It standardizes the API for interacting with collections of data. Any class that implements
+ListContainer (like ClientList, PolicyList, etc.) guarantees it will have a listItems() method, which is crucial for the ListCommand to function.
+
+6. **LookUpTable**
+* **Role**:: A centralized registry for all ListContainer instances.
+* **Responsibility**: It provides a single point of access for commands to retrieve the data containers they need to operate on, decoupling the command from the storage details of the lists.
 ## Product scope
 ### Target user profile
 

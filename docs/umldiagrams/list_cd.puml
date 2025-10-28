@@ -1,0 +1,88 @@
+@startuml
+title Class Diagram: "list" Command Architecture
+
+
+skinparam classAttributeIconSize 0
+hide empty members
+
+
+package seedu.duke.parser {
+    abstract class Parser {
+        + {static} parse(userInput: String): Command
+        # {static} selectParserType(userInput: String): Parser
+        # executeAndCreateCommand(): Command
+    }
+
+    class ListParser {
+        - commandSubtype: String
+        --
+        + ListParser(type: String, commandArgs: String)
+        # executeAndCreateCommand(): Command
+        - checkIsValid(subtype: String): boolean
+    }
+}
+
+package seedu.duke.command {
+    abstract class Command {
+        + execute(...)
+    }
+
+    class ListCommand {
+        - arguments: String
+        --
+        + ListCommand(subtype: String)
+        + execute(lookUpTable: LookUpTable)
+    }
+}
+
+package seedu.duke.container {
+    interface ListContainer {
+        + listItems()
+        ' Other methods omitted for clarity
+    }
+
+    class LookUpTable {
+        + getList(key: String): ListContainer
+    }
+}
+
+' Concrete ListContainer implementations
+package seedu.duke.client {
+    class ClientList
+    class ArchivedClientList
+}
+package seedu.duke.meeting {
+    class MeetingList
+}
+package seedu.duke.policy {
+    class PolicyList
+}
+package seedu.duke.task {
+    class TaskList
+}
+package seedu.duke.user {
+    class UserList
+}
+
+
+
+' Inheritance
+Parser <|-- ListParser
+Command <|-- ListCommand
+
+' Implementation
+ClientList ..|> ListContainer
+ArchivedClientList ..|> ListContainer
+MeetingList ..|> ListContainer
+PolicyList ..|> ListContainer
+TaskList ..|> ListContainer
+UserList ..|> ListContainer
+
+' Dependency
+Parser ..> ListParser : <<creates>>
+ListParser ..> ListCommand : <<creates>>
+ListCommand ..> LookUpTable : uses >
+ListCommand ..> ListContainer : uses >
+LookUpTable ..> ListContainer : returns >
+
+@enduml
