@@ -37,8 +37,8 @@ class DeleteClientPolicyCommandTest {
         clientList.addItem("n/Test Client c/123 id/" + clientNric, mainPolicyList);
 
 
-        String addPolicyArgs1 = "id/" + clientNric + " p/Health s/2024-01-01 e/2025-01-01 m/100";
-        String addPolicyArgs2 = "id/" + clientNric + " p/Life s/2024-01-01 e/2025-01-01 m/200";
+        String addPolicyArgs1 = "id/" + clientNric + " p/Health s/01-01-2024 e/01-01-2025 m/100";
+        String addPolicyArgs2 = "id/" + clientNric + " p/Life s/01-01-2024 e/01-01-2025 m/200";
         clientList.addPolicyToClient(addPolicyArgs1, mainPolicyList);
         clientList.addPolicyToClient(addPolicyArgs2, mainPolicyList);
     }
