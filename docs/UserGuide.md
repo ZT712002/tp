@@ -13,25 +13,25 @@ It's a CRM that works at your pace, not the other way around.
 ## Quick Start
 
 1. Ensure that you have Java 17 or above installed.
-1. Down the latest version of `FinanceProPlus` from [here](https://github.com/AY2526S1-CS2113-W12-2/tp/releases).
+2. Down the latest version of `FinanceProPlus.jar` from [here](https://github.com/AY2526S1-CS2113-W12-2/tp/releases).
+3. Copy the file to the folder you want to use as the home folder of FinanceProPlus
+4. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar [CS2113-W12-2][FinanceProPlus].jar` command to run the application
+5. Refer to the [Features](#features) or [Command Summary](#command-summary)
+## Features
 
-## Features 
+### Client Features
 
-{Give detailed description of each feature}
+### Meeting Features
 
-### Adding a todo: `todo`
-Adds a new item to the list of todo items.
+### List Features
 
-Format: `todo n/TODO_NAME d/DEADLINE`
+### Policy Features
 
-* The `DEADLINE` can be in a natural language format.
-* The `TODO_NAME` cannot contain punctuation.  
+### Task Features
 
-Example of usage: 
+### User Features
 
-`todo n/Write the rest of the User Guide d/next week`
 
-`todo n/Refactor the User Guide to remove passive voice d/13/04/2020`
 
 ## FAQ
 
