@@ -1,17 +1,20 @@
 package seedu.duke.parser;
 
+
 import seedu.duke.command.AddCommand;
-import seedu.duke.command.AddPolicyCommand;
 import seedu.duke.command.Command;
 import seedu.duke.command.DeleteCommand;
 import seedu.duke.command.SearchCommand;
 import seedu.duke.command.UpdateClientPolicyCommand;
 import seedu.duke.command.ViewClientCommand;
+import seedu.duke.command.AddPolicyCommand;
+import seedu.duke.command.DeleteClientPolicyCommand;
 import seedu.duke.command.AddClientTodoCommand;
 import seedu.duke.command.ListClientTodosCommand;
 import seedu.duke.command.ArchiveCommand;
-import seedu.duke.command.RestoreCommand;
 import seedu.duke.command.ListCommand;
+import seedu.duke.command.RestoreCommand;
+
 import seedu.duke.exception.FinanceProPlusException;
 
 
@@ -40,6 +43,8 @@ public class ClientParser extends Parser{
             return new AddPolicyCommand(commandType, args);
         case "updatepolicy":
             return new UpdateClientPolicyCommand(commandType,args);
+        case "deletepolicy":
+            return new DeleteClientPolicyCommand(commandType,args);
         case "view":
             return new ViewClientCommand(commandType,args);
         case "addtodo":

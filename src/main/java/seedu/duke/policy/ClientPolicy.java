@@ -8,9 +8,11 @@ import java.time.format.DateTimeFormatter;
 
 
 public class ClientPolicy extends Policy {
+    public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     private LocalDate startDate;
     private LocalDate expiryDate;
     private BigDecimal monthlyPremium;
+
 
     public ClientPolicy(Policy basePolicy, LocalDate startDate, LocalDate expiryDate, BigDecimal monthlyPremium)
             throws FinanceProPlusException {
@@ -86,26 +88,28 @@ public class ClientPolicy extends Policy {
                 + ", Expires: " + expiryStr + "]";
     }
 
-    public String viewDetails(){
+    public String viewDetails() {
         StringBuilder sb = new StringBuilder();
         sb.append("Policy Name: ").append(super.getName());
         String premiumStr;
         if (this.monthlyPremium != null) {
-            premiumStr = String.format("$%.2f", this.monthlyPremium); // Formats to 2 decimal places
+            premiumStr = String.format("$%.2f", this.monthlyPremium);
         } else {
             premiumStr = "Not set";
         }
         sb.append("\n    - Monthly Premium: ").append(premiumStr);
+
         String startStr;
         if (this.startDate != null) {
-            startStr = this.startDate.format(DateTimeFormatter.ofPattern("dd MMM yyyy")); // e.g., "14 Sep 1999"
+            startStr = this.startDate.format(DATE_FORMATTER);
         } else {
             startStr = "Not set";
         }
         sb.append("\n    - Start Date: ").append(startStr);
+
         String expiryStr;
         if (this.expiryDate != null) {
-            expiryStr = this.expiryDate.format(DateTimeFormatter.ofPattern("dd MMM yyyy"));
+            expiryStr = this.expiryDate.format(DATE_FORMATTER);
         } else {
             expiryStr = "Not set";
         }

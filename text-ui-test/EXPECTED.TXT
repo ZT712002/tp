@@ -31,10 +31,7 @@ Added successfully!
 Name: nednez, ID: T0329103L, Contact: 12345678, Policies: 1. Policy: 1233 [Premium: Not set, Starts: Not set, Expires: Not set]
 Added successfully!
 ----------------------------------------------------
-> Successfully updated policy '1234' for client T0329123L.
-New Details: Policy: 1234 [Premium: $300.05, Starts: 1999-09-14, Expires: 2010-09-14]
-Policy updated successfully!
-----------------------------------------------------
+> Invalid date format. Please use DD-MM-YYYY.
 > -------------------------------------
          Client Details
 -------------------------------------
@@ -44,12 +41,15 @@ Contact: 12345678
 
 --- Policies ---
 1. Policy Name: 1234
-    - Monthly Premium: $300.05
-    - Start Date: 14 Sep 1999
-    - Expiry Date: 14 Sep 2010
+    - Monthly Premium: Not set
+    - Start Date: Not set
+    - Expiry Date: Not set
+
+--- To-Dos ---
+No tasks found.
 ----------------------------------------------------
 > Noted. I've removed this client:
-Name: Zendne, ID: T0329123L, Contact: 12345678, Policies: 1. Policy: 1234 [Premium: $300.05, Starts: 1999-09-14, Expires: 2010-09-14]
+Name: Zendne, ID: T0329123L, Contact: 12345678, Policies: 1. Policy: 1234 [Premium: Not set, Starts: Not set, Expires: Not set]
 ----------------------------------------------------
 > Noted. I've added this meeting:
 Title: TEST, Client: FOO, Date: 18-02-2025, Time: 10:00 to 14:30

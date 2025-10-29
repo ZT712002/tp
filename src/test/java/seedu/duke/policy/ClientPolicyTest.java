@@ -6,6 +6,7 @@ import seedu.duke.exception.FinanceProPlusException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -14,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 
 class ClientPolicyTest {
-
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     private Policy basePolicy;
 
     @BeforeEach
@@ -78,17 +79,17 @@ class ClientPolicyTest {
         String result = policy.toString();
         assertEquals(expected, result);
     }
-    
+
     @Test
     void viewDetails_fullDetails_returnsCorrectMultiLineFormattedString() throws FinanceProPlusException {
         LocalDate startDate = LocalDate.of(1999, 9, 14);
         LocalDate expiryDate = LocalDate.of(2030, 1, 1);
-        BigDecimal premium = new BigDecimal("123.456"); 
+        BigDecimal premium = new BigDecimal("123.456");
         ClientPolicy policy = new ClientPolicy(basePolicy, startDate, expiryDate, premium);
         String expected = "Policy Name: 1234\n" +
                 "    - Monthly Premium: $123.46\n" +
-                "    - Start Date: 14 Sep 1999\n" +
-                "    - Expiry Date: 01 Jan 2030";
+                "    - Start Date: 14-09-1999\n" +
+                "    - Expiry Date: 01-01-2030";
         String result = policy.viewDetails();
         assertEquals(expected, result);
     }
