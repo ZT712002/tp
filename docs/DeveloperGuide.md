@@ -333,31 +333,25 @@ The MeetingList then returns all valid results to the ForecastCommand which form
 
 #### 1. Performance & Responsiveness
 
-For a CLI application aimed at fast typists, performance is the most critical NFR. Users expect an instantaneous feedback loop.
-
 *   **Command Execution Time:** All core CRUD (Create, Read, Update, Delete) operations (e.g., `client add`, `view`, `updatepolicy`, `delete`) must complete and return feedback to the user in **under 200 milliseconds** on a standard modern computer.
 *   **Application Startup Time:** The application must launch and be ready to accept user input in **under 2 seconds**.
 *   **Scalability:** The application's performance must not noticeably degrade with an increasing number of records. Searches, listings, and updates should remain within the 200ms threshold for up to **1,000 client records** and their associated policies/tasks.
 
 #### 2. Usability & User Experience (UX)
 
-For a keyboard-driven interface, usability is defined by the efficiency and intuitiveness of the commands.
-
-*   **Learnability & Consistency:** The command syntax must be consistent and predictable. The `[noun] [verb] [arguments]` structure (e.g., `client add`, `policy delete`) must be maintained for all primary entities. Argument prefixes (`n/`, `id/`, `p/`) must be consistent across all commands.
-*   **Efficiency:** The command structure must be optimized for fast typing, minimizing the need for complex syntax. The use of prefixes allows for flexible argument order and reduces the user's cognitive load.
-*   **Error Handling:** The application must handle user errors gracefully. Invalid commands or arguments must not crash the application. Error messages must be **clear, concise, and actionable**, explicitly stating what was wrong and suggesting the correct format (e.g., "Invalid date format. Please use dd-MM-yyyy.").
+*   **Learnability & Consistency:** The command syntax must be consistent and predictable. The `[noun] [verb/noun] [arguments]` structure (e.g., `client add`, `policy delete`) must be maintained for all primary entities. Argument prefixes (`n/`, `id/`, `p/`) must be consistent across all commands.
+*   **Efficiency:** The command structure must be optimized for fast typing, minimizing the need for complex syntax.
+*   **Error Handling:** The application must handle user errors gracefully. Invalid commands or arguments must not crash the application. 
 *   **Feedback:** Every successful command that modifies data must provide immediate and clear confirmation to the user (e.g., "Noted. I've added this client:").
 
 #### 3. Reliability & Robustness
 
-The application manages critical client data, so it must be exceptionally reliable.
 
-*   **Crash Resistance:** The application must be robust against unexpected or malformed user input. An uncaught exception must never terminate the main application loop. The `try-catch(Throwable)` block in the main loop is a key implementation of this requirement.
+*   **Crash Resistance:** The application must be robust against unexpected or malformed user input. An uncaught exception must never terminate the main application loop.
 *   **Data Durability:** All data modifications (adds, updates, deletes) must be persisted to the storage file (e.g., `clients.txt`) immediately upon the successful completion of the command. This minimizes the risk of data loss in case of an unexpected shutdown.
 
 #### 4. Maintainability & Extensibility
 
-The codebase must be structured to allow for easy updates and the addition of new features by developers.
 
 *   **Modularity:** The application must exhibit a clear **separation of concerns**. The UI, parsing logic, command execution, and data models must be in distinct, loosely coupled packages.
 *   **Code Readability:** The code must adhere to standard Java coding conventions, including meaningful variable names and Javadoc comments for all public classes and methods.
@@ -369,8 +363,8 @@ The codebase must be structured to allow for easy updates and the addition of ne
 
 ## Glossary
 
-* *glossary item* - Definition
-
+* *CLI* - Command Line Interface
+* *CRM* - Client Relation Management - Software used typically by Financial Advisors
 ## Instructions for manual testing
 
 {Give instructions on how to do a manual product testing e.g., how to load sample data to be used for testing}
