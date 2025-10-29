@@ -212,11 +212,6 @@ This command provides a focused view of all pending tasks for a single client.
 
 ## Command Summary
 
-Of course. Here is a concise cheatsheet for all `client` commands in Markdown table format, perfect for a quick reference.
-
----
-
-### **FinanceProPlus Client Command Cheatsheet**
 
 #### Client Management
 
