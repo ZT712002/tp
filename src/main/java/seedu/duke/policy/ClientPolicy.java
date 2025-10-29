@@ -8,10 +8,11 @@ import java.time.format.DateTimeFormatter;
 
 
 public class ClientPolicy extends Policy {
+    public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     private LocalDate startDate;
     private LocalDate expiryDate;
     private BigDecimal monthlyPremium;
-    public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
 
     public ClientPolicy(Policy basePolicy, LocalDate startDate, LocalDate expiryDate, BigDecimal monthlyPremium)
             throws FinanceProPlusException {
