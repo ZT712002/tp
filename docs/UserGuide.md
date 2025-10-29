@@ -212,6 +212,32 @@ This command provides a focused view of all pending tasks for a single client.
 
 ## Command Summary
 
-{Give a 'cheat sheet' of commands here}
+Of course. Here is a concise cheatsheet for all `client` commands in Markdown table format, perfect for a quick reference.
 
-* Add todo `todo n/TODO_NAME d/DEADLINE`
+---
+
+### **FinanceProPlus Client Command Cheatsheet**
+
+#### Client Management
+
+| Command | Description | Syntax / Arguments | Example |
+| :--- | :--- | :--- | :--- |
+| `client add` | Creates a new client record. | `client add n/<NAME> c/<CONTACT> id/<NRIC> [p/<POLICY_NAME>]` | `client add n/John Doe c/123 id/S123A` |
+| `client view` | Displays full details for one client (policies, to-dos). | `client view id/<NRIC>` | `client view id/S123A` |
+| `list client` | Shows a summary of all clients with their index numbers. | `list client` | `list client` |
+| `client delete`| Removes a client by index (use `list client` first). | `client delete <INDEX>` | `client delete 1` |
+
+#### Client Policy Management
+
+| Command | Description | Syntax / Arguments | Example |
+| :--- | :--- | :--- | :--- |
+| `client addpolicy` | Adds a new, detailed policy contract to a client. | `client addpolicy id/<NRIC> p/<POLICY> s/<dd-MM-yyyy> e/<dd-MM-yyyy> m/<PREMIUM>` | `client addpolicy id/S123A p/Health s/14-09-2024 e/14-09-2026 m/250.50` |
+| `client updatepolicy` | Modifies an existing policy contract for a client. | `client updatepolicy id/<NRIC> p/<POLICY> [s/...] [e/...] [m/...]` | `client updatepolicy id/S123A p/Health m/275.00` |
+| `client deletepolicy` | Removes a policy from a client by index (use `client view` first). | `client deletepolicy id/<NRIC> i/<INDEX>` | `client deletepolicy id/S123A i/1` |
+
+#### Client Task (To-Do) Management
+
+| Command | Description | Syntax / Arguments | Example |
+| :--- | :--- | :--- | :--- |
+| `client addtodo` | Adds a new to-do task for a specific client. | `client addtodo id/<NRIC> d/<DESC> by/<dd-MM-yyyy>` | `client addtodo id/S123A d/Follow up claim by/30-11-2025` |
+| `client listtodos` | Lists all to-do tasks for a single client. | `client listtodos id/<NRIC>` | `client listtodos id/S123A` |
