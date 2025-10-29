@@ -299,6 +299,29 @@ public class ClientList implements ListContainer {
         }
         return rows;
     }
+    /**
+     * Deletes a policy from a specific client's policy list by index.
+     * The command arguments must contain the client's NRIC (id/) and the policy index (i/).
+     *
+     * @param arguments The raw string arguments from the user.
+     * @throws FinanceProPlusException If arguments are invalid, client is not found, or index is invalid.
+     */
+    public void deletePolicyForClient(String arguments) throws FinanceProPlusException {
+        Map<String, List<String>> argsMap = Client.parseClientDetails(arguments);
+        String nric = safeGetFirst(argsMap, "id");
+        String indexString = safeGetFirst(argsMap, "i");
+
+        if (nric.isEmpty() || indexString.isEmpty()) {
+            throw new FinanceProPlusException("Invalid command. Both client NRIC (id/) and policy index (i/) are required.");
+        }
+        Client client = findClientByNric(nric);
+        if (client == null) {
+            throw new FinanceProPlusException("Error: Client with NRIC '" + nric + "' not found.");
+        }
+        PolicyList clientPolicies = client.getClientPolicyList();
+        clientPolicies.deleteItem(indexString);
+
+    }
 }
 
 
