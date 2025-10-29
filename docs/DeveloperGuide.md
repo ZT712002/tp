@@ -110,7 +110,7 @@ If no files exist (first launch), blank lists are created and files will be gene
 
 ### LookUpTable Component
 
-API: [LookUpTable](./seedu/duke/container/LookUpTable.java)
+API: [LookUpTable](../src/main/java/seedu/duke/container/LookUpTable.java)
 
 ![Figure of LookUpTable](./umldiagrams/lookuptable.png "Class Diagram of LookUpTable")
 
@@ -316,11 +316,16 @@ The MeetingList then returns all valid results to the ForecastCommand which form
 ## Product scope
 ### Target user profile
 
-{Describe the target user profile}
+* Has a need to manage numerous clients, meetings and policies.
+* prefer desktop application
+* types relatively fast
+* prefers typing to mouse interactions
+* is comfortable using CLI Apps.
+
 
 ### Value proposition
 
-{Describe the value proposition: what problem does it solve?}
+Instead of using bulky, visual driven CRM applications, power users who type fast can take advantage of this application to improve their speed and efficiency of using this tool.
 
 ## User Stories
 
