@@ -157,12 +157,12 @@ public class ClientList implements ListContainer {
     private ClientPolicy createClientPolicyFromArgs(Map<String, List<String>> argsMap, Policy basePolicy)
             throws FinanceProPlusException {
         try {
-            LocalDate startDate = LocalDate.parse(argsMap.get("s").get(0)); // Assumes YYYY-MM-DD
-            LocalDate expiryDate = LocalDate.parse(argsMap.get("e").get(0));
+            LocalDate startDate = LocalDate.parse(argsMap.get("s").get(0),ClientPolicy.DATE_FORMATTER);
+            LocalDate expiryDate = LocalDate.parse(argsMap.get("e").get(0),ClientPolicy.DATE_FORMATTER);
             BigDecimal premium = new BigDecimal(argsMap.get("m").get(0));
             return new ClientPolicy(basePolicy, startDate, expiryDate, premium);
         } catch (DateTimeParseException e) {
-            throw new FinanceProPlusException("Invalid date format. Please use YYYY-MM-DD.");
+            throw new FinanceProPlusException("Invalid date format. Please use dd-MM-yyyy.");
         } catch (NumberFormatException e) {
             throw new FinanceProPlusException("Invalid premium format. Please enter a valid number (e.g., 150.75).");
         }
@@ -246,11 +246,11 @@ public class ClientList implements ListContainer {
         boolean isUpdated = false;
         try {
             if (argsMap.containsKey("s")) {
-                clientPolicy.setStartDate(LocalDate.parse(argsMap.get("s").get(0)));
+                clientPolicy.setStartDate(LocalDate.parse(argsMap.get("s").get(0),ClientPolicy.DATE_FORMATTER));
                 isUpdated = true;
             }
             if (argsMap.containsKey("e")) {
-                clientPolicy.setExpiryDate(LocalDate.parse(argsMap.get("e").get(0)));
+                clientPolicy.setExpiryDate(LocalDate.parse(argsMap.get("e").get(0),ClientPolicy.DATE_FORMATTER));
                 isUpdated = true;
             }
             if (argsMap.containsKey("m")) {
@@ -258,7 +258,7 @@ public class ClientList implements ListContainer {
                 isUpdated = true;
             }
         } catch (DateTimeParseException e) {
-            throw new FinanceProPlusException("Invalid date format. Please use YYYY-MM-DD.");
+            throw new FinanceProPlusException("Invalid date format. Please use DD-MM-YYYY.");
         } catch (NumberFormatException e) {
             throw new FinanceProPlusException("Invalid premium format. Please enter a valid number.");
         }
