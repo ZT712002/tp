@@ -188,16 +188,66 @@ When a command with the prefix "client" is invoked by the user, here is a sequen
 
 ![Figure of Client Add Command SQ](./umldiagrams/clientsequence-Sequence_Diagram__Add_New_Client.png)
 
-To explain  an example of the command. The user(Financial Advisor), first issues a command, this command is passed into the UI. Class, the UI calls the parse command to pass the data into an instantiated parser for processing.
+### Command Execution Flow: A Detailed Walkthrough
 
-In the parser, it then further breaks it down into respective child classes, in this case, it is the ClientParser Child class. This class splits the processed string into further substrings and then calls the constructor for AddCommand. AddCommand calls itself to instantiate some methods
-and hands back the control signal to Client Parser. ClientParser hands back signal to Parser and Parser hands back signal to UI. UI then calls the execute method from Add Command. Add Command calls Client List to addItem.
+The application's command processing pipeline is designed around the **Command Design Pattern**. This decouples the invoker of a command (the `Ui`) from the object that knows how to perform the action (the concrete `Command` object).
 
-In the Additem function it creates a new Client Object. In the Client Object Constructor it does the verification and instantiates the attributes. The client object then returns the control signal back to ClientList.
-ClientList then does a callback method AddClient to add the client into the clientlist object  and then the additem callback is finished.
+Here is a step-by-step breakdown of the execution flow for a typical command, such as `client add n/Zendne ...`.
 
-ClientList then hands back control to Add Command and Add Command adds gives back the control to UI.
-UI then calls the method printExecutionMessage() to AddCommand and AddCommand returns control back to UI with data. UI then displays the success message to the user.
+
+#### Phase 1: Parsing and Command Instantiation
+
+This phase is responsible for converting the user's raw input string into an executable `Command` object.
+
+1.  **Input Capture:** The `Ui` component captures the raw command string from the user.
+
+2.  **Initial Parsing:** The main application loop invokes the static `Parser.parse(string)` method. This top-level parser acts as a **Factory**. It inspects the first word of the command (e.g., `"client"`) to determine which specialized parser to use.
+
+3.  **Delegation to Sub-Parser:** The `Parser` factory instantiates a specific subclass, in this case, `new ClientParser(...)`, and passes the remaining arguments to it.
+
+4.  **Command Creation:** The `ClientParser` identifies the command's subtype (e.g., `"add"`) and its arguments. It then instantiates the corresponding concrete command object:
+    ```java
+    new AddCommand("client", "n/Zendne ...");
+    ```
+
+5.  **Return to Caller:** This newly created `AddCommand` object is returned all the way up the call stack to the main application loop in `FinanceProPlus`. At this point, the application holds an executable object but has not yet performed any action.
+
+
+
+#### Phase 2: Execution and Business Logic
+
+This phase is where the `Command` object performs its designated action by interacting with the data models.
+
+1.  **Invocation:** The main loop calls the `execute(lookUpTable)` method on the `AddCommand` object.
+
+2.  **Dependency Retrieval:** The `AddCommand` uses the `lookUpTable` (a form of dependency injection) to get a reference to the `ClientList` instance, which is the model responsible for managing client data.
+
+3.  **Delegation to Model:** The command's responsibility is orchestration, not business logic. It delegates the core work by calling `clientList.addItem(arguments, mainPolicyList)`.
+
+4.  **Business Logic & Validation:** Inside `ClientList.addItem()`, critical business logic is executed:
+    *   It first validates the request (e.g., checks if a client with the same NRIC already exists).
+    *   If validation passes, it proceeds to instantiate a `new Client(...)` object.
+
+5.  **Object Instantiation:** The `Client` constructor is responsible for its own state. It performs detailed validation on the input arguments and initializes its internal attributes (name, NRIC, policies, etc.).
+
+6.  **Data Persistence:** Once the `Client` object is successfully created, control returns to `ClientList`. The `addItem` method then calls a helper, `addClient()`, which adds the new `Client` object to its internal `ArrayList`.
+
+7.  **Execution Completion:** After the client is added, the `addItem` method finishes, and control returns to the `AddCommand.execute()` method, which also concludes its execution.
+
+
+
+#### Phase 3: User Feedback
+
+This final phase informs the user of the outcome.
+
+1.  **Return to Main Loop:** Control returns from `command.execute()` back to the main `while` loop in `FinanceProPlus`.
+
+2.  **Request Feedback:** The loop then calls `command.printExecutionMessage()`.
+
+3.  **Display Message:** The `AddCommand`'s `printExecutionMessage()` method prints the success confirmation to the console. The main loop is now complete and waits for the next user command.
+
+
+
 ### List Feature, Design and Implementation
 The list command is designed based on key software engineering principle, Polymorphism. This architecture ensures that the command is both robust and easily extensible.
 
@@ -281,7 +331,41 @@ The MeetingList then returns all valid results to the ForecastCommand which form
 
 ## Non-Functional Requirements
 
-{Give non-functional requirements}
+#### 1. Performance & Responsiveness
+
+For a CLI application aimed at fast typists, performance is the most critical NFR. Users expect an instantaneous feedback loop.
+
+*   **Command Execution Time:** All core CRUD (Create, Read, Update, Delete) operations (e.g., `client add`, `view`, `updatepolicy`, `delete`) must complete and return feedback to the user in **under 200 milliseconds** on a standard modern computer.
+*   **Application Startup Time:** The application must launch and be ready to accept user input in **under 2 seconds**.
+*   **Scalability:** The application's performance must not noticeably degrade with an increasing number of records. Searches, listings, and updates should remain within the 200ms threshold for up to **1,000 client records** and their associated policies/tasks.
+
+#### 2. Usability & User Experience (UX)
+
+For a keyboard-driven interface, usability is defined by the efficiency and intuitiveness of the commands.
+
+*   **Learnability & Consistency:** The command syntax must be consistent and predictable. The `[noun] [verb] [arguments]` structure (e.g., `client add`, `policy delete`) must be maintained for all primary entities. Argument prefixes (`n/`, `id/`, `p/`) must be consistent across all commands.
+*   **Efficiency:** The command structure must be optimized for fast typing, minimizing the need for complex syntax. The use of prefixes allows for flexible argument order and reduces the user's cognitive load.
+*   **Error Handling:** The application must handle user errors gracefully. Invalid commands or arguments must not crash the application. Error messages must be **clear, concise, and actionable**, explicitly stating what was wrong and suggesting the correct format (e.g., "Invalid date format. Please use dd-MM-yyyy.").
+*   **Feedback:** Every successful command that modifies data must provide immediate and clear confirmation to the user (e.g., "Noted. I've added this client:").
+
+#### 3. Reliability & Robustness
+
+The application manages critical client data, so it must be exceptionally reliable.
+
+*   **Crash Resistance:** The application must be robust against unexpected or malformed user input. An uncaught exception must never terminate the main application loop. The `try-catch(Throwable)` block in the main loop is a key implementation of this requirement.
+*   **Data Durability:** All data modifications (adds, updates, deletes) must be persisted to the storage file (e.g., `clients.txt`) immediately upon the successful completion of the command. This minimizes the risk of data loss in case of an unexpected shutdown.
+
+#### 4. Maintainability & Extensibility
+
+The codebase must be structured to allow for easy updates and the addition of new features by developers.
+
+*   **Modularity:** The application must exhibit a clear **separation of concerns**. The UI, parsing logic, command execution, and data models must be in distinct, loosely coupled packages.
+*   **Code Readability:** The code must adhere to standard Java coding conventions, including meaningful variable names and Javadoc comments for all public classes and methods.
+*   **Extensibility:** The architecture (leveraging the Command and Factory patterns) must make it simple to add new entities (e.g., "Meetings") or new commands for existing entities (e.g., `client merge`) with minimal changes to the core application loop or parser factory.
+
+#### 5. Portability
+
+*   **Platform Independence:** The application must be able to run on any major desktop operating system (Windows, macOS, Linux) that has a compatible Java Runtime Environment (JRE) of version 17 or higher. It should have no platform-specific dependencies.
 
 ## Glossary
 
