@@ -175,6 +175,12 @@ public class Client {
                 System.out.println((i + 1) + ". " + policy.viewDetails());
             }
         }
+        System.out.println("\n--- To-Dos ---");
+        try {
+            this.todoList.listItems();
+        } catch (FinanceProPlusException e) {
+            System.out.println("Could not display to-dos due to an error: " + e.getMessage());
+        }
     }
 
     /**
