@@ -312,7 +312,8 @@ public class ClientList implements ListContainer {
         String indexString = safeGetFirst(argsMap, "i");
 
         if (nric.isEmpty() || indexString.isEmpty()) {
-            throw new FinanceProPlusException("Invalid command. Both client NRIC (id/) and policy index (i/) are required.");
+            throw new FinanceProPlusException("Invalid command. Both client NRIC (id/) and policy index (i/) are " +
+                    "required.");
         }
         Client client = findClientByNric(nric);
         if (client == null) {

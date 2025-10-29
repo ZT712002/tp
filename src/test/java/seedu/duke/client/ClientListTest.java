@@ -346,4 +346,81 @@ class ClientListTest {
             assertEquals(realNric, foundClient.getNric());
         }
     }
+    @Nested
+    class DeletePolicyForClientTests {
+
+        private final String clientNric = "T111A";
+        private Client testClient;
+
+        @BeforeEach
+        void setupClientWithPolicies() throws FinanceProPlusException {
+            // Add a client to the main list
+            clientList.addItem("n/Client One c/111 id/" + clientNric, mainPolicyList);
+            testClient = clientList.findClientByNric(clientNric);
+
+
+            String addPolicyArgs1 = "id/" + clientNric + " p/1234 s/2023-01-01 e/2024-01-01 m/100";
+            String addPolicyArgs2 = "id/" + clientNric + " p/1233 s/2023-02-01 e/2024-02-01 m/200";
+            clientList.addPolicyToClient(addPolicyArgs1, mainPolicyList);
+            clientList.addPolicyToClient(addPolicyArgs2, mainPolicyList);
+
+
+            outContent.reset();
+        }
+
+        @Test
+        void deletePolicyForClient_validIndex_removesSuccessfully() throws FinanceProPlusException {
+
+            assertEquals(2, testClient.getClientPolicyList().getPolicyList().size());
+            assertTrue(testClient.hasPolicy("1234")); // Policy at index 1
+            assertTrue(testClient.hasPolicy("1233")); // Policy at index 2
+
+            String deleteArgs = "id/" + clientNric + " i/1";
+            clientList.deletePolicyForClient(deleteArgs);
+            System.out.println(testClient.hasPolicy("1234"));
+            assertEquals(1, testClient.getClientPolicyList().getPolicyList().size());
+            assertEquals(false, testClient.hasPolicy("1234"));
+            assertTrue(testClient.hasPolicy("1233"));
+        }
+
+        @Test
+        void deletePolicyForClient_clientNotFound_throwsException() {
+            String deleteArgs = "id/FAKE_ID i/1";
+            FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
+                    () -> clientList.deletePolicyForClient(deleteArgs));
+            assertEquals("Error: Client with NRIC 'FAKE_ID' not found.", e.getMessage());
+        }
+
+        @Test
+        void deletePolicyForClient_indexOutOfBounds_throwsException() {
+            String deleteArgs = "id/" + clientNric + " i/3";
+            FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
+                    () -> clientList.deletePolicyForClient(deleteArgs));
+            assertEquals("Invalid index. Please provide a valid policy index to delete.", e.getMessage());
+        }
+
+        @Test
+        void deletePolicyForClient_nonNumericIndex_throwsException() {
+            String deleteArgs = "id/" + clientNric + " i/abc";
+            FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
+                    () -> clientList.deletePolicyForClient(deleteArgs));
+            assertEquals("Invalid input. Please provide a valid policy index to delete.", e.getMessage());
+        }
+
+        @Test
+        void deletePolicyForClient_missingIndexPrefix_throwsException() {
+            String deleteArgs = "id/" + clientNric;
+            FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
+                    () -> clientList.deletePolicyForClient(deleteArgs));
+            assertEquals("Invalid command. Both client NRIC (id/) and policy index (i/) are required.", e.getMessage());
+        }
+
+        @Test
+        void deletePolicyForClient_missingIdPrefix_throwsException() {
+            String deleteArgs = "i/1";
+            FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
+                    () -> clientList.deletePolicyForClient(deleteArgs));
+            assertEquals("Invalid command. Both client NRIC (id/) and policy index (i/) are required.", e.getMessage());
+        }
+    }
 }
