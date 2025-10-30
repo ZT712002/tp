@@ -19,12 +19,12 @@ public class User {
 
         Map<String, String> detailsMap = parseUserDetails(arguments);
         assert detailsMap != null : "Parsed user details map should not be null after parsing";
-        List<String> requiredKeys = List.of("n", "e", "p", "r");
+        List<String> requiredKeys = List.of("n", "e", "c", "r");
 
         for (String key : requiredKeys) {
             if (!detailsMap.containsKey(key) || detailsMap.get(key).isEmpty()) {
                 throw new FinanceProPlusException("Invalid user details. Please provide all required fields: "
-                        + "n/NAME e/EMAIL p/PHONE r/REPRESENTATIVE_NUMBER");
+                        + "n/NAME e/EMAIL c/CONTACT r/REPRESENTATIVE_NUMBER");
             }
         }
 
@@ -33,9 +33,9 @@ public class User {
         representativeNumber = detailsMap.get("r");
 
         try {
-            phoneNumber = Integer.parseInt(detailsMap.get("p"));
+            phoneNumber = Integer.parseInt(detailsMap.get("c"));
         } catch (NumberFormatException ex) {
-            throw new FinanceProPlusException("Invalid phone number format. Please enter digits only.");
+            throw new FinanceProPlusException("Invalid contact format. Please enter digits only.");
         }
         assert this.name != null && !this.name.isEmpty()
                 : "User name should be initialized";
@@ -72,13 +72,12 @@ public class User {
         return "User Details:\n"
                 + "Name: " + name + "\n"
                 + "Email: " + email + "\n"
-                + "Phone: " + phoneNumber
+                + "Contact: " + phoneNumber
                 + "\n" + "Representative No.: " + representativeNumber;
     }
 
-    // ========== STORAGE HELPERS ==========
-    public String toStorageString() {
-        return String.format("n/%s e/%s p/%d r/%s", name, email, phoneNumber, representativeNumber);
+    String toStorageString() {
+        return String.format("n/%s e/%s c/%d r/%s", name, email, phoneNumber, representativeNumber);
     }
 
     public String[] toCSVRow() {

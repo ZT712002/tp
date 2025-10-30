@@ -73,7 +73,6 @@ public class UserList implements ListContainer {
         return 0;
     }
 
-    // ========== STORAGE HELPERS ==========
     public List<String> toStorageFormat() {
         List<String> lines = new ArrayList<>();
         if (user != null) {
@@ -91,7 +90,7 @@ public class UserList implements ListContainer {
 
     public List<String[]> toCSVFormat() {
         List<String[]> rows = new ArrayList<>();
-        rows.add(new String[]{"Name", "Email", "Phone", "Representative"});
+        rows.add(new String[]{"Name", "Email", "Contact", "Representative"});
         if (user != null) {
             rows.add(user.toCSVRow());
         }
