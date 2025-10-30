@@ -1,4 +1,4 @@
-# FinancialProPlus
+# FinanceProPlus
 
 {Give product intro here}
 
