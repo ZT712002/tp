@@ -1,9 +1,25 @@
 # Developer Guide
+*   [Acknowledgements](#acknowledgements)
+*   [Design & implementation](#design--implementation)
+    *   [Architecture](#architecture)
+    *   [Storage Component](#storage-component)
+    *   [Storage Initialization on Startup](#storage-initialization-on-startup)
+    *   [LookUpTable Component](#lookuptable-component)
+    *   [Client Features](#client-features)
+    *   [Command Execution Flow: A Detailed Walkthrough](#command-execution-flow-a-detailed-walkthrough)
+    *   [List Feature, Design and Implementation](#list-feature-design-and-implementation)
+    *   [Task Management Feature](#task-management-feature)
+    *   [Meeting Features](#meeting-features)
+*   [Product scope](#product-scope)
+    *   [Target user profile](#target-user-profile)
+    *   [Value proposition](#value-proposition)
+*   [User Stories](#user-stories)
+*   [Non-Functional Requirements](#non-functional-requirements)
+*   [Glossary](#glossary)
+*   [Instructions for manual testing](#instructions-for-manual-testing)
 
 ## Acknowledgements
 This was heavily inspired by the AB3 reference DG found [here](https://github.com/se-edu/addressbook-level3/blob/master/docs/DeveloperGuide.md)
-
-{list here sources of all reused/adapted ideas, code, documentation, and third-party libraries -- include links to the original source as well}
 
 ## Design & implementation
 ### Architecture
@@ -329,11 +345,33 @@ Instead of using bulky, visual driven CRM applications, power users who type fas
 
 ## User Stories
 
-|Version| As a ... | I want to ... | So that I can ...|
-|--------|----------|---------------|------------------|
-|v1.0|new user|see usage instructions|refer to them when I forget how to use the application|
-|v2.0|user|find a to-do item by name|locate a to-do without having to go through the entire list|
-
+| Version           | As a ...                                                                             | I want to ... | So that I can ...|
+|-------------------|--------------------------------------------------------------------------------------|---------------|------------------|
+| v1.0              | first-time user                                                                      | see some sample client data when I open the application | easily try out its features without importing my own data. |
+| v1.0              | first-time user                                                                      | see a welcome message explaining which features to try out first | start by trying out features more suited for a beginner user. |
+| v1.0              | Financial advisor                                                                  | add a client's name | keep track of the client's profile. |
+| v1.0              | Financial advisor                                                                  | add a client's phone number | keep track of the number. |
+| v1.0              | Financial advisor                                                                  | add policy names | keep track of a client's policies. |
+| v1.0              | Financial advisor                                                                 | add policy details | keep track of the details of a client's policies. |
+| v1.0              | Financial advisor                                                                   | add my FA certificate number | |
+| v1.0              | Financial advisor                                                                   | add a company policy | see the insurance policy. |
+| v1.0              | Financial advisor                                                                  | delete a client's name | remove a client's profile. |
+| v1.0              | Financial advisor                                                                   | delete a client's phone number | remove an old client's number. |
+| v1.0              | Financial advisor                                                                   | delete policy names | remove unwanted user's policies. |
+| v1.0              | Financial advisor                                                                     | delete policy details | remove unwanted user's policies. |
+| v1.0              | Financial advisor                                                                     | delete a company policy | remove unwanted company policies. |
+| v1.0              | Financial advisor                                                                     | read a client's name | view the client's profile. |
+| v1.0              | Financial advisor                                                                     | read a client's phone number | view the number. |
+| v1.0              | Financial advisor                                                                | read policy names | view a user's policies. |
+| v1.0              | Financial advisor                                                                    | read policy details | view policy details. |
+| v2.0              |  Financial advisor                                                                   | have a to-do list for each of my clients (by ID) | avoid missing important tasks for individual clients. |
+| v2.0       | Financial advisor | log and view the policy effective dates for individual clients.                      | |
+| v2.0       | Financial advisor | create a standalone task with a due date                                             | manage my professional responsibilities. |
+| v2.0       | Financial advisor | search for a specific client by ID                                                   | quickly retrieve their details before a call or meeting. |
+| v2.0       | Financial advisor | archive a client who is no longer with me                                            | maintain a clean and active client list. |
+| v2.0       | Financial advisor | import and export my client list to an Excel sheet                                   | share data with my company easily. |
+| v2.0       | Financial advisor | view my weekly forecast of meetings                                                  | plan my time accordingly. |
+| v2.0       | Financial advisor | clearly view the types of policies my clients have and the total money in per month. | |
 ## Non-Functional Requirements
 
 #### 1. Performance & Responsiveness
