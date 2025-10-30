@@ -58,7 +58,7 @@ All saved data resides within a single primary directory:
 
 #### Key Data Files
 | Data Type        | Storage Location               | Example Path                      |
-|:-----------------|:-------------------------------|:----------------------------------|
+| :--- | :--- | :--- |
 | User             | `data/user.txt`                | `data/user.txt`                   |
 | Client           | `data/client.txt`              | `data/client.txt`                 |
 | Archived Clients | `data/archived_clients.txt`    | `data/archived_clients.txt`       |
@@ -351,7 +351,7 @@ Instead of using bulky, visual driven CRM applications, power users who type fas
 ## User Stories
 
 | Version           | As a ...                                                                             | I want to ... | So that I can ...|
-|-------------------|--------------------------------------------------------------------------------------|---------------|------------------|
+| :--- | :--- | :--- |:---|
 | v1.0              | first-time user                                                                      | see some sample client data when I open the application | easily try out its features without importing my own data. |
 | v1.0              | first-time user                                                                      | see a welcome message explaining which features to try out first | start by trying out features more suited for a beginner user. |
 | v1.0              | Financial advisor                                                                  | add a client's name | keep track of the client's profile. |
