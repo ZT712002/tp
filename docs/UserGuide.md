@@ -202,8 +202,52 @@ This command provides a focused view of all pending tasks for a single client.
 
 ### User Features
 
+The **User** feature represents the **Financial Advisor** currently using FinanceProPlus.  
+At any given time, **only one user record can exist** in the system  representing the active advisor profile.  
+If a new user needs to be added, the existing one must first be deleted.
 
 
+---
+
+#### **1. Adding the Active User**
+
+This command registers the Financial Advisor using the system.  
+Only one user can exist at any time — attempting to add another will result in an error.
+
+* **Command:** `user add n/<NAME> e/<EMAIL> c/<CONTACT> r/<REP_NUMBER>`
+
+* **Arguments:**
+    * `n/<NAME>` — **Required.** Advisor’s full name.
+    * `e/<EMAIL>` — **Required.** Contact email.
+    * `c/<CONTACT>` — **Required.** Contact number (digits only).
+    * `r/<REP_NUMBER>` — **Required.** Representative or license number.
+
+* **Example:**
+```
+user add n/Alex Tan e/alex@example.com c/91234567 r/FA-001
+```
+#### **2. Viewing the Current User**
+
+Displays the currently registered advisor’s details.  
+If no user exists, a message will indicate that the user profile is empty.
+
+* **Example:** `user view`
+```
+  Here is the current user information:
+  User Details:
+  Name: Alex Tan
+  Email: alex@example.com
+  Contact: 91234567
+  Representative No.: FA-001
+```
+
+#### **3. Deleting the Current User**
+
+Removes the existing user profile from the system.  
+This must be done before adding a new advisor.
+
+* **Command:** `user delete`
+---
 ## FAQ
 
 **Q**: How do I transfer my data to another computer? 
@@ -236,3 +280,11 @@ This command provides a focused view of all pending tasks for a single client.
 | :--- | :--- | :--- | :--- |
 | `client addtodo` | Adds a new to-do task for a specific client. | `client addtodo id/<NRIC> d/<DESC> by/<dd-MM-yyyy>` | `client addtodo id/S123A d/Follow up claim by/30-11-2025` |
 | `client listtodos` | Lists all to-do tasks for a single client. | `client listtodos id/<NRIC>` | `client listtodos id/S123A` |
+
+#### User Management
+
+| Command | Description | Syntax / Arguments | Example |
+| :--- | :--- | :--- | :--- |
+| `user add` | Registers the current financial advisor (only one allowed). | `user add n/<NAME> e/<EMAIL> c/<CONTACT> r/<REP_NUMBER>` | `user add n/Alex Tan e/alex@example.com c/91234567 r/FA-001` |
+| `user view` | Displays details of the current user. | `user view` | `user view` |
+| `user delete` | Removes the existing user record. | `user delete` | `user delete` |

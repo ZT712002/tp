@@ -43,6 +43,10 @@ public class FinanceProPlus {
         archivedClients = new ArchivedClientList();
         LoggerConfig.setup();
         lookUpTable = new LookUpTable(clients, policies, meetings, tasks, user, archivedClients);
+        loadFromFiles();
+    }
+
+    private void loadFromFiles() {
         try {
             policies.loadFromStorage(storage.loadFromFile("policy.txt"));
             clients.loadFromStorage(storage.loadFromFile("client.txt"), policies);
@@ -57,13 +61,11 @@ public class FinanceProPlus {
                     logger.warning("Failed to load tasks for client " + c.getNric() + ": " + ex.getMessage());
                 }
             }
-
-
             tasks.loadFromStorage(storage.loadFromFile("task.txt"));
             logger.info("Data loaded successfully.");
         } catch (Exception e) {
             logger.info("Some data failed to load: " + e.getMessage());
-        }  
+        }
     }
 
     public static void terminate() {
