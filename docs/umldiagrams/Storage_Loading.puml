@@ -1,6 +1,4 @@
-### UML Sequence Diagram (Storage_Loading.puml)
 
-```plantuml
 @startuml
 title Sequence Diagram: Application Startup Data Loading
 
@@ -23,7 +21,11 @@ activate FinanceProPlus
 
 FinanceProPlus -> StorageManager: new StorageManager()
 activate StorageManager
-StorageManager -> StorageManager: createFolder("data/")\ncreateFolder("exports/")
+StorageManager --> StorageManager: createFolder("data/")\ncreateFolder("exports/")\ncreateFolder("data/client_tasks")
+activate StorageManager
+StorageManager --> StorageManager
+deactivate StorageManager
+StorageManager --> FinanceProPlus
 deactivate StorageManager
 
 == Data Loading ==

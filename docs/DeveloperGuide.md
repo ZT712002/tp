@@ -26,32 +26,36 @@ The App is consisted of the following four components:
 
 ### Storage Component
 
-The **StorageManager** class is responsible for all file operations in the application, including reading, writing, and exporting data.  
-It ensures that user data, client data, archived clients, tasks, policies, and meeting records are automatically persisted to disk after every command execution  minimizing data loss risks even during unexpected shutdowns.
+The **StorageManager** class is responsible for all file operations in the application, including reading and writing data to disk.  
+It ensures that user data, client data, archived clients, per-client to-dos, policies, and meeting records are automatically persisted to disk after every command execution — minimizing data loss risks even during unexpected shutdowns.
 
 ![Storage Component Autosave Sequence](./umldiagrams/Storage.png)
 
 #### Design Overview
 The `FinanceProPlus` class manages the autosave feature through its `saveAllData()` method, which is triggered after each executed command.  
-This guarantees that all updates made during runtime  including new tasks, meetings, or clients — are immediately written to disk without requiring explicit user action to save.
+This guarantees that all updates made during runtime — including new clients, tasks, meetings, or policies — are immediately written to disk without requiring explicit user action to save.
 
-Each dataset (User, Client, ArchivedClient, Policy, Meeting, and Task) is stored in both:
-- **Text format** (`.txt`) – for reliable internal persistence and reloading.
-- **CSV format** (`.csv`) – for user-friendly export and analysis.
+Each dataset (User, Client, ArchivedClient, Policy, Meeting, and ClientTasks) is stored in **text format (`.txt`)** for reliable internal persistence and reloading.
 
-All saved data resides within two primary directories:
+All saved data resides within a single primary directory:
 - `data/` — used for internal save and load operations.
-- `exports/` — used for external CSV exports (e.g., viewing in Excel).
 
 #### Key Data Files
-| Data Type | Text File | CSV File |
-|------------|------------|----------|
-| User | `user.txt` | `user.csv` |
-| Client | `client.txt` | `client.csv` |
-| Archived Clients | `archived_clients.txt` | `archived_clients.csv` |
-| Policy | `policy.txt` | `policy.csv` |
-| Meeting | `meeting.txt` | `meeting.csv` |
-| Task | `task.txt` | `task.csv` |
+| Data Type        | Storage Location               | Example Path                      |
+|:-----------------|:-------------------------------|:----------------------------------|
+| User             | `data/user.txt`                | `data/user.txt`                   |
+| Client           | `data/client.txt`              | `data/client.txt`                 |
+| Archived Clients | `data/archived_clients.txt`    | `data/archived_clients.txt`       |
+| Policy           | `data/policy.txt`              | `data/policy.txt`                 |
+| Meeting          | `data/meeting.txt`             | `data/meeting.txt`                |
+| Client Todos     | `data/client_tasks/<NRIC>.txt` | `data/client_tasks/S1234567A.txt` |
+| Task             | `task.txt`                     | `task.csv`                          |
+---
+
+#### Client Task Storage Design (`client_tasks/` Folder)
+Each client’s personal to-do list is saved in a separate text file named after their NRIC, located inside the `client_tasks/` subfolder.  
+This design ensures isolation between clients and simplifies debugging, updating, and file management.
+
 #### Workflow Description (Autosave)
 1. After the user enters a command, `Parser.parse()` creates a `Command` object.
 2. The command executes and updates the respective data list(s).
@@ -59,10 +63,10 @@ All saved data resides within two primary directories:
 4. Each list’s data is written to `.txt` and `.csv` files via `StorageManager`.
 5. The `StorageManager` logs a success message (`logger.info("Data saved successfully.")`).
 
-Errors during saving are logged internally and not printed to the user — keeping the UI clean but traceable through logs.
+Errors during saving are logged internally and not printed to the user keeping the UI clean but traceable through logs.
 
 #### Rationale for Design
-- **Autosave per command** guarantees maximum reliability — no manual save needed.
+- **Autosave per command** guarantees maximum reliability, no manual save needed.
 - **Centralized save logic** inside `FinanceProPlus` keeps design modular and testable.
 - **Logging instead of printing** ensures users aren’t spammed with system messages.
 
@@ -83,6 +87,7 @@ On startup, the `FinanceProPlus` constructor initializes the `StorageManager` an
 - **MeetingList**
 - **ArchivedClientList**
 - **TaskList**
+- **Per-Client TaskLists** (located under `data/client_tasks/`)
 
 If any file is missing or unreadable, the app logs the issue but continues loading other data, ensuring robust operation even with partial data.
 
@@ -96,6 +101,7 @@ If any file is missing or unreadable, the app logs the issue but continues loadi
     - `meetings.loadFromStorage(storage.loadFromFile("meeting.txt"));`
     - `archivedClients.loadFromStorage(storage.loadFromFile("archived_clients.txt"));`
     - `tasks.loadFromStorage(storage.loadFromFile("task.txt"));`
+    - iterates through each client and updates their personal todolist.
 4. Each list reconstructs its objects from text lines.
 5. `Logger.info("Data loaded successfully.")` confirms successful initialization.
 
@@ -103,8 +109,7 @@ If no files exist (first launch), blank lists are created and files will be gene
 
 #### Rationale for Design
 - Guarantees users always resume with consistent data.
-- Prevents startup failure even if a single data file is missing.
-- Keeps all load logic centralized within `FinanceProPlus` for easier debugging and maintenance.
+- Allow for transfer of data from different devices.
 
 ---
 
@@ -206,7 +211,7 @@ This phase is responsible for converting the user's raw input string into an exe
 3.  **Delegation to Sub-Parser:** The `Parser` factory instantiates a specific subclass, in this case, `new ClientParser(...)`, and passes the remaining arguments to it.
 
 4.  **Command Creation:** The `ClientParser` identifies the command's subtype (e.g., `"add"`) and its arguments. It then instantiates the corresponding concrete command object:
-    ```java
+    ```
     new AddCommand("client", "n/Zendne ...");
     ```
 
