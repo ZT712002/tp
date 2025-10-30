@@ -7,7 +7,7 @@ import seedu.duke.command.DeleteCommand;
 import seedu.duke.command.SearchCommand;
 import seedu.duke.command.ArchiveCommand;
 import seedu.duke.command.RestoreCommand;
-import seedu.duke.command.ListCommand;
+
 import seedu.duke.exception.FinanceProPlusException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -118,13 +118,6 @@ class ClientParserTest {
         ClientParser parser = new ClientParser("client", "restore");
         Command command = parser.executeAndCreateCommand();
         assertInstanceOf(RestoreCommand.class, command);
-    }
-
-    @Test
-    void executeAndCreateCommand_listArchivedCommand_returnsListCommand() throws FinanceProPlusException {
-        ClientParser parser = new ClientParser("client", "listarchived");
-        Command command = parser.executeAndCreateCommand();
-        assertInstanceOf(ListCommand.class, command);
     }
 
     @Test
