@@ -198,6 +198,57 @@ This command provides a focused view of all pending tasks for a single client.
 
 ### Policy Features
 
+This guide provides commands for managing **base policies** (insurance product templates) in your system. These base policies serve as templates that can be assigned to clients when adding detailed policy contracts.
+
+#### **1. Adding a New Base Policy**
+
+This command creates a new policy template that can later be assigned to clients. Base policies define the type and general details of insurance products available.
+
+*   **Command:** `policy add n/<NAME> d/<DETAILS>`
+
+*   **Arguments:**
+    *   `n/<NAME>`: **Required.** The name of the policy (e.g., "HealthShield", "PremiumLife").
+    *   `d/<DETAILS>`: **Required.** A brief description of the policy coverage and features.
+
+*   **Example:**
+    ```
+    policy add n/HealthShield d/Comprehensive health insurance covering hospitalization and outpatient care
+    ```
+
+#### **2. Listing All Base Policies**
+
+This command displays all policy templates currently available in your system, listed with numerical indices. This index is essential for deleting policies.
+
+*   **Command:** `list policy`
+
+*   **Example:**
+    ```
+    list policy
+    ```
+
+#### **3. Deleting a Base Policy**
+
+This command permanently removes a policy template from the system. Note that this does not affect policies already assigned to clients.
+
+*   **Command:** `policy delete <INDEX>`
+
+*   **Arguments:**
+    *   `<INDEX>`: **Required.** The numerical index of the policy to delete. 
+
+*   **Workflow Example:**
+    1.  First, list all policies to find the target's index:
+        ```
+        list policy
+        ```
+        *(Output might show "1. Name: HealthShield, Details: ...")*
+
+    2.  Then, use that index to delete the policy:
+        ```
+        policy delete 1
+        ```
+
+---
+
 ### Task Features
 
 ### User Features
@@ -288,3 +339,11 @@ This must be done before adding a new advisor.
 | `user add` | Registers the current financial advisor (only one allowed). | `user add n/<NAME> e/<EMAIL> c/<CONTACT> r/<REP_NUMBER>` | `user add n/Alex Tan e/alex@example.com c/91234567 r/FA-001` |
 | `user view` | Displays details of the current user. | `user view` | `user view` |
 | `user delete` | Removes the existing user record. | `user delete` | `user delete` |
+
+#### Policy Management
+
+| Command | Description | Syntax / Arguments | Example |
+| :--- | :--- | :--- | :--- |
+| `policy add` | Creates a new base policy template. | `policy add n/<NAME> d/<DETAILS>` | `policy add n/HealthShield d/Comprehensive health insurance` |
+| `list policy` | Shows all base policy templates with their index numbers. | `list policy` | `list policy` |
+| `policy delete` | Removes a base policy by index (use `list policy` first). | `policy delete <INDEX>` | `policy delete 1` |
