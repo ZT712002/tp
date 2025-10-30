@@ -419,4 +419,183 @@ Instead of using bulky, visual driven CRM applications, power users who type fas
 * *CRM* - Client Relation Management - Software used typically by Financial Advisors
 ## Instructions for manual testing
 
-{Give instructions on how to do a manual product testing e.g., how to load sample data to be used for testing}
+This section provides instructions for manual testing of FinanceProPlus. Refer to the [Command Summary](#command-summary) tables in the User Guide for quick reference of all available commands.
+
+### Initial Setup
+
+1. **Download the JAR file:**
+   - Obtain the latest version of `[CS2113-W12-2][FinanceProPlus].jar` from the releases page
+   - Place it in an empty folder that will serve as the testing directory
+
+2. **Launch the application:**
+   - Open a command terminal
+   - Navigate to the folder containing the JAR file: `cd <folder_path>`
+   - Run the command: `java -jar [CS2113-W12-2][FinanceProPlus].jar`
+   - Verify that the application starts successfully and displays the welcome message
+
+3. **Verify data directory creation:**
+   - After the first launch, check that a `data/` folder is created in the same directory
+   - The folder should contain `.txt` files for storing application data
+
+### Loading Sample Data for Testing
+
+#### Method 1: Using Commands (Recommended for initial testing)
+
+To quickly populate the application with test data, execute the following commands in order:
+
+**Step 1: Add User Profile**
+```
+user add n/John Smith e/john.smith@example.com c/91234567 r/FA-12345
+```
+
+**Step 2: Add Base Policies**
+```
+policy add n/HealthShield d/Comprehensive health insurance covering hospitalization and outpatient care
+policy add n/PremiumLife d/Whole life insurance with investment component and guaranteed returns
+policy add n/TravelSafe d/Travel insurance covering medical emergencies and trip cancellations
+```
+
+**Step 3: Add Clients**
+```
+client add n/Alice Wong c/98765432 id/S1234567A
+client add n/Bob Tan c/87654321 id/G7654321B p/HealthShield
+client add n/Charlie Lee c/91112233 id/S9876543C
+```
+
+**Step 4: Add Detailed Policies to Clients**
+```
+client addpolicy id/S1234567A p/HealthShield s/01-01-2024 e/01-01-2026 m/250.50
+client addpolicy id/S1234567A p/PremiumLife s/15-03-2024 e/15-03-2034 m/500.00
+client addpolicy id/G7654321B p/PremiumLife s/10-02-2024 e/10-02-2034 m/450.75
+client addpolicy id/S9876543C p/TravelSafe s/20-06-2024 e/20-06-2025 m/50.00
+```
+
+**Step 5: Add Client-Specific To-Dos**
+```
+client addtodo id/S1234567A d/Follow up on claim submission by/30-11-2025
+client addtodo id/G7654321B d/Schedule annual policy review by/15-12-2025
+client addtodo id/S9876543C d/Send renewal reminder by/01-06-2025
+```
+
+**Step 6: Add Standalone Tasks**
+```
+task add d/Review quarterly insurance report by/15-12-2025
+task add d/Attend compliance training by/31-01-2026
+task add d/Update client portfolio analysis by/20-11-2025
+```
+
+**Step 7: Add Meetings**
+```
+meeting add t/Policy Review c/Alice Wong d/05-11-2025 from/14:00 to/16:00
+meeting add t/Initial Consultation c/Bob Tan d/07-11-2025 from/10:30 to/11:30
+meeting add t/Claim Discussion c/Charlie Lee d/03-11-2025 from/09:00
+```
+
+#### Method 2: Manual File Population
+
+For advanced testing scenarios, you can manually create or modify files in the `data/` directory. Ensure the application is closed before editing these files:
+
+1. Navigate to the `data/` folder
+2. Edit the relevant `.txt` files following the format shown in the Storage Component section of this guide
+3. Relaunch the application to load the modified data
+
+### Testing Individual Features
+
+Refer to the command summary tables in the User Guide for complete syntax. Below are structured test scenarios for each feature area:
+
+#### 1. Testing Client Management
+
+| Test Case | Command | Expected Result |
+| :--- | :--- | :--- |
+| View all clients | `list client` | Displays all clients with index numbers |
+| View specific client | `client view id/S1234567A` | Shows Alice Wong's full details including policies and to-dos |
+| Search for client | `client search S1234567A` | Displays Alice Wong's basic information |
+| Add new client | `client add n/David Chen c/88889999 id/S1111222C` | Success message and client added to list |
+| Delete client | `client delete 4` (after listing) | Client removed from active list |
+| Archive client | `client archive 1` | Client moved to archived list |
+| View archived clients | `list archived` | Shows archived clients with indices |
+| Restore archived client | `client restore 1` | Client moved back to active list |
+
+#### 2. Testing Policy Management
+
+| Test Case | Command | Expected Result |
+| :--- | :--- | :--- |
+| List all base policies | `list policy` | Shows HealthShield, PremiumLife, TravelSafe with indices |
+| Add new base policy | `policy add n/AutoProtect d/Comprehensive car insurance` | Success message and policy added |
+| Delete base policy | `policy delete 4` | AutoProtect policy removed |
+| Add policy to client | `client addpolicy id/S1234567A p/TravelSafe s/01-11-2025 e/01-11-2026 m/75.00` | Policy added to Alice Wong |
+| Update client policy | `client updatepolicy id/S1234567A p/HealthShield m/275.00` | Premium updated for HealthShield |
+| View client with policies | `client view id/S1234567A` | Shows all policies with updated premium |
+| Delete client policy | `client deletepolicy id/S1234567A i/3` | TravelSafe policy removed from Alice Wong |
+
+#### 3. Testing Task Management
+
+| Test Case | Command | Expected Result |
+| :--- | :--- | :--- |
+| List all tasks | `list task` | Shows all standalone tasks with indices |
+| Add new task | `task add d/Complete audit preparation by/28-11-2025` | Task added successfully |
+| Delete task | `task delete 4` | Task removed from list |
+| List client to-dos | `client listtodos id/S1234567A` | Shows Alice Wong's to-do items |
+| Add client to-do | `client addtodo id/S1234567A d/Review policy documents by/10-12-2025` | To-do added to client |
+
+#### 4. Testing Meeting Management
+
+| Test Case | Command | Expected Result |
+| :--- | :--- | :--- |
+| List all meetings | `meeting list` | Shows all meetings with indices |
+| Add meeting with end time | `meeting add t/Renewal Discussion c/Alice Wong d/10-11-2025 from/15:00 to/16:30` | Meeting added successfully |
+| Add meeting without end time | `meeting add t/Quick Call c/Bob Tan d/08-11-2025 from/11:00` | Meeting added with start time only |
+| View upcoming meetings | `meeting forecast` | Shows meetings within next 7 days |
+| Delete meeting | `meeting delete 1` | Meeting removed from list |
+
+#### 5. Testing User Management
+
+| Test Case | Command | Expected Result |
+| :--- | :--- | :--- |
+| View current user | `user view` | Displays John Smith's details |
+| Attempt duplicate user | `user add n/Jane Doe e/jane@example.com c/99998888 r/FA-99999` | Error message (only one user allowed) |
+| Delete user | `user delete` | User removed successfully |
+| Add new user | `user add n/Jane Doe e/jane@example.com c/99998888 r/FA-99999` | Jane Doe added as new user |
+| View new user | `user view` | Displays Jane Doe's details |
+
+### Testing Data Persistence
+
+1. **Test autosave functionality:**
+   - Execute any command that modifies data (e.g., add a client)
+   - Check the corresponding `.txt` file in the `data/` folder to verify immediate persistence
+   - Note: Autosave happens after every successful command execution
+
+2. **Test data loading on startup:**
+   - Execute several commands to populate data
+   - Close the application (type `exit` or close the terminal)
+   - Relaunch the application
+   - Verify all previously entered data is still present using `list` commands
+
+3. **Test data integrity across sessions:**
+   - Create a client with policies and to-dos
+   - Restart the application
+   - View the client: `client view id/<NRIC>`
+   - Verify all associated data (policies, to-dos) is correctly loaded
+
+### Testing Error Handling
+
+| Error Scenario | Command | Expected Behavior |
+| :--- | :--- | :--- |
+| Invalid command | `invalid command` | Error message displayed, app continues running |
+| Duplicate client NRIC | `client add n/Test c/12345678 id/S1234567A` | Error: client with this NRIC already exists |
+| Invalid date format | `task add d/Test task by/2025-11-30` | Error: invalid date format (should be dd-MM-yyyy) |
+| Missing required argument | `client add n/John c/12345678` | Error: missing required NRIC |
+| Invalid index | `client delete 999` | Error: invalid index |
+| Delete non-existent policy | `client deletepolicy id/S1234567A i/99` | Error: policy index out of range |
+
+
+### Reference
+
+For complete command syntax and examples, refer to the **Command Summary** section at the end of the User Guide, which provides comprehensive tables for:
+- Client Management Commands
+- Client Policy Management Commands
+- Client Task (To-Do) Management Commands
+- Meeting Management Commands
+- User Management Commands
+- Policy Management Commands
+- Task Management Commands
