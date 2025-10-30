@@ -9,49 +9,53 @@ participant "Command" as Command
 participant "StorageManager" as Storage
 participant "Logger" as Logger
 
-User -> UI: enters command (e.g., "add client n/John c/91234567 id/S1234567A")
+User -> UI: enters command
 activate UI
 
 UI -> App: readCommand()
 activate App
 
-App -> Parser: parse(unprocessedInput)
+App -> Parser: parse()
 activate Parser
-Parser --> App: Command object (e.g., AddCommand)
+Parser --> App: Command object
 deactivate Parser
-
-App -> Command: execute(lookUpTable)
+App -->UI
+UI -> Command: execute()
 activate Command
 Command -> Command: ... (internal logic not shown)
+activate Command
+Command --> Command
+deactivate Command
+Command --> UI
+deactivate Command
 
-UI ->Command :printExecutionMessage();
-    Activate Command
-    Command --> UI
-    deactivate Command
-activate UI
-UI --> User: Displays "Client added successfully"
+
+
+
+UI -> Command: printExecutionMessage()
+activate Command
+Command --> UI
+deactivate Command
+
+UI --> User: displays success message
 deactivate UI
 
 == Autosave triggered ==
 
-App -> Storage: saveToFile("client.txt", clients.toStorageFormat())
+App -> Storage: saveToFile()
 activate Storage
-Storage -> File: write line-by-line
-File --> Storage:
+Storage --> App:
 deactivate Storage
 
-App -> Storage: exportToCSV("client.csv", clients.toCSVFormat())
+App -> Storage: exportToCSV()
 activate Storage
-Storage -> File: write line-by-line
-File --> Storage:
+Storage --> App:
 deactivate Storage
 
-
-App -> Logger: info("Data saved successfully.")
+App -> Logger: info("Data saved successfully")
 activate Logger
-Logger --> App:
+Logger --> App
 deactivate Logger
-
 
 deactivate App
 @enduml
