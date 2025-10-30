@@ -149,12 +149,12 @@ This command moves a previously archived client and all their associated data (p
 *   **Command:** `client restore <INDEX>`
 
 *   **Arguments:**
-    *   `<INDEX>`: **Required.** The numerical index of the archived client to restore. **You must run `client listarchived` first to find the correct index.**
+    *   `<INDEX>`: **Required.** The numerical index of the archived client to restore. **You must run `list archived` first to find the correct index.**
 
 *   **Workflow Example:**
     1.  First, list all archived clients to find the target's index:
         ```
-        client listarchived
+        list archived
         ```
         *(Output might show "1. Name: John Doe...")*
 
@@ -167,11 +167,11 @@ This command moves a previously archived client and all their associated data (p
 
 This command displays all archived clients with their basic information, listed with numerical indices for restoration.
 
-*   **Command:** `client listarchived`
+*   **Command:** `list archived`
 
 *   **Example:**
     ```
-    client listarchived
+    list archived
     ```
 
 ---
@@ -410,16 +410,16 @@ This must be done before adding a new advisor.
 
 #### Client Management
 
-| Command | Description | Syntax / Arguments | Example |
-| :--- | :--- | :--- | :--- |
-| `client add` | Creates a new client record. | `client add n/<NAME> c/<CONTACT> id/<NRIC> [p/<POLICY_NAME>]` | `client add n/John Doe c/123 id/S123A` |
-| `client view` | Displays full details for one client (policies, to-dos). | `client view id/<NRIC>` | `client view id/S123A` |
-| `list client` | Shows a summary of all clients with their index numbers. | `list client` | `list client` |
-| `client delete`| Removes a client by index (use `list client` first). | `client delete <INDEX>` | `client delete 1` |
-| `client search` | Searches for a client by NRIC and displays basic info. | `client search <NRIC>` | `client search S123A` |
-| `client archive` | Moves a client to archived list by index. | `client archive <INDEX>` | `client archive 1` |
-| `client restore` | Restores an archived client by index. | `client restore <INDEX>` | `client restore 1` |
-| `client listarchived` | Shows all archived clients with indices. | `client listarchived` | `client listarchived` |
+| Command          | Description | Syntax / Arguments                                            | Example                                |
+|:-----------------| :--- |:--------------------------------------------------------------|:---------------------------------------|
+| `client add`     | Creates a new client record. | `client add n/<NAME> c/<CONTACT> id/<NRIC> [p/<POLICY_NAME>]` | `client add n/John Doe c/123 id/S123A` |
+| `client view`    | Displays full details for one client (policies, to-dos). | `client view id/<NRIC>`                                       | `client view id/S123A`                 |
+| `list client`    | Shows a summary of all clients with their index numbers. | `list client`                                                 | `list client`                          |
+| `client delete`  | Removes a client by index (use `list client` first). | `client delete <INDEX>`                                       | `client delete 1`                      |
+| `client search`  | Searches for a client by NRIC and displays basic info. | `client search <NRIC>`                                        | `client search S123A`                  |
+| `client archive` | Moves a client to archived list by index. | `client archive <INDEX>`                                      | `client archive 1`                     |
+| `client restore` | Restores an archived client by index. | `client restore <INDEX>`                                      | `client restore 1`                     |
+| `list archived`  | Shows all archived clients with indices. | `list archived`                                               | `list archived`                        |
 
 #### Client Policy Management
 
