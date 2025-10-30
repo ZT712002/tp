@@ -251,6 +251,57 @@ This command permanently removes a policy template from the system. Note that th
 
 ### Task Features
 
+This guide provides commands for managing **standalone tasks** in your system. These tasks are independent action items with due dates that help you track general follow-ups, deadlines, and to-do items that may not be tied to a specific client.
+
+#### **1. Adding a New Task**
+
+This command creates a new standalone task with a description and due date.
+
+*   **Command:** `task add d/<DESCRIPTION> by/<DUE_DATE>`
+
+*   **Arguments:**
+    *   `d/<DESCRIPTION>`: **Required.** The description of the task or action item.
+    *   `by/<DUE_DATE>`: **Required.** The due date in `dd-MM-yyyy` format.
+
+*   **Example:**
+    ```
+    task add d/Review quarterly insurance report by/15-12-2025
+    ```
+
+#### **2. Listing All Tasks**
+
+This command displays all tasks in your system, listed with numerical indices. This index is essential for deleting tasks.
+
+*   **Command:** `list task`
+
+*   **Example:**
+    ```
+    list task
+    ```
+
+#### **3. Deleting a Task**
+
+This command permanently removes a task from the system.
+
+*   **Command:** `task delete <INDEX>`
+
+*   **Arguments:**
+    *   `<INDEX>`: **Required.** The numerical index of the task to delete. 
+
+*   **Workflow Example:**
+    1.  First, list all tasks to find the target's index:
+        ```
+        list task
+        ```
+        *(Output might show "1. Review quarterly insurance report (by: 15-12-2025)")*
+
+    2.  Then, use that index to delete the task:
+        ```
+        task delete 1
+        ```
+
+---
+
 ### User Features
 
 The **User** feature represents the **Financial Advisor** currently using FinanceProPlus.  
@@ -347,3 +398,11 @@ This must be done before adding a new advisor.
 | `policy add` | Creates a new base policy template. | `policy add n/<NAME> d/<DETAILS>` | `policy add n/HealthShield d/Comprehensive health insurance` |
 | `list policy` | Shows all base policy templates with their index numbers. | `list policy` | `list policy` |
 | `policy delete` | Removes a base policy by index (use `list policy` first). | `policy delete <INDEX>` | `policy delete 1` |
+
+#### Task Management
+
+| Command | Description | Syntax / Arguments | Example |
+| :--- | :--- | :--- | :--- |
+| `task add` | Creates a new standalone task with a due date. | `task add d/<DESCRIPTION> by/<dd-MM-yyyy>` | `task add d/Review quarterly report by/15-12-2025` |
+| `list task` | Shows all tasks with their index numbers. | `list task` | `list task` |
+| `task delete` | Removes a task by index (use `list task` first). | `task delete <INDEX>` | `task delete 1` |
