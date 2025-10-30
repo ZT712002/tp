@@ -39,11 +39,11 @@ public class Client {
         assert this.todoList != null : "todoList should not be null after initialization";
 
         Map<String, List<String>> detailsMap = parseClientDetails(arguments);
-      
+
         initialiseMainDetails(detailsMap);
         initialiseOptionalPolicy(detailsMap, mainPolicyList);
         if (this.name == null || this.name.isEmpty() ||
-                this.phoneNumber == 0||
+                this.phoneNumber == 0 ||
                 this.nric == null || this.nric.isEmpty()) {
             throw new FinanceProPlusException("Required fields are missing");
         }
@@ -137,6 +137,7 @@ public class Client {
 
     /**
      * Adds a validated policy to the client's personal policy list.
+     *
      * @param policy The Policy object to add.
      */
     public void addPolicy(ClientPolicy policy) throws FinanceProPlusException {
@@ -147,6 +148,7 @@ public class Client {
 
     /**
      * Checks if the client already owns a policy with the given name.
+     *
      * @param policyName The name of the policy to check.
      * @return true if the client already has the policy, false otherwise.
      */
@@ -211,7 +213,7 @@ public class Client {
         System.out.println("To-dos for client " + this.name + " (NRIC: " + this.nric + "):");
         this.todoList.listItems();
     }
-  
+
     public String toStorageString() {
         StringBuilder sb = new StringBuilder();
         sb.append(String.format("n/%s c/%d id/%s", name, phoneNumber, nric));

@@ -157,8 +157,8 @@ public class ClientList implements ListContainer {
     private ClientPolicy createClientPolicyFromArgs(Map<String, List<String>> argsMap, Policy basePolicy)
             throws FinanceProPlusException {
         try {
-            LocalDate startDate = LocalDate.parse(argsMap.get("s").get(0),ClientPolicy.DATE_FORMATTER);
-            LocalDate expiryDate = LocalDate.parse(argsMap.get("e").get(0),ClientPolicy.DATE_FORMATTER);
+            LocalDate startDate = LocalDate.parse(argsMap.get("s").get(0), ClientPolicy.DATE_FORMATTER);
+            LocalDate expiryDate = LocalDate.parse(argsMap.get("e").get(0), ClientPolicy.DATE_FORMATTER);
             BigDecimal premium = new BigDecimal(argsMap.get("m").get(0));
             return new ClientPolicy(basePolicy, startDate, expiryDate, premium);
         } catch (DateTimeParseException e) {
@@ -246,11 +246,11 @@ public class ClientList implements ListContainer {
         boolean isUpdated = false;
         try {
             if (argsMap.containsKey("s")) {
-                clientPolicy.setStartDate(LocalDate.parse(argsMap.get("s").get(0),ClientPolicy.DATE_FORMATTER));
+                clientPolicy.setStartDate(LocalDate.parse(argsMap.get("s").get(0), ClientPolicy.DATE_FORMATTER));
                 isUpdated = true;
             }
             if (argsMap.containsKey("e")) {
-                clientPolicy.setExpiryDate(LocalDate.parse(argsMap.get("e").get(0),ClientPolicy.DATE_FORMATTER));
+                clientPolicy.setExpiryDate(LocalDate.parse(argsMap.get("e").get(0), ClientPolicy.DATE_FORMATTER));
                 isUpdated = true;
             }
             if (argsMap.containsKey("m")) {
@@ -299,6 +299,7 @@ public class ClientList implements ListContainer {
         }
         return rows;
     }
+
     /**
      * Deletes a policy from a specific client's policy list by index.
      * The command arguments must contain the client's NRIC (id/) and the policy index (i/).
