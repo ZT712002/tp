@@ -1,9 +1,25 @@
 # Developer Guide
+*   [Acknowledgements](#acknowledgements)
+*   [Design & implementation](#design--implementation)
+    *   [Architecture](#architecture)
+    *   [Storage Component](#storage-component)
+    *   [Storage Initialization on Startup](#storage-initialization-on-startup)
+    *   [LookUpTable Component](#lookuptable-component)
+    *   [Client Features](#client-features)
+    *   [Command Execution Flow: A Detailed Walkthrough](#command-execution-flow-a-detailed-walkthrough)
+    *   [List Feature, Design and Implementation](#list-feature-design-and-implementation)
+    *   [Task Management Feature](#task-management-feature)
+    *   [Meeting Features](#meeting-features)
+*   [Product scope](#product-scope)
+    *   [Target user profile](#target-user-profile)
+    *   [Value proposition](#value-proposition)
+*   [User Stories](#user-stories)
+*   [Non-Functional Requirements](#non-functional-requirements)
+*   [Glossary](#glossary)
+*   [Instructions for manual testing](#instructions-for-manual-testing)
 
 ## Acknowledgements
 This was heavily inspired by the AB3 reference DG found [here](https://github.com/se-edu/addressbook-level3/blob/master/docs/DeveloperGuide.md)
-
-{list here sources of all reused/adapted ideas, code, documentation, and third-party libraries -- include links to the original source as well}
 
 ## Design & implementation
 ### Architecture
