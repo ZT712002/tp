@@ -76,7 +76,7 @@ public class User {
                 + "\n" + "Representative No.: " + representativeNumber;
     }
 
-     String toStorageString() {
+    String toStorageString() {
         return String.format("n/%s e/%s c/%d r/%s", name, email, phoneNumber, representativeNumber);
     }
 
