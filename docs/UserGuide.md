@@ -97,6 +97,83 @@ This command permanently removes a client and all their associated data (policie
         client delete 1
         ```
 
+#### **5. Searching for a Client**
+
+This command searches for and displays a specific client's basic information using their NRIC. This is useful for quickly finding a client without viewing their full details.
+
+*   **Command:** `client search <NRIC>`
+
+*   **Arguments:**
+    *   `<NRIC>`: **Required.** The NRIC of the client you want to search for.
+
+*   **Examples:**
+    *   To search for a client with NRIC "S1234567A":
+        ```
+        client search S1234567A
+        ```
+    *   If the client is found, you'll see their basic information:
+        ```
+        Client found:
+        Name: John Doe, Contact: 87654321, NRIC: S1234567A
+        ```
+    *   If no client is found with that NRIC:
+        ```
+        No client found with NRIC: S9999999Z
+        ```
+
+#### **6. Archiving a Client**
+
+This command moves a client and all their associated data (policies, to-dos) from the active clients list to the archived clients list. This is useful for clients who are no longer active but whose records you want to preserve.
+
+*   **Command:** `client archive <INDEX>`
+
+*   **Arguments:**
+    *   `<INDEX>`: **Required.** The numerical index of the client to archive. **You must run `list client` first to find the correct index.**
+
+*   **Workflow Example:**
+    1.  First, list all active clients to find the target's index:
+        ```
+        list client
+        ```
+        *(Output might show "1. Name: John Doe...")*
+
+    2.  Then, use that index to archive the client:
+        ```
+        client archive 1
+        ```
+
+#### **7. Restoring a Client**
+
+This command moves a previously archived client and all their associated data (policies, to-dos) back to the active clients list.
+
+*   **Command:** `client restore <INDEX>`
+
+*   **Arguments:**
+    *   `<INDEX>`: **Required.** The numerical index of the archived client to restore. **You must run `list archived` first to find the correct index.**
+
+*   **Workflow Example:**
+    1.  First, list all archived clients to find the target's index:
+        ```
+        list archived
+        ```
+        *(Output might show "1. Name: John Doe...")*
+
+    2.  Then, use that index to restore the client:
+        ```
+        client restore 1
+        ```
+
+#### **8. Listing Archived Clients**
+
+This command displays all archived clients with their basic information, listed with numerical indices for restoration.
+
+*   **Command:** `list archived`
+
+*   **Example:**
+    ```
+    list archived
+    ```
+
 ---
 
 ### Managing Client Policies
@@ -195,6 +272,80 @@ This command provides a focused view of all pending tasks for a single client.
     ```
 ### Meeting Features
 
+This guide provides a complete reference for all commands related to the `meeting` entity. These commands help you schedule, track, and manage client meetings efficiently from the keyboard.
+
+#### **1. Adding a New Meeting**
+
+This command creates a new meeting record with the specified details. All meetings require a title, client name, date, and start time. End time is optional.
+
+*   **Command:** `meeting add t/<TITLE> c/<CLIENT> d/<DATE> from/<START_TIME> [to/<END_TIME>]`
+
+*   **Arguments:**
+    *   `t/<TITLE>`: **Required.** The title or subject of the meeting.
+    *   `c/<CLIENT>`: **Required.** The name of the client attending the meeting.
+    *   `d/<DATE>`: **Required.** The meeting date in `dd-MM-yyyy` format.
+    *   `from/<START_TIME>`: **Required.** The meeting start time in `HH:mm` format (24-hour).
+    *   `to/<END_TIME>`: *Optional.* The meeting end time in `HH:mm` format (24-hour).
+
+*   **Examples:**
+    *   To add a meeting with start and end time:
+        ```
+        meeting add t/Policy Review c/John Doe d/30-10-2025 from/14:00 to/16:00
+        ```
+    *   To add a meeting with only start time:
+        ```
+        meeting add t/Initial Consultation c/Jane Smith d/05-11-2025 from/10:30
+        ```
+
+#### **2. Listing All Meetings**
+
+This command displays all scheduled meetings with their details, listed with numerical indices for easy reference.
+
+*   **Command:** `meeting list`
+
+*   **Example:**
+    ```
+    Here are the meetings in your list:
+    1. Title: Policy Review, Client: John Doe, Date: 30-10-2025, Time: 14:00 to 16:00
+    2. Title: Initial Consultation, Client: Jane Smith, Date: 05-11-2025, Start Time: 10:30
+    ```
+
+#### **3. Deleting a Meeting**
+
+This command permanently removes a meeting from your schedule.
+
+*   **Command:** `meeting delete <INDEX>`
+
+*   **Arguments:**
+    *   `<INDEX>`: **Required.** The numerical index of the meeting to delete. **You must run `meeting list` first to find the correct index.**
+
+*   **Workflow Example:**
+    1.  First, list all meetings to find the target's index:
+        ```
+        meeting list
+        ```
+        *(Output might show "1. Title: Policy Review, Client: John Doe...")*
+
+    2.  Then, use that index to delete the meeting:
+        ```
+        meeting delete 1
+        ```
+
+#### **4. Viewing Upcoming Meetings (7-Day Forecast)**
+
+This command shows all meetings scheduled within the next 7 days, helping you prepare for upcoming appointments.
+
+*   **Command:** `meeting forecast`
+
+*   **Example:**
+    ```
+    Meetings in the next 7 days:
+    1. Title: Policy Review, Client: John Doe, Date: 30-10-2025, Time: 14:00 to 16:00
+    2. Title: Initial Consultation, Client: Jane Smith, Date: 05-11-2025, Start Time: 10:30
+    ```
+
+---
+
 
 ### Policy Features
 
@@ -259,12 +410,16 @@ This must be done before adding a new advisor.
 
 #### Client Management
 
-| Command | Description | Syntax / Arguments | Example |
-| :--- | :--- | :--- | :--- |
-| `client add` | Creates a new client record. | `client add n/<NAME> c/<CONTACT> id/<NRIC> [p/<POLICY_NAME>]` | `client add n/John Doe c/123 id/S123A` |
-| `client view` | Displays full details for one client (policies, to-dos). | `client view id/<NRIC>` | `client view id/S123A` |
-| `list client` | Shows a summary of all clients with their index numbers. | `list client` | `list client` |
-| `client delete`| Removes a client by index (use `list client` first). | `client delete <INDEX>` | `client delete 1` |
+| Command          | Description | Syntax / Arguments                                            | Example                                |
+|:-----------------| :--- |:--------------------------------------------------------------|:---------------------------------------|
+| `client add`     | Creates a new client record. | `client add n/<NAME> c/<CONTACT> id/<NRIC> [p/<POLICY_NAME>]` | `client add n/John Doe c/123 id/S123A` |
+| `client view`    | Displays full details for one client (policies, to-dos). | `client view id/<NRIC>`                                       | `client view id/S123A`                 |
+| `list client`    | Shows a summary of all clients with their index numbers. | `list client`                                                 | `list client`                          |
+| `client delete`  | Removes a client by index (use `list client` first). | `client delete <INDEX>`                                       | `client delete 1`                      |
+| `client search`  | Searches for a client by NRIC and displays basic info. | `client search <NRIC>`                                        | `client search S123A`                  |
+| `client archive` | Moves a client to archived list by index. | `client archive <INDEX>`                                      | `client archive 1`                     |
+| `client restore` | Restores an archived client by index. | `client restore <INDEX>`                                      | `client restore 1`                     |
+| `list archived`  | Shows all archived clients with indices. | `list archived`                                               | `list archived`                        |
 
 #### Client Policy Management
 
@@ -280,6 +435,15 @@ This must be done before adding a new advisor.
 | :--- | :--- | :--- | :--- |
 | `client addtodo` | Adds a new to-do task for a specific client. | `client addtodo id/<NRIC> d/<DESC> by/<dd-MM-yyyy>` | `client addtodo id/S123A d/Follow up claim by/30-11-2025` |
 | `client listtodos` | Lists all to-do tasks for a single client. | `client listtodos id/<NRIC>` | `client listtodos id/S123A` |
+
+#### Meeting Management
+
+| Command | Description | Syntax / Arguments | Example |
+| :--- | :--- | :--- | :--- |
+| `meeting add` | Creates a new meeting record. | `meeting add t/<TITLE> c/<CLIENT> d/<dd-MM-yyyy> from/<HH:mm> [to/<HH:mm>]` | `meeting add t/Policy Review c/John Doe d/30-10-2025 from/14:00 to/16:00` |
+| `meeting list` | Shows all scheduled meetings with indices. | `meeting list` | `meeting list` |
+| `meeting delete` | Removes a meeting by index (use `meeting list` first). | `meeting delete <INDEX>` | `meeting delete 1` |
+| `meeting forecast` | Shows meetings in the next 7 days. | `meeting forecast` | `meeting forecast` |
 
 #### User Management
 
