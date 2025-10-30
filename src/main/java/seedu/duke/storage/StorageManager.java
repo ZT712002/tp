@@ -101,9 +101,13 @@ public class StorageManager {
     }
 
     public List<String> loadClientTasks(String nric) throws IOException {
-        if (nric == null || nric.isEmpty()) return new ArrayList<>();
+        if (nric == null || nric.isEmpty()) {
+            return new ArrayList<>();
+        }
         File file = new File(DATA_FOLDER + "client_tasks/" + nric + ".txt");
-        if (!file.exists()) return new ArrayList<>();
+        if (!file.exists()) {
+            return new ArrayList<>();
+        }
         return Files.readAllLines(Path.of(file.getPath()));
     }
 
