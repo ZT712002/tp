@@ -16,11 +16,13 @@ import java.util.List;
 public class StorageManager {
 
     private static final String DATA_FOLDER = "data/";
+    private static final String CLIENT_TASKS_FOLDER = "data/client_tasks/";
     private static final String EXPORT_FOLDER = "exports/";
 
     public StorageManager() {
         createFolder(DATA_FOLDER);
         createFolder(EXPORT_FOLDER);
+        createFolder(CLIENT_TASKS_FOLDER);
     }
 
     private void createFolder(String folder) {
@@ -90,4 +92,19 @@ public class StorageManager {
         }
         return escaped;
     }
+
+    public void saveClientTasks(String nric, List<String> lines) throws IOException {
+        if (nric == null || nric.isEmpty()) {
+            throw new IllegalArgumentException("NRIC cannot be null or empty");
+        }
+        saveToFile("client_tasks/" + nric + ".txt", lines);
+    }
+
+    public List<String> loadClientTasks(String nric) throws IOException {
+        if (nric == null || nric.isEmpty()) return new ArrayList<>();
+        File file = new File(DATA_FOLDER + "client_tasks/" + nric + ".txt");
+        if (!file.exists()) return new ArrayList<>();
+        return Files.readAllLines(Path.of(file.getPath()));
+    }
+
 }

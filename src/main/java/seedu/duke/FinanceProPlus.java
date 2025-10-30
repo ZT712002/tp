@@ -1,6 +1,7 @@
 package seedu.duke;
 
 import seedu.duke.client.ArchivedClientList;
+import seedu.duke.client.Client;
 import seedu.duke.client.ClientList;
 import seedu.duke.command.Command;
 import seedu.duke.container.LookUpTable;
@@ -14,6 +15,7 @@ import seedu.duke.user.UserList;
 import seedu.duke.ui.Ui;
 import seedu.duke.storage.StorageManager;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 public class FinanceProPlus {
@@ -47,6 +49,16 @@ public class FinanceProPlus {
             user.loadFromStorage(storage.loadFromFile("user.txt"));
             meetings.loadFromStorage(storage.loadFromFile("meeting.txt"));
             archivedClients.loadFromStorage(storage.loadFromFile("archived_clients.txt"), policies);
+            for (Client c : clients.getClientList()) {
+                try {
+                    List<String> taskLines = storage.loadClientTasks(c.getNric());
+                    c.getTodoList().loadFromStorage(taskLines);
+                } catch (Exception ex) {
+                    logger.warning("Failed to load tasks for client " + c.getNric() + ": " + ex.getMessage());
+                }
+            }
+
+
             tasks.loadFromStorage(storage.loadFromFile("task.txt"));
             logger.info("Data loaded successfully.");
         } catch (Exception e) {
@@ -101,7 +113,13 @@ public class FinanceProPlus {
             storage.exportToCSV("archived_clients.csv", archivedClients.toCSVFormat());
             storage.saveToFile("task.txt", tasks.toStorageFormat());
             storage.exportToCSV("task.csv", tasks.toCSVFormat());
-
+            for (Client c : clients.getClientList()) {
+                try {
+                    storage.saveClientTasks(c.getNric(), c.getTodoList().toStorageFormat());
+                } catch (Exception ex) {
+                    logger.warning("Failed to save tasks for client " + c.getNric() + ": " + ex.getMessage());
+                }
+            }
         } catch (Exception e) {
             logger.info("Error saving data: " + e.getMessage());
         }
