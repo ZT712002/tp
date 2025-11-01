@@ -269,20 +269,27 @@ public class ClientList implements ListContainer {
         boolean isUpdated = false;
         try {
             if (argsMap.containsKey("s")) {
-                clientPolicy.setStartDate(LocalDate.parse(argsMap.get("s").get(0), ClientPolicy.DATE_FORMATTER));
-                isUpdated = true;
-            }
-            if (argsMap.containsKey("e")) {
-                clientPolicy.setExpiryDate(LocalDate.parse(argsMap.get("e").get(0), ClientPolicy.DATE_FORMATTER));
-                isUpdated = true;
-            }
-            if (argsMap.containsKey("m")) {
-                BigDecimal amount = new BigDecimal(argsMap.get("m").get(0));
-                if(amount.compareTo(BigDecimal.ZERO) < 0) {
-                    throw new FinanceProPlusException("Invalid premium: " + amount+ "\nPlease enter a positive value.");
+                LocalDate newStartDate = LocalDate.parse(argsMap.get("s").get(0), ClientPolicy.DATE_FORMATTER);
+                if (!clientPolicy.getStartDate().equals(newStartDate)) {
+                    clientPolicy.setStartDate(newStartDate);
+                    isUpdated = true;
                 }
-                clientPolicy.setMonthlyPremium(new BigDecimal(argsMap.get("m").get(0)));
-                isUpdated = true;
+            }
+
+            if (argsMap.containsKey("e")) {
+                LocalDate newExpiryDate = LocalDate.parse(argsMap.get("e").get(0), ClientPolicy.DATE_FORMATTER);
+                if (!clientPolicy.getExpiryDate().equals(newExpiryDate)) {
+                    clientPolicy.setExpiryDate(newExpiryDate);
+                    isUpdated = true;
+                }
+            }
+
+            if (argsMap.containsKey("m")) {
+                BigDecimal newPremium = new BigDecimal(argsMap.get("m").get(0));
+                if (clientPolicy.getMonthlyPremium()==null||clientPolicy.getMonthlyPremium().compareTo(newPremium) != 0) {
+                    clientPolicy.setMonthlyPremium(newPremium);
+                    isUpdated = true;
+                }
             }
         } catch (DateTimeParseException e) {
             throw new FinanceProPlusException(INVALID_DATE_FORMAT_MESSAGE);

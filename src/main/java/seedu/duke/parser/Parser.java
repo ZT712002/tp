@@ -38,7 +38,8 @@ public class Parser {
         }
     }
     protected static String[] splitCommand(String userInput) {
-        return userInput.split(" ", 2);
+        String trimmedInput = userInput.trim();
+        return trimmedInput.split(" ", 2);
     }
 
 
