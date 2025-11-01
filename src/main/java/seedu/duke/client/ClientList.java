@@ -15,6 +15,17 @@ import java.time.format.DateTimeParseException;
 import java.math.BigDecimal;
 
 public class ClientList implements ListContainer {
+    private static final String ADD_CLIENT_FORMAT = "Correct format: client add n/<NAME> c/<CONTACT> id/<NRIC> " +
+            "[p/<POLICY_NAME>]";
+    private static final String DELETE_CLIENT_FORMAT = "Correct format: client delete <INDEX>";
+    private static final String ADD_POLICY_FORMAT = "Correct format: client addpolicy id/<NRIC> p/<POLICY_NAME> " +
+            "s/<START_DATE> e/<EXPIRY_DATE> m/<PREMIUM>";
+    private static final String UPDATE_POLICY_FORMAT = "Correct format: client updatepolicy id/<NRIC> p/<POLICY_NAME>" +
+            " [s/<NEW_DATE>] [e/<NEW_DATE>] [m/<NEW_PREMIUM>]";
+    private static final String DELETE_POLICY_FORMAT = "Correct format: client deletepolicy id/<NRIC> i/<INDEX>";
+    private static final String INVALID_DATE_FORMAT_MESSAGE = "Invalid date format. Please use dd-MM-yyyy.";
+    private static final String INVALID_PREMIUM_FORMAT_MESSAGE = "Invalid premium format. Please enter a " +
+            "valid number (e.g., 150.75).";
     private static final Logger logger = Logger.getLogger(ClientList.class.getName());
     private ArrayList<Client> clients;
 
