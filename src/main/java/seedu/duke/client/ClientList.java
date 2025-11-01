@@ -283,7 +283,8 @@ public class ClientList implements ListContainer {
 
             if (argsMap.containsKey("m")) {
                 BigDecimal newPremium = parseAndValidatePremium(argsMap.get("m").get(0));
-                if (clientPolicy.getMonthlyPremium()==null||clientPolicy.getMonthlyPremium().compareTo(newPremium) != 0) {
+                if (clientPolicy.getMonthlyPremium()==null
+                        ||clientPolicy.getMonthlyPremium().compareTo(newPremium) != 0) {
                     clientPolicy.setMonthlyPremium(newPremium);
                     isUpdated = true;
                 }

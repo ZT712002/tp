@@ -16,7 +16,7 @@ public class Parser {
 
     protected static Parser selectParserType(String userInput) throws FinanceProPlusException {
         String[] commandParts = splitCommand(userInput);
-        String commandType = commandParts[0];
+        String commandType = commandParts[0].toLowerCase();
         String commandArgs = commandParts.length > 1 ? commandParts[1] : "";
         switch (commandType) {
         case "client":
