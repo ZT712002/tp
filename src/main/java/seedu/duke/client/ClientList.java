@@ -369,7 +369,6 @@ public class ClientList implements ListContainer {
         try {
             premium = new BigDecimal(premiumString);
         } catch (NumberFormatException e) {
-            // This catches non-numeric input like "abc"
             throw new FinanceProPlusException(INVALID_PREMIUM_FORMAT_MESSAGE);
         }
         if (premium.scale() > 2) {

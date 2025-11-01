@@ -32,6 +32,9 @@ public class Parser {
         case "task":
             return new TaskParser(commandType, commandArgs);
         case "exit":
+            if(!commandArgs.equals("")) {
+                throw new  FinanceProPlusException("Exit Command does not have any arguments");
+        }
             return new ExitParser();
         default:
             throw new FinanceProPlusException("Invalid command type");

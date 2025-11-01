@@ -184,6 +184,27 @@ public class Client {
             System.out.println("Could not display to-dos due to an error: " + e.getMessage());
         }
     }
+    /**
+     * Finds and removes a policy from this client's policy list by its name.
+     *
+     * @param policyName The name of the policy to remove.
+     * @return true if a policy was found and removed, false otherwise.
+     */
+    public boolean removePolicyByName(String policyName) {
+        PolicyList clientPolicies = this.getClientPolicyList();
+        Policy policyToRemove = null;
+        for (Policy p : clientPolicies.getPolicyList()) {
+            if (p.getName().equals(policyName)) {
+                policyToRemove = p;
+                break;
+            }
+        }
+        if (policyToRemove != null) {
+            clientPolicies.getPolicyList().remove(policyToRemove);
+            return true;
+        }
+        return false;
+    }
 
     /**
      * Returns the todo list for this client.

@@ -1,5 +1,7 @@
 package seedu.duke.policy;
 
+import seedu.duke.client.Client;
+import seedu.duke.client.ClientList;
 import seedu.duke.container.ListContainer;
 import seedu.duke.exception.FinanceProPlusException;
 
@@ -59,6 +61,46 @@ public class PolicyList implements ListContainer {
         
         System.out.println("Noted. I've removed this policy:");
         System.out.println(removedPolicy.toString());
+    }
+    /**
+     * Deletes a base policy and cascades the delete to all clients who have that policy.
+     *
+     * @param arguments The index of the policy to delete.
+     * @param clientList The list of all clients to check for cascading deletes.
+     * @throws FinanceProPlusException If the index is invalid.
+     */
+    public void deleteItem(String arguments, ClientList clientList) throws FinanceProPlusException {
+        assert arguments != null : "Arguments cannot be null";
+        assert policies != null : "Policies list must be initialized";
+        assert clientList != null : "Client list cannot be null for a cascading delete";
+        if(policies.isEmpty()) {
+            System.out.println("No policies to delete.");
+            return;
+        }
+        int index = checkDeleteIndex(arguments);
+        assert index >= 0 && index < policies.size() : "Index must be within valid range";
+        Policy removedPolicy = policies.get(index);
+        String removedPolicyName = removedPolicy.getName();
+        policies.remove(index);
+        System.out.println("Noted. I've removed this base policy:");
+        System.out.println(removedPolicy.toString());
+        System.out.println("----------------------------------------------------");
+        System.out.println("Checking clients for associated policy contracts...");
+        int removalCount = 0;
+        for (Client client : clientList.getClientList()) {
+            // Ask the client to remove any policy with this name
+            boolean wasRemoved = client.removePolicyByName(removedPolicyName);
+            if (wasRemoved) {
+                System.out.println("- Removed contract for '" + removedPolicyName + "' from client: "
+                        + client.getName());
+                removalCount++;
+            }
+        }
+        if (removalCount > 0) {
+            System.out.println("Successfully removed " + removalCount + " associated policy contract(s) from clients.");
+        } else {
+            System.out.println("No clients had a contract for the deleted policy.");
+        }
     }
 
     @Override
