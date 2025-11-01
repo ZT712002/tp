@@ -19,7 +19,7 @@ class DeleteClientPolicyCommandTest {
     private LookUpTable lookUpTable;
     private ClientList clientList;
     private ListContainer mainPolicyList;
-    private final String clientNric = "T123A";
+    private final String clientNric = "T1234567A";
 
     @BeforeEach
     void setUp() throws FinanceProPlusException {

@@ -73,6 +73,10 @@ public class ClientList implements ListContainer {
             throw new FinanceProPlusException("Invalid command format or missing required fields.\n" + ADD_CLIENT_FORMAT
             +"\nWhere [] are optional fields.");
         }
+        if (!Client.isValidNric(nric)) {
+            throw new FinanceProPlusException("Invalid NRIC. The format must be a letter, followed by " +
+                    "7 digits, and another letter (e.g., T1234567A)." + ADD_CLIENT_FORMAT);
+        }
         if (findClientByNric(nric) != null) {
             throw new FinanceProPlusException("A client with NRIC '" + nric + "' already exists.");
         }
@@ -127,7 +131,7 @@ public class ClientList implements ListContainer {
 
     public Client findClientByNric(String nric) throws FinanceProPlusException {
         if (nric == null || nric.isEmpty()) {
-            throw new FinanceProPlusException("Error: NRIC to find cannot be null or empty. make sure id/ isn't empty");
+            throw new FinanceProPlusException("Error: NRIC to find cannot be null or empty. Make sure id/ isn't empty");
         }
         for (Client client : this.clients) {
             if (client.getNric().equals(nric)) {

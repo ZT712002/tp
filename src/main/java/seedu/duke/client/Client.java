@@ -231,5 +231,20 @@ public class Client {
                 .collect(Collectors.joining(", "));
         return new String[]{name, String.valueOf(phoneNumber), nric, joinedPolicies};
     }
+    /**
+     * Validates an NRIC based on the format: a letter, followed by 7 digits, and another letter.
+     * The method is case-insensitive.
+     *
+     * @param nric The NRIC string to validate.
+     * @return true if the NRIC format is valid, false otherwise.
+     */
+    public static boolean isValidNric(String nric) {
+        if (nric == null) {
+            return false;
+        }
+        String nricRegex = "^[a-zA-Z]\\d{7}[a-zA-Z]$";
+
+        return nric.matches(nricRegex);
+    }
 }
 
