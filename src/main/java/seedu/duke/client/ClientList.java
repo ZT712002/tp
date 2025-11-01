@@ -70,8 +70,7 @@ public class ClientList implements ListContainer {
         String name = safeGetFirst(detailsMap, "n");
         String contact = safeGetFirst(detailsMap, "c");
         if (nric.isEmpty() || name.isEmpty() || contact.isEmpty() ) {
-            String correctFormat = "Correct format: client add n/<NAME> c/<CONTACT> id/<NRIC> [p/<POLICY_NAME>]";
-            throw new FinanceProPlusException("Invalid command format or missing required fields.\n" + correctFormat
+            throw new FinanceProPlusException("Invalid command format or missing required fields.\n" + ADD_CLIENT_FORMAT
             +"\nWhere [] are optional fields.");
         }
         if (findClientByNric(nric) != null) {
@@ -115,10 +114,12 @@ public class ClientList implements ListContainer {
         try {
             index = Integer.parseInt(arguments) - 1;
             if (index < 0 || index >= clients.size()) {
-                throw new FinanceProPlusException("Invalid index. Please provide a valid client index to delete.");
+                throw new FinanceProPlusException("Invalid index. The index you provided is out of bounds.\n"
+                        + DELETE_CLIENT_FORMAT);
             }
         } catch (NumberFormatException e) {
-            throw new FinanceProPlusException("Invalid input. Please provide a valid client index to delete.");
+            throw new FinanceProPlusException("Invalid input. Please provide a numerical index.\n" +
+                    DELETE_CLIENT_FORMAT);
         }
         logger.fine("Validated delete index: " + index);
         return index;
@@ -175,11 +176,14 @@ public class ClientList implements ListContainer {
             LocalDate startDate = LocalDate.parse(argsMap.get("s").get(0), ClientPolicy.DATE_FORMATTER);
             LocalDate expiryDate = LocalDate.parse(argsMap.get("e").get(0), ClientPolicy.DATE_FORMATTER);
             BigDecimal premium = new BigDecimal(argsMap.get("m").get(0));
+            if (premium.compareTo(BigDecimal.ZERO) < 0) {
+                throw new FinanceProPlusException("Invalid premium value. Please enter a positive number.");
+            }
             return new ClientPolicy(basePolicy, startDate, expiryDate, premium);
         } catch (DateTimeParseException e) {
-            throw new FinanceProPlusException("Invalid date format. Please use dd-MM-yyyy.");
+            throw new FinanceProPlusException(INVALID_DATE_FORMAT_MESSAGE);
         } catch (NumberFormatException e) {
-            throw new FinanceProPlusException("Invalid premium format. Please enter a valid number (e.g., 150.75).");
+            throw new FinanceProPlusException(INVALID_PREMIUM_FORMAT_MESSAGE);
         }
     }
 
