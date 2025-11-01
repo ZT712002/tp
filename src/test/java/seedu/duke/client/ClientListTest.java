@@ -74,7 +74,9 @@ class ClientListTest {
             String args = "n/John Doe c/12345678";
             FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
                     () -> clientList.addItem(args, mainPolicyList));
-            assertEquals("NRIC (id/) must be provided.", e.getMessage());
+            assertEquals("Invalid command format or missing required fields.\n" +
+                    "Correct format: client add n/<NAME> c/<CONTACT> id/<NRIC> [p/<POLICY_NAME>]\n" +
+                    "Where [] are optional fields.", e.getMessage());
         }
 
         @Test
@@ -109,14 +111,16 @@ class ClientListTest {
         void deleteItem_invalidIndex_throwsException() {
             FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
                     () -> clientList.deleteItem("3"));
-            assertEquals("Invalid index. Please provide a valid client index to delete.", e.getMessage());
+            assertEquals("Invalid index. The index you provided is out of bounds.\n" +
+                    "Correct format: client delete <INDEX>", e.getMessage());
         }
 
         @Test
         void deleteItem_nonNumericIndex_throwsException() {
             FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
                     () -> clientList.deleteItem("abc"));
-            assertEquals("Invalid input. Please provide a valid client index to delete.", e.getMessage());
+            assertEquals("Invalid input. Please provide a numerical index.\n" +
+                    "Correct format: client delete <INDEX>", e.getMessage());
         }
 
         @Test
@@ -211,7 +215,7 @@ class ClientListTest {
             String args = "id/T111A p/1234 s/01-01-2023 e/01-01-2024";
             FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
                     () -> clientList.addPolicyToClient(args, mainPolicyList));
-            assertTrue(e.getMessage().contains("Required fields are missing."));
+            assertTrue(e.getMessage().contains("Invalid"));
         }
     }
 
@@ -258,7 +262,10 @@ class ClientListTest {
             String updateArgs = "p/1234 s/01-01-2023 e/31-12-2025 m/100";
             FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
                     () -> clientList.updatePolicyForClient(updateArgs));
-            assertEquals("Invalid command. Both id/ and p/ are required to identify the policy.", e.getMessage());
+            assertEquals("Invalid command. Both client NRIC (id/) and policy name (p/) are required.\n" +
+                    "Correct format: client updatepolicy id/<NRIC> p/<POLICY_NAME> [s/<NEW_DATE>] " +
+                            "[e/<NEW_DATE>] [m/<NEW_PREMIUM>]"
+                    , e.getMessage());
         }
 
         @Test
@@ -393,7 +400,8 @@ class ClientListTest {
             String deleteArgs = "id/" + clientNric;
             FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
                     () -> clientList.deletePolicyForClient(deleteArgs));
-            assertEquals("Invalid command. Both client NRIC (id/) and policy index (i/) are required.", e.getMessage());
+            assertEquals("Invalid command. Both client NRIC (id/) and policy index (i/) are required.\n" +
+                    "Correct format: client deletepolicy id/<NRIC> i/<INDEX>", e.getMessage());
         }
 
         @Test
@@ -401,7 +409,8 @@ class ClientListTest {
             String deleteArgs = "i/1";
             FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
                     () -> clientList.deletePolicyForClient(deleteArgs));
-            assertEquals("Invalid command. Both client NRIC (id/) and policy index (i/) are required.", e.getMessage());
+            assertEquals("Invalid command. Both client NRIC (id/) and policy index (i/) are required.\n" +
+                    "Correct format: client deletepolicy id/<NRIC> i/<INDEX>", e.getMessage());
         }
     }
 }
