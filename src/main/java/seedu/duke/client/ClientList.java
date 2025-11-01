@@ -179,10 +179,7 @@ public class ClientList implements ListContainer {
         try {
             LocalDate startDate = LocalDate.parse(argsMap.get("s").get(0), ClientPolicy.DATE_FORMATTER);
             LocalDate expiryDate = LocalDate.parse(argsMap.get("e").get(0), ClientPolicy.DATE_FORMATTER);
-            BigDecimal premium = new BigDecimal(argsMap.get("m").get(0));
-            if (premium.compareTo(BigDecimal.ZERO) < 0) {
-                throw new FinanceProPlusException("Invalid premium value. Please enter a positive number.");
-            }
+            BigDecimal premium = parseAndValidatePremium(argsMap.get("m").get(0));
             return new ClientPolicy(basePolicy, startDate, expiryDate, premium);
         } catch (DateTimeParseException e) {
             throw new FinanceProPlusException(INVALID_DATE_FORMAT_MESSAGE);
@@ -285,7 +282,7 @@ public class ClientList implements ListContainer {
             }
 
             if (argsMap.containsKey("m")) {
-                BigDecimal newPremium = new BigDecimal(argsMap.get("m").get(0));
+                BigDecimal newPremium = parseAndValidatePremium(argsMap.get("m").get(0));
                 if (clientPolicy.getMonthlyPremium()==null||clientPolicy.getMonthlyPremium().compareTo(newPremium) != 0) {
                     clientPolicy.setMonthlyPremium(newPremium);
                     isUpdated = true;
@@ -357,6 +354,30 @@ public class ClientList implements ListContainer {
         PolicyList clientPolicies = client.getClientPolicyList();
         clientPolicies.deleteItem(indexString);
 
+    }
+    /**
+     * Parses a string into a BigDecimal and validates it for currency format.
+     * Checks for valid number format, ensures no more than 2 decimal places, and checks for non-negative values.
+     *
+     * @param premiumString The raw premium string from user input.
+     * @return A validated BigDecimal object.
+     * @throws FinanceProPlusException If the format is invalid.
+     */
+    private BigDecimal parseAndValidatePremium(String premiumString) throws FinanceProPlusException {
+        BigDecimal premium;
+        try {
+            premium = new BigDecimal(premiumString);
+        } catch (NumberFormatException e) {
+            // This catches non-numeric input like "abc"
+            throw new FinanceProPlusException(INVALID_PREMIUM_FORMAT_MESSAGE);
+        }
+        if (premium.scale() > 2) {
+            throw new FinanceProPlusException("Invalid premium format. A maximum of 2 decimal places is allowed.");
+        }
+        if (premium.compareTo(BigDecimal.ZERO) < 0) {
+            throw new FinanceProPlusException("Invalid premium amount. The premium cannot be negative.");
+        }
+        return premium;
     }
 }
 
