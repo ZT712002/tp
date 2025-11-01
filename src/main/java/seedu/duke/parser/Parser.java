@@ -16,7 +16,7 @@ public class Parser {
 
     protected static Parser selectParserType(String userInput) throws FinanceProPlusException {
         String[] commandParts = splitCommand(userInput);
-        String commandType = commandParts[0];
+        String commandType = commandParts[0].toLowerCase();
         String commandArgs = commandParts.length > 1 ? commandParts[1] : "";
         switch (commandType) {
         case "client":
@@ -32,13 +32,17 @@ public class Parser {
         case "task":
             return new TaskParser(commandType, commandArgs);
         case "exit":
+            if(!commandArgs.equals("")) {
+                throw new  FinanceProPlusException("Exit Command does not have any arguments");
+            }
             return new ExitParser();
         default:
             throw new FinanceProPlusException("Invalid command type");
         }
     }
     protected static String[] splitCommand(String userInput) {
-        return userInput.split(" ", 2);
+        String trimmedInput = userInput.trim();
+        return trimmedInput.split(" ", 2);
     }
 
 

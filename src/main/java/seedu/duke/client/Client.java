@@ -69,7 +69,7 @@ public class Client {
             }
         }
         this.name = detailsMap.get("n").get(0);
-        this.nric = detailsMap.get("id").get(0);
+        this.nric = detailsMap.get("id").get(0).toUpperCase();
         this.phoneNumber = Integer.parseInt(detailsMap.get("c").get(0));
     }
 
@@ -183,6 +183,27 @@ public class Client {
         } catch (FinanceProPlusException e) {
             System.out.println("Could not display to-dos due to an error: " + e.getMessage());
         }
+    }
+    /**
+     * Finds and removes a policy from this client's policy list by its name.
+     *
+     * @param policyName The name of the policy to remove.
+     * @return true if a policy was found and removed, false otherwise.
+     */
+    public boolean removePolicyByName(String policyName) {
+        PolicyList clientPolicies = this.getClientPolicyList();
+        Policy policyToRemove = null;
+        for (Policy p : clientPolicies.getPolicyList()) {
+            if (p.getName().equals(policyName)) {
+                policyToRemove = p;
+                break;
+            }
+        }
+        if (policyToRemove != null) {
+            clientPolicies.getPolicyList().remove(policyToRemove);
+            return true;
+        }
+        return false;
     }
 
     /**
