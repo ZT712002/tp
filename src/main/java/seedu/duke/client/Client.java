@@ -69,7 +69,7 @@ public class Client {
             }
         }
         this.name = detailsMap.get("n").get(0);
-        this.nric = detailsMap.get("id").get(0);
+        this.nric = detailsMap.get("id").get(0).toUpperCase();
         this.phoneNumber = Integer.parseInt(detailsMap.get("c").get(0));
     }
 

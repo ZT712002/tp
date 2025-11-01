@@ -133,8 +133,9 @@ public class ClientList implements ListContainer {
         if (nric == null || nric.isEmpty()) {
             throw new FinanceProPlusException("Error: NRIC to find cannot be null or empty. Make sure id/ isn't empty");
         }
+        String upperCaseNricToFind = nric.toUpperCase();
         for (Client client : this.clients) {
-            if (client.getNric().equals(nric)) {
+            if (client.getNric().equals(upperCaseNricToFind)) {
                 return client;
             }
         }
