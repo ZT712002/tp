@@ -56,8 +56,12 @@ public class ClientList implements ListContainer {
     public void addItem(String arguments, ListContainer policyList) throws FinanceProPlusException {
         Map<String, List<String>> detailsMap = Client.parseClientDetails(arguments);
         String nric = safeGetFirst(detailsMap, "id");
-        if (nric.isEmpty()) {
-            throw new FinanceProPlusException("NRIC (id/) must be provided.");
+        String name = safeGetFirst(detailsMap, "n");
+        String contact = safeGetFirst(detailsMap, "c");
+        if (nric.isEmpty() || name.isEmpty() || contact.isEmpty() ) {
+            String correctFormat = "Correct format: client add n/<NAME> c/<CONTACT> id/<NRIC> [p/<POLICY_NAME>]";
+            throw new FinanceProPlusException("Invalid command format or missing required fields.\n" + correctFormat
+            +"\nWhere [] are optional fields.");
         }
         if (findClientByNric(nric) != null) {
             throw new FinanceProPlusException("A client with NRIC '" + nric + "' already exists.");
