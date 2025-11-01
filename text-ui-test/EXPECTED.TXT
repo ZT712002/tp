@@ -31,7 +31,7 @@ Added successfully!
 Name: nednez, ID: T0329103L, Contact: 12345678, Policies: 1. Policy: 1233 [Premium: Not set, Starts: Not set, Expires: Not set]
 Added successfully!
 ----------------------------------------------------
-> Invalid date format. Please use DD-MM-YYYY.
+> Invalid date format. Please use dd-MM-yyyy.
 > -------------------------------------
          Client Details
 -------------------------------------
