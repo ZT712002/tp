@@ -207,8 +207,7 @@ public class ClientList implements ListContainer {
         List<String> requiredKeys = List.of("id", "p", "s", "e", "m");
         for (String key : requiredKeys) {
             if (!argsMap.containsKey(key) || argsMap.get(key).isEmpty()) {
-                throw new FinanceProPlusException("Invalid command. Required fields are missing. "
-                        + "Please provide: id/, p/, s/, e/, m/");
+                throw new FinanceProPlusException("Invalid command or missing required fields.\n" + ADD_POLICY_FORMAT);
             }
         }
         return argsMap;
@@ -231,11 +230,12 @@ public class ClientList implements ListContainer {
             throws FinanceProPlusException {
         Map<String, List<String>> argsMap = Client.parseClientDetails(arguments);
         if (!argsMap.containsKey("id") || !argsMap.containsKey("p")) {
-            throw new FinanceProPlusException("Invalid command. Both id/ and p/ are required to identify the policy.");
+            throw new FinanceProPlusException("Invalid command. Both client NRIC (id/) and policy name (p/) " +
+                    "are required.\n" + UPDATE_POLICY_FORMAT);
         }
         if (!argsMap.containsKey("s") && !argsMap.containsKey("e") && !argsMap.containsKey("m")) {
-            throw new FinanceProPlusException("Invalid command. You must provide at least one field to update: s/, " +
-                    "e/, or m/.");
+            throw new FinanceProPlusException("Invalid command. You must provide at least one " +
+                    "field to update (s/, e/, or m/).\n" + UPDATE_POLICY_FORMAT);
         }
         return argsMap;
     }
@@ -273,13 +273,17 @@ public class ClientList implements ListContainer {
                 isUpdated = true;
             }
             if (argsMap.containsKey("m")) {
+                BigDecimal amount = new BigDecimal(argsMap.get("m").get(0));
+                if(amount.compareTo(BigDecimal.ZERO) < 0) {
+                    throw new FinanceProPlusException("Invalid premium: " + amount+ "\nPlease enter a positive value.");
+                }
                 clientPolicy.setMonthlyPremium(new BigDecimal(argsMap.get("m").get(0)));
                 isUpdated = true;
             }
         } catch (DateTimeParseException e) {
-            throw new FinanceProPlusException("Invalid date format. Please use DD-MM-YYYY.");
+            throw new FinanceProPlusException(INVALID_DATE_FORMAT_MESSAGE);
         } catch (NumberFormatException e) {
-            throw new FinanceProPlusException("Invalid premium format. Please enter a valid number.");
+            throw new FinanceProPlusException(INVALID_PREMIUM_FORMAT_MESSAGE);
         }
         return isUpdated;
     }
@@ -332,8 +336,8 @@ public class ClientList implements ListContainer {
         String indexString = safeGetFirst(argsMap, "i");
 
         if (nric.isEmpty() || indexString.isEmpty()) {
-            throw new FinanceProPlusException("Invalid command. Both client NRIC (id/) and policy index (i/) are " +
-                    "required.");
+            throw new FinanceProPlusException("Invalid command. Both client NRIC (id/) and " +
+                    "policy index (i/) are required.\n" + DELETE_POLICY_FORMAT);
         }
         Client client = findClientByNric(nric);
         if (client == null) {
