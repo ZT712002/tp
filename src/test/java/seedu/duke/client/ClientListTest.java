@@ -74,7 +74,9 @@ class ClientListTest {
             String args = "n/John Doe c/12345678";
             FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
                     () -> clientList.addItem(args, mainPolicyList));
-            assertEquals("NRIC (id/) must be provided.", e.getMessage());
+            assertEquals("Invalid command format or missing required fields.\n" +
+                    "Correct format: client add n/<NAME> c/<CONTACT> id/<NRIC> [p/<POLICY_NAME>]\n" +
+                    "Where [] are optional fields.", e.getMessage());
         }
 
         @Test
@@ -90,8 +92,8 @@ class ClientListTest {
     class DeleteItemTests {
         @BeforeEach
         void addClientForDeletion() throws FinanceProPlusException {
-            clientList.addItem("n/Client One c/111 id/T111A", mainPolicyList);
-            clientList.addItem("n/Client Two c/222 id/T222B", mainPolicyList);
+            clientList.addItem("n/Client One c/111 id/T1111111A", mainPolicyList);
+            clientList.addItem("n/Client Two c/222 id/T2222222B", mainPolicyList);
         }
 
         @Test
@@ -99,8 +101,8 @@ class ClientListTest {
             assertEquals(2, clientList.getClientList().size());
             clientList.deleteItem("1");
             assertEquals(1, clientList.getClientList().size());
-            assertNull(clientList.findClientByNric("T111A"));
-            assertNotNull(clientList.findClientByNric("T222B"));
+            assertNull(clientList.findClientByNric("T1111111A"));
+            assertNotNull(clientList.findClientByNric("T2222222B"));
             assertTrue(outContent.toString().contains("Noted. I've removed this client:"));
             assertTrue(outContent.toString().contains("Name: Client One"));
         }
@@ -109,14 +111,16 @@ class ClientListTest {
         void deleteItem_invalidIndex_throwsException() {
             FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
                     () -> clientList.deleteItem("3"));
-            assertEquals("Invalid index. Please provide a valid client index to delete.", e.getMessage());
+            assertEquals("Invalid index. The index you provided is out of bounds.\n" +
+                    "Correct format: client delete <INDEX>", e.getMessage());
         }
 
         @Test
         void deleteItem_nonNumericIndex_throwsException() {
             FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
                     () -> clientList.deleteItem("abc"));
-            assertEquals("Invalid input. Please provide a valid client index to delete.", e.getMessage());
+            assertEquals("Invalid input. Please provide a numerical index.\n" +
+                    "Correct format: client delete <INDEX>", e.getMessage());
         }
 
         @Test
@@ -131,13 +135,13 @@ class ClientListTest {
     class ListItemsTests {
         @Test
         void listItems_nonEmptyList_printsList() throws FinanceProPlusException {
-            clientList.addItem("n/Client One c/111 id/T111A", mainPolicyList);
-            clientList.addItem("n/Client Two c/222 id/T222B", mainPolicyList);
+            clientList.addItem("n/Client One c/111 id/T1111111A", mainPolicyList);
+            clientList.addItem("n/Client Two c/222 id/T2222222B", mainPolicyList);
             clientList.listItems();
             String output = outContent.toString();
             assertTrue(output.contains("Here are the clients in your list:"));
-            assertTrue(output.contains("1. " + clientList.findClientByNric("T111A").toString()));
-            assertTrue(output.contains("2. " + clientList.findClientByNric("T222B").toString()));
+            assertTrue(output.contains("1. " + clientList.findClientByNric("T1111111A").toString()));
+            assertTrue(output.contains("2. " + clientList.findClientByNric("T2222222B").toString()));
         }
 
         @Test
@@ -151,13 +155,13 @@ class ClientListTest {
     class AddPolicyToClientTests {
         @BeforeEach
         void addClientForPolicy() throws FinanceProPlusException {
-            clientList.addItem("n/Client One c/111 id/T111A", mainPolicyList);
+            clientList.addItem("n/Client One c/111 id/T1111111A", mainPolicyList);
         }
 
         @Test
         void addPolicyToClient_validArgs_addsSuccessfully() throws FinanceProPlusException {
-            String args = "id/T111A p/1234 s/01-01-2023 e/01-01-2024 m/150.50";
-            Client client = clientList.findClientByNric("T111A");
+            String args = "id/T1111111A p/1234 s/01-01-2023 e/01-01-2024 m/150.50";
+            Client client = clientList.findClientByNric("T1111111A");
             assertEquals(0, client.getClientPolicyList().getPolicyList().size());
             clientList.addPolicyToClient(args, mainPolicyList);
             assertEquals(1, client.getClientPolicyList().getPolicyList().size());
@@ -175,7 +179,7 @@ class ClientListTest {
 
         @Test
         void addPolicyToClient_basePolicyNotFound_throwsException() {
-            String args = "id/T111A p/12345 s/01-01-2023 e/01-01-2024 m/150.50";
+            String args = "id/T1111111A p/12345 s/01-01-2023 e/01-01-2024 m/150.50";
             FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
                     () -> clientList.addPolicyToClient(args, mainPolicyList));
             assertTrue(e.getMessage().contains("Base policy '12345' not found"));
@@ -183,7 +187,7 @@ class ClientListTest {
 
         @Test
         void addPolicyToClient_clientAlreadyHasPolicy_throwsException() throws FinanceProPlusException {
-            String args = "id/T111A p/1234 s/01-01-2023 e/01-01-2024 m/150.50";
+            String args = "id/T1111111A p/1234 s/01-01-2023 e/01-01-2024 m/150.50";
             clientList.addPolicyToClient(args, mainPolicyList);
             FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
                     () -> clientList.addPolicyToClient(args, mainPolicyList));
@@ -192,7 +196,7 @@ class ClientListTest {
 
         @Test
         void addPolicyToClient_invalidDateFormat_throwsException() {
-            String args = "id/T111A p/1234 s/2023-01-01 e/01-01-2024 m/150.50";
+            String args = "id/T1111111A p/1234 s/2023-01-01 e/01-01-2024 m/150.50";
             FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
                     () -> clientList.addPolicyToClient(args, mainPolicyList));
             assertEquals("Invalid date format. Please use dd-MM-yyyy.", e.getMessage());
@@ -200,7 +204,7 @@ class ClientListTest {
 
         @Test
         void addPolicyToClient_invalidPremiumFormat_throwsException() {
-            String args = "id/T111A p/1234 s/01-01-2023 e/01-01-2024 m/abc";
+            String args = "id/T1111111A p/1234 s/01-01-2023 e/01-01-2024 m/abc";
             FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
                     () -> clientList.addPolicyToClient(args, mainPolicyList));
             assertEquals("Invalid premium format. Please enter a valid number (e.g., 150.75).", e.getMessage());
@@ -208,10 +212,10 @@ class ClientListTest {
 
         @Test
         void addPolicyToClient_missingArgument_throwsException() {
-            String args = "id/T111A p/1234 s/01-01-2023 e/01-01-2024";
+            String args = "id/T1111111A p/1234 s/01-01-2023 e/01-01-2024";
             FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
                     () -> clientList.addPolicyToClient(args, mainPolicyList));
-            assertTrue(e.getMessage().contains("Required fields are missing."));
+            assertTrue(e.getMessage().contains("Invalid"));
         }
     }
 
@@ -219,18 +223,18 @@ class ClientListTest {
     class UpdatePolicyForClientTests {
         @BeforeEach
         void setupClientWithPolicy() throws FinanceProPlusException {
-            clientList.addItem("n/Client One c/111 id/T111A", mainPolicyList);
-            String addArgs = "id/T111A p/1233 s/01-01-2023 e/01-01-2024 m/150.00";
+            clientList.addItem("n/Client One c/111 id/T1111111A", mainPolicyList);
+            String addArgs = "id/T1111111A p/1233 s/01-01-2023 e/01-01-2024 m/150.00";
             clientList.addPolicyToClient(addArgs, mainPolicyList);
         }
 
         @Test
         void updatePolicyForClient_validArgs_updatesSuccessfully() throws FinanceProPlusException {
             // FIX: Your updatePolicy method requires all three fields (s, e, m)
-            String updateArgs = "id/T111A p/1233 s/01-01-2023 e/31-12-2025 m/200.00";
+            String updateArgs = "id/T1111111A p/1233 s/01-01-2023 e/31-12-2025 m/200.00";
             clientList.updatePolicyForClient(updateArgs);
 
-            Client client = clientList.findClientByNric("T111A");
+            Client client = clientList.findClientByNric("T1111111A");
             Policy policy = client.getClientPolicyList().findPolicyByName("1233");
             assertEquals(LocalDate.parse("2025-12-31"), ((ClientPolicy) policy).getExpiryDate());
             assertEquals(0, ((ClientPolicy) policy).getMonthlyPremium().compareTo(new BigDecimal("200.00")));
@@ -247,7 +251,7 @@ class ClientListTest {
 
         @Test
         void updatePolicyForClient_clientDoesNotHavePolicy_throwsException() {
-            String updateArgs = "id/T111A p/1234 s/01-01-2023 e/31-12-2025 m/100";
+            String updateArgs = "id/T1111111A p/1234 s/01-01-2023 e/31-12-2025 m/100";
             FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
                     () -> clientList.updatePolicyForClient(updateArgs));
             assertTrue(e.getMessage().contains("does not have a contract for policy '1234'."));
@@ -258,12 +262,15 @@ class ClientListTest {
             String updateArgs = "p/1234 s/01-01-2023 e/31-12-2025 m/100";
             FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
                     () -> clientList.updatePolicyForClient(updateArgs));
-            assertEquals("Invalid command. Both id/ and p/ are required to identify the policy.", e.getMessage());
+            assertEquals("Invalid command. Both client NRIC (id/) and policy name (p/) are required.\n" +
+                    "Correct format: client updatepolicy id/<NRIC> p/<POLICY_NAME> [s/<NEW_DATE>] " +
+                            "[e/<NEW_DATE>] [m/<NEW_PREMIUM>]"
+                    , e.getMessage());
         }
 
         @Test
         void updatePolicyForClient_noUpdateFields_throwsException() {
-            String updateArgs = "id/T111A p/1233";
+            String updateArgs = "id/T1111111A p/1233";
             FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
                     () -> clientList.updatePolicyForClient(updateArgs));
             assertTrue(e.getMessage().contains("You must provide at least one field to update"));
@@ -303,7 +310,7 @@ class ClientListTest {
             String args = "n/Some Name";
             FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
                     () -> clientList.getClientByID(args));
-            assertEquals("Error: NRIC to find cannot be null or empty. make sure id/ isn't empty", e.getMessage());
+            assertEquals("Error: NRIC to find cannot be null or empty. Make sure id/ isn't empty", e.getMessage());
         }
 
         @Test
@@ -311,7 +318,7 @@ class ClientListTest {
             String args = "id/";
             FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
                     () -> clientList.getClientByID(args));
-            assertEquals("Error: NRIC to find cannot be null or empty. make sure id/ isn't empty", e.getMessage());
+            assertEquals("Error: NRIC to find cannot be null or empty. Make sure id/ isn't empty", e.getMessage());
         }
 
         @Test
@@ -333,7 +340,7 @@ class ClientListTest {
 
     @Nested
     class DeletePolicyForClientTests {
-        private final String clientNric = "T111A";
+        private final String clientNric = "T1111111A";
         private Client testClient;
 
         @BeforeEach
@@ -393,7 +400,8 @@ class ClientListTest {
             String deleteArgs = "id/" + clientNric;
             FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
                     () -> clientList.deletePolicyForClient(deleteArgs));
-            assertEquals("Invalid command. Both client NRIC (id/) and policy index (i/) are required.", e.getMessage());
+            assertEquals("Invalid command. Both client NRIC (id/) and policy index (i/) are required.\n" +
+                    "Correct format: client deletepolicy id/<NRIC> i/<INDEX>", e.getMessage());
         }
 
         @Test
@@ -401,7 +409,8 @@ class ClientListTest {
             String deleteArgs = "i/1";
             FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
                     () -> clientList.deletePolicyForClient(deleteArgs));
-            assertEquals("Invalid command. Both client NRIC (id/) and policy index (i/) are required.", e.getMessage());
+            assertEquals("Invalid command. Both client NRIC (id/) and policy index (i/) are required.\n" +
+                    "Correct format: client deletepolicy id/<NRIC> i/<INDEX>", e.getMessage());
         }
     }
 }

@@ -82,7 +82,7 @@ public class FinanceProPlus {
                     this.terminate();
                     continue;
                 }
-                Command c = Parser.parse(unprocessedInput);
+                Command c = Parser.parse(unprocessedInput.trim());
                 assert c != null : "Command should not be null";
                 c.execute(lookUpTable);
                 c.printExecutionMessage();

@@ -15,6 +15,17 @@ import java.time.format.DateTimeParseException;
 import java.math.BigDecimal;
 
 public class ClientList implements ListContainer {
+    private static final String ADD_CLIENT_FORMAT = "Correct format: client add n/<NAME> c/<CONTACT> id/<NRIC> " +
+            "[p/<POLICY_NAME>]";
+    private static final String DELETE_CLIENT_FORMAT = "Correct format: client delete <INDEX>";
+    private static final String ADD_POLICY_FORMAT = "Correct format: client addpolicy id/<NRIC> p/<POLICY_NAME> " +
+            "s/<START_DATE> e/<EXPIRY_DATE> m/<PREMIUM>";
+    private static final String UPDATE_POLICY_FORMAT = "Correct format: client updatepolicy id/<NRIC> p/<POLICY_NAME>" +
+            " [s/<NEW_DATE>] [e/<NEW_DATE>] [m/<NEW_PREMIUM>]";
+    private static final String DELETE_POLICY_FORMAT = "Correct format: client deletepolicy id/<NRIC> i/<INDEX>";
+    private static final String INVALID_DATE_FORMAT_MESSAGE = "Invalid date format. Please use dd-MM-yyyy.";
+    private static final String INVALID_PREMIUM_FORMAT_MESSAGE = "Invalid premium format. Please enter a " +
+            "valid number (e.g., 150.75).";
     private static final Logger logger = Logger.getLogger(ClientList.class.getName());
     private ArrayList<Client> clients;
 
@@ -56,8 +67,15 @@ public class ClientList implements ListContainer {
     public void addItem(String arguments, ListContainer policyList) throws FinanceProPlusException {
         Map<String, List<String>> detailsMap = Client.parseClientDetails(arguments);
         String nric = safeGetFirst(detailsMap, "id");
-        if (nric.isEmpty()) {
-            throw new FinanceProPlusException("NRIC (id/) must be provided.");
+        String name = safeGetFirst(detailsMap, "n");
+        String contact = safeGetFirst(detailsMap, "c");
+        if (nric.isEmpty() || name.isEmpty() || contact.isEmpty() ) {
+            throw new FinanceProPlusException("Invalid command format or missing required fields.\n" + ADD_CLIENT_FORMAT
+            +"\nWhere [] are optional fields.");
+        }
+        if (!Client.isValidNric(nric)) {
+            throw new FinanceProPlusException("Invalid NRIC. The format must be a letter, followed by " +
+                    "7 digits, and another letter (e.g., T1234567A)." + ADD_CLIENT_FORMAT);
         }
         if (findClientByNric(nric) != null) {
             throw new FinanceProPlusException("A client with NRIC '" + nric + "' already exists.");
@@ -100,10 +118,12 @@ public class ClientList implements ListContainer {
         try {
             index = Integer.parseInt(arguments) - 1;
             if (index < 0 || index >= clients.size()) {
-                throw new FinanceProPlusException("Invalid index. Please provide a valid client index to delete.");
+                throw new FinanceProPlusException("Invalid index. The index you provided is out of bounds.\n"
+                        + DELETE_CLIENT_FORMAT);
             }
         } catch (NumberFormatException e) {
-            throw new FinanceProPlusException("Invalid input. Please provide a valid client index to delete.");
+            throw new FinanceProPlusException("Invalid input. Please provide a numerical index.\n" +
+                    DELETE_CLIENT_FORMAT);
         }
         logger.fine("Validated delete index: " + index);
         return index;
@@ -111,7 +131,7 @@ public class ClientList implements ListContainer {
 
     public Client findClientByNric(String nric) throws FinanceProPlusException {
         if (nric == null || nric.isEmpty()) {
-            throw new FinanceProPlusException("Error: NRIC to find cannot be null or empty. make sure id/ isn't empty");
+            throw new FinanceProPlusException("Error: NRIC to find cannot be null or empty. Make sure id/ isn't empty");
         }
         for (Client client : this.clients) {
             if (client.getNric().equals(nric)) {
@@ -160,11 +180,14 @@ public class ClientList implements ListContainer {
             LocalDate startDate = LocalDate.parse(argsMap.get("s").get(0), ClientPolicy.DATE_FORMATTER);
             LocalDate expiryDate = LocalDate.parse(argsMap.get("e").get(0), ClientPolicy.DATE_FORMATTER);
             BigDecimal premium = new BigDecimal(argsMap.get("m").get(0));
+            if (premium.compareTo(BigDecimal.ZERO) < 0) {
+                throw new FinanceProPlusException("Invalid premium value. Please enter a positive number.");
+            }
             return new ClientPolicy(basePolicy, startDate, expiryDate, premium);
         } catch (DateTimeParseException e) {
-            throw new FinanceProPlusException("Invalid date format. Please use dd-MM-yyyy.");
+            throw new FinanceProPlusException(INVALID_DATE_FORMAT_MESSAGE);
         } catch (NumberFormatException e) {
-            throw new FinanceProPlusException("Invalid premium format. Please enter a valid number (e.g., 150.75).");
+            throw new FinanceProPlusException(INVALID_PREMIUM_FORMAT_MESSAGE);
         }
     }
 
@@ -188,8 +211,7 @@ public class ClientList implements ListContainer {
         List<String> requiredKeys = List.of("id", "p", "s", "e", "m");
         for (String key : requiredKeys) {
             if (!argsMap.containsKey(key) || argsMap.get(key).isEmpty()) {
-                throw new FinanceProPlusException("Invalid command. Required fields are missing. "
-                        + "Please provide: id/, p/, s/, e/, m/");
+                throw new FinanceProPlusException("Invalid command or missing required fields.\n" + ADD_POLICY_FORMAT);
             }
         }
         return argsMap;
@@ -212,11 +234,12 @@ public class ClientList implements ListContainer {
             throws FinanceProPlusException {
         Map<String, List<String>> argsMap = Client.parseClientDetails(arguments);
         if (!argsMap.containsKey("id") || !argsMap.containsKey("p")) {
-            throw new FinanceProPlusException("Invalid command. Both id/ and p/ are required to identify the policy.");
+            throw new FinanceProPlusException("Invalid command. Both client NRIC (id/) and policy name (p/) " +
+                    "are required.\n" + UPDATE_POLICY_FORMAT);
         }
         if (!argsMap.containsKey("s") && !argsMap.containsKey("e") && !argsMap.containsKey("m")) {
-            throw new FinanceProPlusException("Invalid command. You must provide at least one field to update: s/, " +
-                    "e/, or m/.");
+            throw new FinanceProPlusException("Invalid command. You must provide at least one " +
+                    "field to update (s/, e/, or m/).\n" + UPDATE_POLICY_FORMAT);
         }
         return argsMap;
     }
@@ -254,13 +277,17 @@ public class ClientList implements ListContainer {
                 isUpdated = true;
             }
             if (argsMap.containsKey("m")) {
+                BigDecimal amount = new BigDecimal(argsMap.get("m").get(0));
+                if(amount.compareTo(BigDecimal.ZERO) < 0) {
+                    throw new FinanceProPlusException("Invalid premium: " + amount+ "\nPlease enter a positive value.");
+                }
                 clientPolicy.setMonthlyPremium(new BigDecimal(argsMap.get("m").get(0)));
                 isUpdated = true;
             }
         } catch (DateTimeParseException e) {
-            throw new FinanceProPlusException("Invalid date format. Please use DD-MM-YYYY.");
+            throw new FinanceProPlusException(INVALID_DATE_FORMAT_MESSAGE);
         } catch (NumberFormatException e) {
-            throw new FinanceProPlusException("Invalid premium format. Please enter a valid number.");
+            throw new FinanceProPlusException(INVALID_PREMIUM_FORMAT_MESSAGE);
         }
         return isUpdated;
     }
@@ -313,8 +340,8 @@ public class ClientList implements ListContainer {
         String indexString = safeGetFirst(argsMap, "i");
 
         if (nric.isEmpty() || indexString.isEmpty()) {
-            throw new FinanceProPlusException("Invalid command. Both client NRIC (id/) and policy index (i/) are " +
-                    "required.");
+            throw new FinanceProPlusException("Invalid command. Both client NRIC (id/) and " +
+                    "policy index (i/) are required.\n" + DELETE_POLICY_FORMAT);
         }
         Client client = findClientByNric(nric);
         if (client == null) {
