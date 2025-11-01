@@ -197,6 +197,10 @@ This command adds a new, fully detailed insurance contract to an existing client
     ```
     client addpolicy id/S1234567A p/HealthShield s/14-09-2024 e/14-09-2026 m/250.50
     ```
+> **Note on Premiums:**
+> *   The premium amount must have a maximum of two decimal places (e.g., `150.75` is valid, `150.755` is not).
+> *   While the system supports very large numbers, please ensure the premium is a realistic value to avoid potential data overflow issues.
+
 
 #### **2. Updating a Client's Policy**
 
@@ -380,7 +384,7 @@ This command displays all policy templates currently available in your system, l
 #### **3. Deleting a Base Policy**
 
 This command permanently removes a policy template from the system. Note that this does not affect policies already assigned to clients.
-
+> ⚠️ **Important:** Deleting a base policy is a **permanent action** that will also **remove all associated policy contracts from every client**. This action cannot be undone. Please be certain before proceeding.
 *   **Command:** `policy delete <INDEX>`
 
 *   **Arguments:**
@@ -503,9 +507,14 @@ This must be done before adding a new advisor.
 ---
 ## FAQ
 
-**Q**: How do I transfer my data to another computer? 
+**Q**: How do I transfer my data to another computer?
 
-**A**: You Can Transfer Files From ./data/ directory to your new computer.
+**A**: You can transfer the entire `./data/` directory to your new computer. Place it in the same folder as the `.jar` file before running the application.
+
+**Q**: Can I manually edit the files in the `./data/` folder?
+
+**A**: **No.** Manually editing the storage files (e.g., `clients.txt`, `policies.txt`) is **strongly discouraged**. The files use a specific format, and any incorrect changes can lead to data corruption, causing the application to fail on startup or lose your data. Always use the application's commands to manage your information.
+
 
 ## Command Summary
 
