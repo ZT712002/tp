@@ -144,12 +144,16 @@ This command moves a client and all their associated data (policies, to-dos) fro
 
 #### **7. Restoring a Client**
 
-This command moves a previously archived client and all their associated data (policies, to-dos) back to the active clients list.
+This command moves a previously archived client back to the active clients list.
 
 *   **Command:** `client restore <INDEX>`
 
 *   **Arguments:**
     *   `<INDEX>`: **Required.** The numerical index of the archived client to restore. **You must run `list archived` first to find the correct index.**
+
+*   **Data Restoration Notes:**
+    *   **Same session:** If you archive and restore a client within the same application session, all associated data (policies, to-dos) will be fully restored.
+    *   **New session:** If you restart the application after archiving, only basic client information (name, NRIC, contact) will be restored. Associated policies and to-dos will not be recovered.
 
 *   **Workflow Example:**
     1.  First, list all archived clients to find the target's index:
@@ -285,7 +289,7 @@ This command creates a new meeting record with the specified details. All meetin
     *   `c/<CLIENT>`: **Required.** The name of the client attending the meeting.
     *   `d/<DATE>`: **Required.** The meeting date in `dd-MM-yyyy` format.
     *   `from/<START_TIME>`: **Required.** The meeting start time in `HH:mm` format (24-hour).
-    *   `to/<END_TIME>`: *Optional.* The meeting end time in `HH:mm` format (24-hour).
+    *   `to/<END_TIME>`: *Optional.* The meeting end time in `HH:mm` format (24-hour). **Note: If provided, the end time must be after the start time.**
 
 *   **Examples:**
     *   To add a meeting with start and end time:
@@ -301,15 +305,16 @@ This command creates a new meeting record with the specified details. All meetin
 
 This command displays all scheduled meetings with their details, listed with numerical indices for easy reference.
 
-*   **Command:** `meeting list`
+*   **Command:** `list meeting`
 
 *   **Example:**
+
     ```
     Here are the meetings in your list:
     1. Title: Policy Review, Client: John Doe, Date: 30-10-2025, Time: 14:00 to 16:00
     2. Title: Initial Consultation, Client: Jane Smith, Date: 05-11-2025, Start Time: 10:30
     ```
-
+    
 #### **3. Deleting a Meeting**
 
 This command permanently removes a meeting from your schedule.
@@ -322,7 +327,7 @@ This command permanently removes a meeting from your schedule.
 *   **Workflow Example:**
     1.  First, list all meetings to find the target's index:
         ```
-        meeting list
+        list meeting
         ```
         *(Output might show "1. Title: Policy Review, Client: John Doe...")*
 
@@ -540,7 +545,7 @@ Updates the existing user profile with new details.
 | Command | Description | Syntax / Arguments | Example |
 | :--- | :--- | :--- | :--- |
 | `meeting add` | Creates a new meeting record. | `meeting add t/<TITLE> c/<CLIENT> d/<dd-MM-yyyy> from/<HH:mm> [to/<HH:mm>]` | `meeting add t/Policy Review c/John Doe d/30-10-2025 from/14:00 to/16:00` |
-| `meeting list` | Shows all scheduled meetings with indices. | `meeting list` | `meeting list` |
+| `list meeting` | Shows all scheduled meetings with indices. | `list meeting` | `list meeting` |
 | `meeting delete` | Removes a meeting by index (use `meeting list` first). | `meeting delete <INDEX>` | `meeting delete 1` |
 | `meeting forecast` | Shows meetings in the next 7 days. | `meeting forecast` | `meeting forecast` |
 
