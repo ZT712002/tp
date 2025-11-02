@@ -2,16 +2,15 @@
 
 title UML Class Diagram for FinancePro+ Client Management
 
-' Set skin parameters for better readability
 skinparam classAttributeIconSize 0
-skinparam packageStyle rect
-skinparam classStereotypeIconSize 0
-hide stereotype
-hide empty members
+skinparam classOperationIconSize 0
+skinparam stereotypePosition top
+skinparam interfaceStereotype "interface"
+hide circle
 
 
 package seedu.duke.container {
-    interface ListContainer {
+    interface ListContainer <<interface>> {
         + addItem(arguments: String)
         + addItem(arguments: String, listContainer: ListContainer)
         + deleteItem(arguments: String)
@@ -66,7 +65,7 @@ package seedu.duke.client {
 }
 
 package seedu.duke.exception {
-    class FinanceProPlusException << (E,red) >> {
+    class FinanceProPlusException {
     }
 }
 
