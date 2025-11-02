@@ -1,8 +1,8 @@
 package seedu.duke.parser;
 
 import seedu.duke.command.AddCommand;
-import seedu.duke.command.DeleteCommand;
 import seedu.duke.command.Command;
+import seedu.duke.command.EditUserCommand;
 import seedu.duke.exception.FinanceProPlusException;
 
 public class UserParser extends Parser {
@@ -25,13 +25,13 @@ public class UserParser extends Parser {
         switch (commandSubtype) {
         case "add":
             return new AddCommand(commandType, arguments);
-        case "delete":
-            return new DeleteCommand(commandType, arguments);
+        case "edit":
+            return new EditUserCommand(commandType, arguments);
         case "view":
             return new seedu.duke.command.ListCommand(commandType);
         default:
             throw new FinanceProPlusException("Invalid user command subtype. Please use one of:"
-                    + "'add', 'delete', or 'view'.");
+                    + "'add', 'edit', or 'view'.");
 
         }
     }
