@@ -28,6 +28,20 @@ class MeetingParserTest {
     }
 
     @Test
+    void executeAndCreateCommand_startTimeAfterEndTime_throwsException() {
+        MeetingParser parser = new MeetingParser("meeting", "add t/Meeting c/Bob d/17-10-2025 from/16:00 to/14:00");
+        Exception exception = assertThrows(FinanceProPlusException.class, parser::executeAndCreateCommand);
+        assertEquals("Start time (16:00) must be before end time (14:00)", exception.getMessage());
+    }
+
+    @Test
+    void executeAndCreateCommand_sameStartAndEndTime_throwsException() {
+        MeetingParser parser = new MeetingParser("meeting", "add t/Meeting c/Bob d/17-10-2025 from/14:00 to/14:00");
+        Exception exception = assertThrows(FinanceProPlusException.class, parser::executeAndCreateCommand);
+        assertEquals("Start time (14:00) must be before end time (14:00)", exception.getMessage());
+    }
+
+    @Test
     void executeAndCreateCommand_invalidSubtype_throwsException() {
         MeetingParser parser = new MeetingParser("meeting", "update t/Meeting");
         Exception exception = assertThrows(FinanceProPlusException.class, parser::executeAndCreateCommand);
