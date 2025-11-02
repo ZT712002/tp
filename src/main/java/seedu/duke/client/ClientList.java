@@ -320,9 +320,26 @@ public class ClientList implements ListContainer {
     public void loadFromStorage(List<String> lines, ListContainer mainPolicyList)
             throws FinanceProPlusException {
         for (String line : lines) {
-            clients.add(new Client(line, mainPolicyList));
+            try {
+                Client newClient = new Client(line, mainPolicyList);
+
+                // Check for duplicates before adding
+                boolean duplicateExists = clients.stream()
+                        .anyMatch(existingClient -> existingClient.getNric().equalsIgnoreCase(newClient.getNric()));
+
+                if (duplicateExists) {
+                    logger.warning("Duplicate client detected during load: " + newClient.getNric() + ". Skipping entry.");
+                    continue;
+                }
+
+                clients.add(newClient);
+
+            } catch (Exception e) {
+                System.out.println("Failed to load client from line: " + line + " | Error: " + e.getMessage());
+            }
         }
     }
+
 
     public List<String[]> toCSVFormat() {
         List<String[]> rows = new ArrayList<>();
