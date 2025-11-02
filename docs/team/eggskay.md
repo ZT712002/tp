@@ -21,11 +21,9 @@ Link [Here!](https://nus-cs2113-ay2526s1.github.io/tp-dashboard/?search=eggskay&
         * Highlights: Implementation required validation to prevent multiple user profiles. The logic ensures that only
           one active user can exist and that the user must delete their current profile before creating a new one.
 
-    * Delete
-        * What it does: Allows the user to remove their existing profile from the system.
-        * Justification: Ensures the user can reset or replace their information if needed.
-        * Highlights: Implemented within `UserList` with proper logging and assertions to maintain data integrity.
-          Deletion is handled cleanly without affecting other stored data.
+    * Edit
+        * What it does: Allows the user to update their existing profile from the system.
+        * Justification: Ensures the user can replace their information if needed.
 
     * View
         * What it does: Displays the stored user profile and details such as name, email, contact number, and
@@ -73,7 +71,7 @@ Link [Here!](https://nus-cs2113-ay2526s1.github.io/tp-dashboard/?search=eggskay&
       quotes to ensure clean export compatibility.
 
 - User Parser Implementation
-    * What it does: Handles all user-specific commands such as `add`, `delete`, and `view` for the User entity.
+    * What it does: Handles all user-specific commands such as `add`, `edit`, and `view` for the User entity.
     * Justification: Separates the logic of parsing user commands from other entities, ensuring modularity and better
       scalability.
     * Highlights: Implemented within `UserParser` to integrate smoothly with the main parser system while maintaining
@@ -85,7 +83,7 @@ Link [Here!](https://nus-cs2113-ay2526s1.github.io/tp-dashboard/?search=eggskay&
 
 **Contributions to UG**
 
-- Documented the **User Management** section, detailing `user add`, `user delete`, and `user view` commands with syntax and examples.
+- Documented the **User Management** section, detailing `user add`, `user edit`, and `user view` commands with syntax and examples.
 
 **Contributions to DG**
 
