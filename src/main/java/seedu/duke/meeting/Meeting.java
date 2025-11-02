@@ -42,6 +42,7 @@ public class Meeting {
         assert this.startTime != null && !startTime.isEmpty() : "Start time should be initialised";
         if (endTime != null) {
             validateTimeFormat(endTime);
+            validateTimeOrder(startTime, endTime);
         }
     }
 
@@ -79,10 +80,23 @@ public class Meeting {
         }
     }
 
+    private void validateTimeOrder(String startTimeString, String endTimeString) throws FinanceProPlusException {
+        assert startTimeString != null && !startTimeString.isEmpty() : "Start time should not be null";
+        assert endTimeString != null && !endTimeString.isEmpty() : "End time should not be null";
+        
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        LocalTime startTime = LocalTime.parse(startTimeString, formatter);
+        LocalTime endTime = LocalTime.parse(endTimeString, formatter);
+        
+        if (!startTime.isBefore(endTime)) {
+            throw new FinanceProPlusException("Start time (" + startTimeString + ") must be before end time (" + endTimeString + ")");
+        }
+    }
+
+
     public String getTitle() {
         return title;
     }
-
     public String getDate() {
         return date;
     }
