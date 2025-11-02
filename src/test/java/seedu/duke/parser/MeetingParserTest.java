@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 import seedu.duke.command.AddCommand;
 import seedu.duke.command.Command;
 import seedu.duke.command.DeleteCommand;
-import seedu.duke.command.ListCommand;
 import seedu.duke.command.ForecastCommand;
 import seedu.duke.exception.FinanceProPlusException;
 
@@ -66,7 +65,7 @@ class MeetingParserTest {
         MeetingParser parser = new MeetingParser("meeting", "update t/Meeting");
         Exception exception = assertThrows(FinanceProPlusException.class, parser::executeAndCreateCommand);
         assertEquals("Invalid meeting command subtype. Please use one of: "
-                + "'add', 'delete', 'list' or 'forecast'.", exception.getMessage());
+                + "'add', 'delete' or 'forecast'.", exception.getMessage());
     }
 
     @Test
