@@ -155,7 +155,7 @@ In the LookUptable Component,
 ### Client Features
 To begin, here is a high level Class Diagram of Clients and its interaction with other classes:
 
-![Clients Class Diagram](./umldiagrams/Clients_class_dg.png)
+![Clients Class Diagram](./umldiagrams/client_manager_component.svg)
 
 The Client Management component is the core of handling customer data within the application. It is responsible for creating, storing, retrieving, updating, and archiving client profiles. The design separates active clients from archived clients and uses a common interface (ListContainer) to ensure consistent handling of data collections throughout the application.
 
