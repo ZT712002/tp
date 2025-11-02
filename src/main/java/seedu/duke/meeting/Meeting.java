@@ -89,7 +89,8 @@ public class Meeting {
         LocalTime endTime = LocalTime.parse(endTimeString, formatter);
         
         if (!startTime.isBefore(endTime)) {
-            throw new FinanceProPlusException("Start time (" + startTimeString + ") must be before end time (" + endTimeString + ")");
+            throw new FinanceProPlusException("Start time (" + startTimeString 
+                    + ") must be before end time (" + endTimeString + ")");
         }
     }
 

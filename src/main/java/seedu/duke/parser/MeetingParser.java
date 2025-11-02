@@ -31,13 +31,11 @@ public class MeetingParser extends Parser {
                 throw new FinanceProPlusException("Invalid meeting command arguments");
             }
             return new DeleteCommand(commandType, arguments);
-        case "list":
-            return new ListCommand(commandType);
         case "forecast":
             return new ForecastCommand(commandType);
         default:
             throw new FinanceProPlusException("Invalid meeting command subtype. Please use one of: "
-                    + "'add', 'delete', 'list' or 'forecast'.");
+                    + "'add', 'delete' or 'forecast'.");
         }
     }
 }
