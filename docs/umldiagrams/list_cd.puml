@@ -1,9 +1,12 @@
 @startuml
 title Class Diagram: "list" Command Architecture
 
-
 skinparam classAttributeIconSize 0
-hide empty members
+skinparam classOperationIconSize 0
+skinparam stereotypePosition top
+skinparam interfaceStereotype "interface"
+hide circle
+
 
 
 package seedu.duke.parser {

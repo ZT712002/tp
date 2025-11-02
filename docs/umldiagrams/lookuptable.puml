@@ -1,8 +1,12 @@
 @startuml
 skinparam classAttributeIconSize 0
+skinparam classOperationIconSize 0
+skinparam stereotypePosition top
+skinparam interfaceStereotype "interface"
+hide circle
 
 
-interface ListContainer {
+interface ListContainer <<interface>> {
   + void addItem(String arguments)
   + void addItem(String arguments, ListContainer listContainer)
   + void deleteItem(String arguments)
