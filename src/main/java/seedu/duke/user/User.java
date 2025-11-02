@@ -90,7 +90,9 @@ public class User {
     private void validateEmail(String email) throws FinanceProPlusException {
         String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
         if (!email.matches(emailRegex)) {
-            throw new FinanceProPlusException("Invalid email format. Please provide a valid email address (e.g., alex@example.com).");
+            throw new FinanceProPlusException("Invalid email format." +
+                    "Please provide a valid email address (e.g., alex@example.com).");
+
         }
     }
 }
