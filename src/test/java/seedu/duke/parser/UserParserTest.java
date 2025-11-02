@@ -40,7 +40,7 @@ public class UserParserTest {
         UserParser parser = new UserParser("user", "update n/John e/john@example.com p/91234567 r/REP003");
         FinanceProPlusException exception = assertThrows(FinanceProPlusException.class,
                 parser::executeAndCreateCommand);
-        assertEquals("Invalid user command subtype. Please use one of:'add', 'edit' or 'view'.",
+        assertEquals("Invalid user command subtype. Please use one of:'add', 'edit', or 'view'.",
                 exception.getMessage());
     }
 
