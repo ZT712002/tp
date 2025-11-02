@@ -450,9 +450,9 @@ user add n/John Smith e/john.smith@example.com c/91234567 r/FA-12345
 
 **Step 2: Add Base Policies**
 ```
-policy add n/HealthShield d/Comprehensive health insurance covering hospitalization and outpatient care
-policy add n/PremiumLife d/Whole life insurance with investment component and guaranteed returns
-policy add n/TravelSafe d/Travel insurance covering medical emergencies and trip cancellations
+policy add n/HealthShield d/Comprehensive health insurance covering hospitalization
+policy add n/PremiumLife d/Whole life insurance with investment component 
+policy add n/TravelSafe d/Travel insurance covering medical emergencies 
 ```
 
 **Step 3: Add Clients**
