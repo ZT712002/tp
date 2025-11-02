@@ -455,17 +455,15 @@ This command permanently removes a task from the system.
 
 ### User Features
 
-The **User** feature represents the **Financial Advisor** currently using FinanceProPlus.  
-At any given time, **only one user record can exist** in the system  representing the active advisor profile.  
-If a new user needs to be added, the existing one must first be deleted.
-
+The User feature allows financial advisors to store their own profile information (e.g., name, email, contact number, and representative number).
+This information is optional and the program can be used without adding a user profile.
 
 ---
 
 #### **1. Adding the Active User**
 
 This command registers the Financial Advisor using the system.  
-Only one user can exist at any time — attempting to add another will result in an error.
+Only one user can exist at any time attempting to add another will result in an error.
 
 * **Command:** `user add n/<NAME> e/<EMAIL> c/<CONTACT> r/<REP_NUMBER>`
 
@@ -494,12 +492,11 @@ If no user exists, a message will indicate that the user profile is empty.
   Representative No.: FA-001
 ```
 
-#### **3. Deleting the Current User**
+#### **3. Editing the Current User**
 
-Removes the existing user profile from the system.  
-This must be done before adding a new advisor.
+Updates the existing user profile with new details. 
 
-* **Command:** `user delete`
+* **Command:** `user edit`
 ---
 ## FAQ
 
@@ -549,11 +546,11 @@ This must be done before adding a new advisor.
 
 #### User Management
 
-| Command | Description | Syntax / Arguments | Example |
-| :--- | :--- | :--- | :--- |
-| `user add` | Registers the current financial advisor (only one allowed). | `user add n/<NAME> e/<EMAIL> c/<CONTACT> r/<REP_NUMBER>` | `user add n/Alex Tan e/alex@example.com c/91234567 r/FA-001` |
-| `user view` | Displays details of the current user. | `user view` | `user view` |
-| `user delete` | Removes the existing user record. | `user delete` | `user delete` |
+| Command     | Description                                                 | Syntax / Arguments                                       | Example                                                          |
+|:------------|:------------------------------------------------------------|:---------------------------------------------------------|:-----------------------------------------------------------------|
+| `user add`  | Registers the current financial advisor (only one allowed). | `user add n/<NAME> e/<EMAIL> c/<CONTACT> r/<REP_NUMBER>` | `user add n/Alex Tan e/alex@example.com c/91234567 r/FA-001`     |
+| `user view` | Displays details of the current user.                       | `user view`                                              | `user view`                                                      |
+| `user edit` | Edits the existing user record.                             | `user edit`                                              | `user edit n/Alex Tan e/alex123@example.com c/91234576 r/FA-001` |
 
 #### Policy Management
 
