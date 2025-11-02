@@ -184,6 +184,7 @@ public class Client {
             System.out.println("Could not display to-dos due to an error: " + e.getMessage());
         }
     }
+
     /**
      * Finds and removes a policy from this client's policy list by its name.
      *
@@ -235,14 +236,11 @@ public class Client {
         this.todoList.listItems();
     }
 
+
     public String toStorageString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(String.format("n/%s c/%d id/%s", name, phoneNumber, nric));
-        for (Policy policy : policyList.getPolicyList()) {
-            sb.append(" p/").append(policy.getName());
-        }
-        return sb.toString();
+        return String.format("n/%s id/%s c/%s", name, nric, phoneNumber);
     }
+
 
     public String[] toCSVRow() {
         String joinedPolicies = policyList.getPolicyList().isEmpty()
@@ -252,6 +250,7 @@ public class Client {
                 .collect(Collectors.joining(", "));
         return new String[]{name, String.valueOf(phoneNumber), nric, joinedPolicies};
     }
+
     /**
      * Validates an NRIC based on the format: a letter, followed by 7 digits, and another letter.
      * The method is case-insensitive.
@@ -266,6 +265,10 @@ public class Client {
         String nricRegex = "^[a-zA-Z]\\d{7}[a-zA-Z]$";
 
         return nric.matches(nricRegex);
+    }
+
+    public PolicyList getPolicyList() {
+        return this.policyList;
     }
 }
 

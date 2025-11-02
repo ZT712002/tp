@@ -5,6 +5,7 @@ import seedu.duke.client.ClientList;
 import seedu.duke.container.ListContainer;
 import seedu.duke.exception.FinanceProPlusException;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -166,11 +167,24 @@ public class PolicyList implements ListContainer {
 
     public List<String> toStorageFormat() {
         List<String> lines = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         for (Policy p : policies) {
-            lines.add(p.toStorageString());
+            if (p instanceof ClientPolicy) {
+                ClientPolicy cp = (ClientPolicy) p;
+                lines.add(String.format(
+                        "p/%s m/%.2f s/%s e/%s",
+                        cp.getName(),
+                        cp.getMonthlyPremium(),
+                        cp.getStartDate().format(formatter),
+                        cp.getExpiryDate().format(formatter)
+                ));
+            } else {
+                lines.add(p.toStorageString());
+            }
         }
         return lines;
     }
+
 
     public void loadFromStorage(List<String> lines) throws FinanceProPlusException {
         for (String line : lines) {
