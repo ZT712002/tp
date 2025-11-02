@@ -69,9 +69,9 @@ public class ClientList implements ListContainer {
         String nric = safeGetFirst(detailsMap, "id");
         String name = safeGetFirst(detailsMap, "n");
         String contact = safeGetFirst(detailsMap, "c");
-        if (nric.isEmpty() || name.isEmpty() || contact.isEmpty() ) {
+        if (nric.isEmpty() || name.isEmpty() || contact.isEmpty()) {
             throw new FinanceProPlusException("Invalid command format or missing required fields.\n" + ADD_CLIENT_FORMAT
-            +"\nWhere [] are optional fields.");
+                    + "\nWhere [] are optional fields.");
         }
         if (!Client.isValidNric(nric)) {
             throw new FinanceProPlusException("Invalid NRIC. The format must be a letter, followed by " +
@@ -164,6 +164,7 @@ public class ClientList implements ListContainer {
         Map<String, List<String>> argsMap = parseAndValidateAddPolicyArgs(arguments);
         String nric = argsMap.get("id").get(0);
         Client client = findClientByNric(nric);
+
         if (client == null) {
             throw new FinanceProPlusException("Client with NRIC '" + nric + "' does not exist.");
         }
@@ -173,6 +174,21 @@ public class ClientList implements ListContainer {
         client.addPolicy(newClientPolicy);
         System.out.println("Successfully added new policy contract to client " + nric + ".");
         System.out.println("Updated Client Details: " + client);
+    }
+
+    public void addPolicyToClientSilent(String arguments, ListContainer mainPolicyList) throws FinanceProPlusException {
+        Map<String, List<String>> argsMap = parseAndValidateAddPolicyArgs(arguments);
+        String nric = argsMap.get("id").get(0);
+        Client client = findClientByNric(nric);
+        if (client == null) {
+            throw new FinanceProPlusException("Client with NRIC '" + nric + "' does not exist.");
+        }
+
+        String basePolicyName = argsMap.get("p").get(0);
+        Policy basePolicy = validateAndGetBasePolicy(client, mainPolicyList, basePolicyName);
+        ClientPolicy newClientPolicy = createClientPolicyFromArgs(argsMap, basePolicy);
+
+        client.addPolicy(newClientPolicy);
     }
 
     private ClientPolicy createClientPolicyFromArgs(Map<String, List<String>> argsMap, Policy basePolicy)
@@ -284,8 +300,8 @@ public class ClientList implements ListContainer {
 
             if (argsMap.containsKey("m")) {
                 BigDecimal newPremium = parseAndValidatePremium(argsMap.get("m").get(0));
-                if (clientPolicy.getMonthlyPremium()==null
-                        ||clientPolicy.getMonthlyPremium().compareTo(newPremium) != 0) {
+                if (clientPolicy.getMonthlyPremium() == null
+                        || clientPolicy.getMonthlyPremium().compareTo(newPremium) != 0) {
                     clientPolicy.setMonthlyPremium(newPremium);
                     isUpdated = true;
                 }
@@ -320,9 +336,28 @@ public class ClientList implements ListContainer {
     public void loadFromStorage(List<String> lines, ListContainer mainPolicyList)
             throws FinanceProPlusException {
         for (String line : lines) {
-            clients.add(new Client(line, mainPolicyList));
+            try {
+                Client newClient = new Client(line, mainPolicyList);
+
+                // Check for duplicates before adding
+                boolean duplicateExists = clients.stream()
+                        .anyMatch(existingClient -> existingClient.getNric().equalsIgnoreCase(newClient.getNric()));
+
+                if (duplicateExists) {
+                    logger.warning("Duplicate client detected during load: "
+                            + newClient.getNric() + ". Skipping entry.");
+
+                    continue;
+                }
+
+                clients.add(newClient);
+
+            } catch (Exception e) {
+                System.out.println("Failed to load client from line: " + line + " | Error: " + e.getMessage());
+            }
         }
     }
+
 
     public List<String[]> toCSVFormat() {
         List<String[]> rows = new ArrayList<>();
@@ -357,6 +392,7 @@ public class ClientList implements ListContainer {
         clientPolicies.deleteItem(indexString);
 
     }
+
     /**
      * Parses a string into a BigDecimal and validates it for currency format.
      * Checks for valid number format, ensures no more than 2 decimal places, and checks for non-negative values.
@@ -380,6 +416,13 @@ public class ClientList implements ListContainer {
         }
         return premium;
     }
+
+    public void updatePolicyForClientSilently(String arguments) throws FinanceProPlusException {
+        Map<String, List<String>> argsMap = parseAndValidateUpdatePolicyArgs(arguments);
+        ClientPolicy clientPolicyToUpdate = findClientPolicyToUpdate(argsMap);
+        applyPolicyUpdatesFromArgs(clientPolicyToUpdate, argsMap);
+    }
+
 }
 
 

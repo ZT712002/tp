@@ -57,8 +57,20 @@ public class FinanceProPlus {
                 try {
                     List<String> taskLines = storage.loadClientTasks(c.getNric());
                     c.getTodoList().loadFromStorage(taskLines);
+                    try {
+                        List<String> policyLines = storage.loadClientPolicies(c.getNric());
+                        for (String line : policyLines) {
+
+                            clients.addPolicyToClientSilent("id/"+c.getNric()+" " +line, policies);
+                        }
+                    } catch (Exception ex) {
+                        logger.warning("Failed to load policy details for client "
+                                + c.getNric() + ": " + ex.getMessage());
+
+
+                    }
                 } catch (Exception ex) {
-                    logger.warning("Failed to load tasks for client " + c.getNric() + ": " + ex.getMessage());
+                    logger.warning("Failed to load data for client " + c.getNric() + ": " + ex.getMessage());
                 }
             }
             tasks.loadFromStorage(storage.loadFromFile("task.txt"));
@@ -118,8 +130,9 @@ public class FinanceProPlus {
             for (Client c : clients.getClientList()) {
                 try {
                     storage.saveClientTasks(c.getNric(), c.getTodoList().toStorageFormat());
+                    storage.saveClientPolicies(c.getNric(), c.getPolicyList().toStorageFormat());
                 } catch (Exception ex) {
-                    logger.warning("Failed to save tasks for client " + c.getNric() + ": " + ex.getMessage());
+                    logger.warning("Failed to save data for client " + c.getNric() + ": " + ex.getMessage());
                 }
             }
         } catch (Exception e) {
