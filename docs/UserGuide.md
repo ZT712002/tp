@@ -301,7 +301,7 @@ This command creates a new meeting record with the specified details. All meetin
 
 This command displays all scheduled meetings with their details, listed with numerical indices for easy reference.
 
-*   **Command:** `meeting list`
+*   **Command:** `list meeting`
 
 *   **Example:**
 
@@ -323,7 +323,7 @@ This command permanently removes a meeting from your schedule.
 *   **Workflow Example:**
     1.  First, list all meetings to find the target's index:
         ```
-        meeting list
+        list meeting
         ```
         *(Output might show "1. Title: Policy Review, Client: John Doe...")*
 
@@ -544,7 +544,7 @@ This must be done before adding a new advisor.
 | Command | Description | Syntax / Arguments | Example |
 | :--- | :--- | :--- | :--- |
 | `meeting add` | Creates a new meeting record. | `meeting add t/<TITLE> c/<CLIENT> d/<dd-MM-yyyy> from/<HH:mm> [to/<HH:mm>]` | `meeting add t/Policy Review c/John Doe d/30-10-2025 from/14:00 to/16:00` |
-| `meeting list` | Shows all scheduled meetings with indices. | `meeting list` | `meeting list` |
+| `list meeting` | Shows all scheduled meetings with indices. | `list meeting` | `list meeting` |
 | `meeting delete` | Removes a meeting by index (use `meeting list` first). | `meeting delete <INDEX>` | `meeting delete 1` |
 | `meeting forecast` | Shows meetings in the next 7 days. | `meeting forecast` | `meeting forecast` |
 
