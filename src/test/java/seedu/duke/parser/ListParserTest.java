@@ -62,6 +62,13 @@ class ListParserTest {
     }
 
     @Test
+    void executeAndCreateCommand_validMeetingSubtype_returnsListCommand() throws FinanceProPlusException {
+        ListParser parser = new ListParser("list", "meeting");
+        Command command = parser.executeAndCreateCommand();
+        assertInstanceOf(ListCommand.class, command);
+    }
+
+    @Test
     void executeAndCreateCommand_validArchivedSubtype_returnsListCommand() throws FinanceProPlusException {
         ListParser parser = new ListParser("list", "archived");
         Command command = parser.executeAndCreateCommand();
