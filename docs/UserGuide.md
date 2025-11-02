@@ -144,12 +144,16 @@ This command moves a client and all their associated data (policies, to-dos) fro
 
 #### **7. Restoring a Client**
 
-This command moves a previously archived client and all their associated data (policies, to-dos) back to the active clients list.
+This command moves a previously archived client back to the active clients list.
 
 *   **Command:** `client restore <INDEX>`
 
 *   **Arguments:**
     *   `<INDEX>`: **Required.** The numerical index of the archived client to restore. **You must run `list archived` first to find the correct index.**
+
+*   **Data Restoration Notes:**
+    *   **Same session:** If you archive and restore a client within the same application session, all associated data (policies, to-dos) will be fully restored.
+    *   **New session:** If you restart the application after archiving, only basic client information (name, NRIC, contact) will be restored. Associated policies and to-dos will not be recovered.
 
 *   **Workflow Example:**
     1.  First, list all archived clients to find the target's index:
