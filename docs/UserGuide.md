@@ -285,7 +285,7 @@ This command creates a new meeting record with the specified details. All meetin
     *   `c/<CLIENT>`: **Required.** The name of the client attending the meeting.
     *   `d/<DATE>`: **Required.** The meeting date in `dd-MM-yyyy` format.
     *   `from/<START_TIME>`: **Required.** The meeting start time in `HH:mm` format (24-hour).
-    *   `to/<END_TIME>`: *Optional.* The meeting end time in `HH:mm` format (24-hour).
+    *   `to/<END_TIME>`: *Optional.* The meeting end time in `HH:mm` format (24-hour). **Note: If provided, the end time must be after the start time.**
 
 *   **Examples:**
     *   To add a meeting with start and end time:
