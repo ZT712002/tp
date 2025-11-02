@@ -5,6 +5,8 @@ title UML Class Diagram for FinancePro+ Client Management
 ' Set skin parameters for better readability
 skinparam classAttributeIconSize 0
 skinparam packageStyle rect
+skinparam classStereotypeIconSize 0
+hide stereotype
 hide empty members
 
 

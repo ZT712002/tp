@@ -13,7 +13,7 @@ It's a CRM that works at your pace, not the other way around.
 ## Quick Start
 
 1. Ensure that you have Java 17 or above installed.
-2. Down the latest version of `FinanceProPlus.jar` from [here](https://github.com/AY2526S1-CS2113-W12-2/tp/releases).
+2. Download the latest version of `FinanceProPlus.jar` from [here](https://github.com/AY2526S1-CS2113-W12-2/tp/releases).
 3. Copy the file to the folder you want to use as the home folder of FinanceProPlus
 4. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar [CS2113-W12-2][FinanceProPlus].jar` command to run the application
 5. Refer to the [Features](#features) or [Command Summary](#command-summary)
@@ -501,13 +501,24 @@ If no user exists, a message will indicate that the user profile is empty.
 
 Updates the existing user profile with new details. 
 
-* **Command:** `user edit`
+* Command: `user edit`
+
+
+#### **Exiting the Application**
+
+Exits the Application
+* Command `exit`
+
 ---
 ## FAQ
 
 **Q**: How do I transfer my data to another computer? 
 
 **A**: You Can Transfer Files From ./data/ directory to your new computer.
+
+**Q**: Can I directly modify my data in the ./data/ directory?
+
+**A**: Do not modify the data directly. If files get corrupted or the problem fails unexpectedly due to modifications of the data file it is of your own risk.
 
 ## Command Summary
 
@@ -572,3 +583,10 @@ Updates the existing user profile with new details.
 | `task add` | Creates a new standalone task with a due date. | `task add d/<DESCRIPTION> by/<dd-MM-yyyy>` | `task add d/Review quarterly report by/15-12-2025` |
 | `list task` | Shows all tasks with their index numbers. | `list task` | `list task` |
 | `task delete` | Removes a task by index (use `list task` first). | `task delete <INDEX>` | `task delete 1` |
+
+
+#### Miscellaneous
+
+| Command | Description | Syntax / Arguments | Example |
+|:--------| :--- |:-------------------| :--- |
+| `exit`  |Exits the application| `exit`             |`exit`|

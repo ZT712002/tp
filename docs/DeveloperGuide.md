@@ -155,7 +155,7 @@ In the LookUptable Component,
 ### Client Features
 To begin, here is a high level Class Diagram of Clients and its interaction with other classes:
 
-![Clients Class Diagram](./umldiagrams/Clients_class_dg.png)
+![Clients Class Diagram](./umldiagrams/client_manager_component.svg)
 
 The Client Management component is the core of handling customer data within the application. It is responsible for creating, storing, retrieving, updating, and archiving client profiles. The design separates active clients from archived clients and uses a common interface (ListContainer) to ensure consistent handling of data collections throughout the application.
 
@@ -450,9 +450,9 @@ user add n/John Smith e/john.smith@example.com c/91234567 r/FA-12345
 
 **Step 2: Add Base Policies**
 ```
-policy add n/HealthShield d/Comprehensive health insurance covering hospitalization and outpatient care
-policy add n/PremiumLife d/Whole life insurance with investment component and guaranteed returns
-policy add n/TravelSafe d/Travel insurance covering medical emergencies and trip cancellations
+policy add n/HealthShield d/Comprehensive health insurance covering hospitalization
+policy add n/PremiumLife d/Whole life insurance with investment component 
+policy add n/TravelSafe d/Travel insurance covering medical emergencies 
 ```
 
 **Step 3: Add Clients**
