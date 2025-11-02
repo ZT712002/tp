@@ -37,6 +37,9 @@ public class User {
         } catch (NumberFormatException ex) {
             throw new FinanceProPlusException("Invalid contact format. Please enter digits only.");
         }
+
+        validateEmail(email);
+
         assert this.name != null && !this.name.isEmpty()
                 : "User name should be initialized";
         assert this.email != null && !this.email.isEmpty()
@@ -84,4 +87,12 @@ public class User {
         return new String[]{name, email, String.valueOf(phoneNumber), representativeNumber};
     }
 
+    private void validateEmail(String email) throws FinanceProPlusException {
+        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+        if (!email.matches(emailRegex)) {
+            throw new FinanceProPlusException("Invalid email format." +
+                    "Please provide a valid email address (e.g., alex@example.com).");
+
+        }
+    }
 }

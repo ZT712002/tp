@@ -25,7 +25,7 @@ public class UserList implements ListContainer {
                 : "Arguments for adding a user cannot be null or empty";
         if (user != null) {
             logger.warning("Attempted to add a new user when one already exists.");
-            throw new FinanceProPlusException("A user already exists. Delete user before adding a new one.");
+            throw new FinanceProPlusException("A user already exists. Edit user to update information.");
         }
         user = new User(arguments);
         logger.info("User added: " + user.toString());
@@ -96,5 +96,20 @@ public class UserList implements ListContainer {
         }
         return rows;
     }
+
+    public boolean hasUser() {
+        return user != null;
+    }
+
+    public void editUser(String arguments) throws FinanceProPlusException {
+        assert arguments != null && !arguments.trim().isEmpty() : "Arguments for edit cannot be null or empty";
+        User newUser = new User(arguments);
+        logger.info("User updated from: " + (user == null ? "None" : user.toString()) + " to: " + newUser.toString());
+        user = newUser;
+
+
+        System.out.println(user.toString());
+    }
+
 
 }

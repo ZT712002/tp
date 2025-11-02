@@ -3,7 +3,6 @@ package seedu.duke.parser;
 import org.junit.jupiter.api.Test;
 import seedu.duke.command.AddCommand;
 import seedu.duke.command.Command;
-import seedu.duke.command.DeleteCommand;
 import seedu.duke.command.ListCommand;
 import seedu.duke.exception.FinanceProPlusException;
 
@@ -20,12 +19,6 @@ public class UserParserTest {
         assertInstanceOf(AddCommand.class, command);
     }
 
-    @Test
-    void executeAndCreateCommand_validDeleteCommand_returnsDeleteCommand() throws FinanceProPlusException {
-        UserParser parser = new UserParser("user", "delete 1");
-        Command command = parser.executeAndCreateCommand();
-        assertInstanceOf(DeleteCommand.class, command);
-    }
 
     @Test
     void executeAndCreateCommand_validViewCommand_returnsListCommand() throws FinanceProPlusException {
@@ -47,7 +40,7 @@ public class UserParserTest {
         UserParser parser = new UserParser("user", "update n/John e/john@example.com p/91234567 r/REP003");
         FinanceProPlusException exception = assertThrows(FinanceProPlusException.class,
                 parser::executeAndCreateCommand);
-        assertEquals("Invalid user command subtype. Please use one of:'add', 'delete', or 'view'.",
+        assertEquals("Invalid user command subtype. Please use one of:'add', 'edit', or 'view'.",
                 exception.getMessage());
     }
 
