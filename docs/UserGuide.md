@@ -496,7 +496,7 @@ If no user exists, a message will indicate that the user profile is empty.
 
 Updates the existing user profile with new details. 
 
-* **Command:** `user edit`
+* Command: `user edit`
 
 
 #### **Exiting the Application**
