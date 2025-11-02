@@ -284,7 +284,8 @@ public class ClientList implements ListContainer {
         try {
             if (argsMap.containsKey("s")) {
                 LocalDate newStartDate = LocalDate.parse(argsMap.get("s").get(0), ClientPolicy.DATE_FORMATTER);
-                if (!clientPolicy.getStartDate().equals(newStartDate)) {
+                if (newStartDate == null ||
+                        !clientPolicy.getStartDate().equals(newStartDate)) {
                     clientPolicy.setStartDate(newStartDate);
                     isUpdated = true;
                 }
@@ -292,7 +293,8 @@ public class ClientList implements ListContainer {
 
             if (argsMap.containsKey("e")) {
                 LocalDate newExpiryDate = LocalDate.parse(argsMap.get("e").get(0), ClientPolicy.DATE_FORMATTER);
-                if (!clientPolicy.getExpiryDate().equals(newExpiryDate)) {
+                if (newExpiryDate == null ||
+                        !clientPolicy.getExpiryDate().equals(newExpiryDate)) {
                     clientPolicy.setExpiryDate(newExpiryDate);
                     isUpdated = true;
                 }
