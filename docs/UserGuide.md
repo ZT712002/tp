@@ -304,12 +304,13 @@ This command displays all scheduled meetings with their details, listed with num
 *   **Command:** `meeting list`
 
 *   **Example:**
+
     ```
     Here are the meetings in your list:
     1. Title: Policy Review, Client: John Doe, Date: 30-10-2025, Time: 14:00 to 16:00
     2. Title: Initial Consultation, Client: Jane Smith, Date: 05-11-2025, Start Time: 10:30
     ```
-
+    
 #### **3. Deleting a Meeting**
 
 This command permanently removes a meeting from your schedule.
