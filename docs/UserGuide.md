@@ -546,11 +546,11 @@ Updates the existing user profile with new details.
 
 #### User Management
 
-| Command     | Description                                                 | Syntax / Arguments                                       | Example                                                      |
-|:------------|:------------------------------------------------------------|:---------------------------------------------------------|:-------------------------------------------------------------|
-| `user add`  | Registers the current financial advisor (only one allowed). | `user add n/<NAME> e/<EMAIL> c/<CONTACT> r/<REP_NUMBER>` | `user add n/Alex Tan e/alex@example.com c/91234567 r/FA-001` |
-| `user view` | Displays details of the current user.                       | `user view`                                              | `user view`                                                  |
-| `user edit` | Edits the existing user record.                             | `user edit`                                              | `user edit`                                                  |
+| Command     | Description                                                 | Syntax / Arguments                                       | Example                                                          |
+|:------------|:------------------------------------------------------------|:---------------------------------------------------------|:-----------------------------------------------------------------|
+| `user add`  | Registers the current financial advisor (only one allowed). | `user add n/<NAME> e/<EMAIL> c/<CONTACT> r/<REP_NUMBER>` | `user add n/Alex Tan e/alex@example.com c/91234567 r/FA-001`     |
+| `user view` | Displays details of the current user.                       | `user view`                                              | `user view`                                                      |
+| `user edit` | Edits the existing user record.                             | `user edit`                                              | `user edit n/Alex Tan e/alex123@example.com c/91234576 r/FA-001` |
 
 #### Policy Management
 
