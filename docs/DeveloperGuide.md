@@ -67,7 +67,7 @@ All saved data resides within a single primary directory:
 | Policy           | `data/policy.txt`              | `data/policy.txt`                 |
 | Meeting          | `data/meeting.txt`             | `data/meeting.txt`                |
 | Client Todos     | `data/client_tasks/<NRIC>.txt` | `data/client_tasks/S1234567A.txt` |
-| Task             | `data/task.txt`                | `data/task.txt`                   |
+| Task             | `task.txt`                     | `task.csv`                        |
 
 
 #### Client Task Storage Design (`client_tasks/` Folder)
