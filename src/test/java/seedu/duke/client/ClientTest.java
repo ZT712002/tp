@@ -11,7 +11,6 @@ import seedu.duke.policy.PolicyList;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.List;
 
@@ -58,37 +57,34 @@ class   ClientTest {
 
     @Test
     void constructor_validArgsWithExistingPolicy_clientCreatedWithPolicy() throws FinanceProPlusException {
-        String args = "n/Jane Doe c/87654321 id/S9876543B p/1234";
+        String args = "n/Jane Doe c/87654321 id/S9876543B";
         Client client = new Client(args, mainPolicyList);
 
         assertNotNull(client);
         assertEquals("Jane Doe", client.getName());
         assertEquals("S9876543B", client.getNric());
-        assertFalse(client.getClientPolicyList().getPolicyList().isEmpty());
-        ArrayList<Policy> clientPolicies = client.getClientPolicyList().getPolicyList();
-        assertEquals(1, clientPolicies.size());
-        assertTrue(client.hasPolicy("1234"));
+
     }
 
     @Test
     void constructor_missingName_throwsException() {
         String args = "c/12345678 id/S1234567A";
         FinanceProPlusException e = assertThrows(FinanceProPlusException.class, () -> new Client(args, mainPolicyList));
-        assertTrue(e.getMessage().contains("Required fields are missing"));
+        assertTrue(e.getMessage().contains("Invalid format"));
     }
 
     @Test
     void constructor_missingContact_throwsException() {
         String args = "n/John Doe id/S1234567A";
         FinanceProPlusException e = assertThrows(FinanceProPlusException.class, () -> new Client(args, mainPolicyList));
-        assertTrue(e.getMessage().contains("Required fields are missing"));
+        assertTrue(e.getMessage().contains("Invalid format"));
     }
 
     @Test
     void constructor_missingNric_throwsException() {
         String args = "n/John Doe c/12345678";
         FinanceProPlusException e = assertThrows(FinanceProPlusException.class, () -> new Client(args, mainPolicyList));
-        assertTrue(e.getMessage().contains("Required fields are missing"));
+        assertTrue(e.getMessage().contains("Invalid format"));
     }
 
     @Test
@@ -99,20 +95,6 @@ class   ClientTest {
     }
 
 
-
-    @Test
-    void constructor_nonExistentPolicy_throwsException() {
-        String args = "n/Jane Doe c/87654321 id/S9876543B p/NonExistent Policy";
-        FinanceProPlusException e = assertThrows(FinanceProPlusException.class, () -> new Client(args, mainPolicyList));
-        assertTrue(e.getMessage().contains("does not exist"));
-    }
-
-    @Test
-    void constructor_emptyPolicyName_throwsException() {
-        String args = "n/Jane Doe c/87654321 id/S9876543B p/";
-        FinanceProPlusException e = assertThrows(FinanceProPlusException.class, () -> new Client(args, mainPolicyList));
-        assertTrue(e.getMessage().contains("Policy number (p/) cannot be empty"));
-    }
 
     @Test
     void constructor_nullArguments_throwsAssertionError() {
@@ -134,7 +116,6 @@ class   ClientTest {
         assertEquals("John Doe", detailsMap.get("n").get(0));
         assertEquals("12345678", detailsMap.get("c").get(0));
         assertEquals("S1234567A", detailsMap.get("id").get(0));
-        assertEquals("1234", detailsMap.get("p").get(0));
     }
 
     @Test
@@ -182,7 +163,7 @@ class   ClientTest {
 
     @Test
     void addPolicy_newPolicy_addsSuccessfully() throws FinanceProPlusException {
-        Client client = new Client("n/Test c/11124567 id/T111", mainPolicyList);
+        Client client = new Client("n/Test c/11124567 id/T1111111A", mainPolicyList);
         assertTrue(client.getClientPolicyList().getPolicyList().isEmpty());
 
         Policy lifePolicyInfo = ((PolicyList) mainPolicyList).findPolicyByName("1234");
@@ -193,28 +174,10 @@ class   ClientTest {
         assertTrue(client.hasPolicy("1234"));
     }
 
-    @Test
-    void addPolicy_existingPolicy_doesNotAddDuplicate() throws FinanceProPlusException {
-        Client client = new Client("n/Test c/1112 6789 id/T111 p/1234", mainPolicyList);
-        assertEquals(1, client.getClientPolicyList().getPolicyList().size());
-
-        Policy lifePolicyInfo = ((PolicyList) mainPolicyList).findPolicyByName("1234");
-        ClientPolicy clientLifePolicy = new ClientPolicy(lifePolicyInfo);
-
-        // Attempt to add the same policy again
-        client.addPolicy(clientLifePolicy);
-        assertEquals(1, client.getClientPolicyList().getPolicyList().size());
-    }
-
-    @Test
-    void hasPolicy_policyExists_returnsTrue() throws FinanceProPlusException {
-        Client client = new Client("n/Test c/1112 3456 id/T111 p/1234", mainPolicyList);
-        assertTrue(client.hasPolicy("1234"));
-    }
 
     @Test
     void hasPolicy_policyDoesNotExist_returnsFalse() throws FinanceProPlusException {
-        Client client = new Client("n/Test c/1112 4567 id/T111", mainPolicyList);
+        Client client = new Client("n/Test c/1112 4567 id/T1111111A", mainPolicyList);
         assertFalse(client.hasPolicy("1234"));
     }
 
@@ -225,38 +188,28 @@ class   ClientTest {
         assertEquals(expected, client.toString());
     }
 
-    @Test
-    void toString_clientWithPolicies_returnsCorrectString() throws FinanceProPlusException {
-        Client client = new Client("n/Jane Doe c/87654321 id/S9876543B p/1234", mainPolicyList);
-        String clientString = client.toString();
-        assertTrue(clientString.contains("Name: Jane Doe"));
-        assertTrue(clientString.contains("ID: S9876543B"));
-        assertTrue(clientString.contains("Contact: 87654321"));
-    }
 
     @Test
     void viewDetails_clientWithNoPolicies_printsCorrectly() throws FinanceProPlusException {
-        Client client = new Client("n/View Test c/9999 1111 id/V999", mainPolicyList);
+        Client client = new Client("n/View Test c/9999 1111 id/V9999991A", mainPolicyList);
         client.viewDetails();
         String output = outContent.toString();
 
         assertTrue(output.contains("Name: View Test"));
-        assertTrue(output.contains("NRIC: V999"));
+        assertTrue(output.contains("NRIC: V9999991A"));
         assertTrue(output.contains("Contact: 999"));
         assertTrue(output.contains("This client currently has no policies."));
     }
 
     @Test
     void viewDetails_clientWithPolicies_printsCorrectly() throws FinanceProPlusException {
-        Client client = new Client("n/View Test c/9991 2345 id/V999 p/1234", mainPolicyList);
+        Client client = new Client("n/View Test c/9991 2345 id/V9999991A", mainPolicyList);
         client.viewDetails();
         String output = outContent.toString();
 
         assertTrue(output.contains("Name: View Test"));
-        assertTrue(output.contains("NRIC: V999"));
+        assertTrue(output.contains("NRIC: V9999991A"));
         assertTrue(output.contains("Contact: 999"));
-        assertTrue(output.contains("--- Policies ---"));
-        assertTrue(output.contains("1. Policy Name: 1234"));
     }
 
 

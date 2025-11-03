@@ -151,14 +151,14 @@ public class PolicyList implements ListContainer {
     }
     public Policy findPolicyByName(String policyName) throws FinanceProPlusException {
         assert policies != null : "Policies list must be initialized";
-        
         if (policyName == null || policyName.isEmpty()) {
             throw new FinanceProPlusException("Internal Error: Policy name to find cannot be null or empty.");
         }
         for (Policy policy : this.policies) {
             assert policy != null : "Policy in list cannot be null";
             assert policy.getName() != null : "Policy name cannot be null";
-            if (policy.getName().equals(policyName)) {
+            String lowerCaseName = policy.getName().toLowerCase();
+            if (lowerCaseName.equals(policyName.toLowerCase())) {
                 return policy;
             }
         }

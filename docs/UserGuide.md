@@ -30,25 +30,21 @@ This guide provides a complete reference for all commands related to the `client
 
 #### **1. Adding a New Client**
 
-This command creates a new client record. The policy is optional and, if included, will be created as a "placeholder" that you can detail later using the `updatepolicy` command.
+This command creates a new client record. 
 
-*   **Command:** `client add n/<NAME> c/<CONTACT> id/<NRIC> [p/<POLICY_NAME>]`
+*   **Command:** `client add n/<NAME> c/<CONTACT> id/<NRIC>`
 
 *   **Arguments:**
     *   `n/<NAME>`: **Required.** The full name of the client.
     *   `c/<CONTACT>`: **Required.** The client's phone number. Must be 8 digits long.
     *   `id/<NRIC>`: **Required.** The client's unique NRIC number (acts as a primary key).
-    *   `p/<POLICY_NAME>`: *Optional.* The name of a base policy to assign to the client as a placeholder. The policy must already exist in the main policy list.
-
+    
 *   **Examples:**
-    *   To add a client without an initial policy:
+    *   To add a client:
         ```
         client add n/John Doe c/87654321 id/S1234567A
         ```
-    *   To add a client and immediately assign a placeholder policy named "HealthShield":
-        ```
-        client add n/Jane Smith c/11223344 id/G7654321B p/HealthShield
-        ```
+
 
 #### **2. Viewing a Client's Full Details**
 
@@ -523,16 +519,16 @@ Exits the Application
 
 #### Client Management
 
-| Command          | Description | Syntax / Arguments                                            | Example                                |
-|:-----------------| :--- |:--------------------------------------------------------------|:---------------------------------------|
-| `client add`     | Creates a new client record. | `client add n/<NAME> c/<CONTACT> id/<NRIC> [p/<POLICY_NAME>]` | `client add n/John Doe c/123 id/S123A` |
-| `client view`    | Displays full details for one client (policies, to-dos). | `client view id/<NRIC>`                                       | `client view id/S123A`                 |
-| `list client`    | Shows a summary of all clients with their index numbers. | `list client`                                                 | `list client`                          |
-| `client delete`  | Removes a client by index (use `list client` first). | `client delete <INDEX>`                                       | `client delete 1`                      |
-| `client search`  | Searches for a client by NRIC and displays basic info. | `client search <NRIC>`                                        | `client search S123A`                  |
-| `client archive` | Moves a client to archived list by index. | `client archive <INDEX>`                                      | `client archive 1`                     |
-| `client restore` | Restores an archived client by index. | `client restore <INDEX>`                                      | `client restore 1`                     |
-| `list archived`  | Shows all archived clients with indices. | `list archived`                                               | `list archived`                        |
+| Command          | Description | Syntax / Arguments                                           | Example                                |
+|:-----------------| :--- |:-------------------------------------------------------------|:---------------------------------------|
+| `client add`     | Creates a new client record. | `client add n/<NAME> c/<CONTACT> id/<NRIC>`                  | `client add n/John Doe c/123 id/S123A` |
+| `client view`    | Displays full details for one client (policies, to-dos). | `client view id/<NRIC>`                                      | `client view id/S123A`                 |
+| `list client`    | Shows a summary of all clients with their index numbers. | `list client`                                                | `list client`                          |
+| `client delete`  | Removes a client by index (use `list client` first). | `client delete <INDEX>`                                      | `client delete 1`                      |
+| `client search`  | Searches for a client by NRIC and displays basic info. | `client search <NRIC>`                                       | `client search S123A`                  |
+| `client archive` | Moves a client to archived list by index. | `client archive <INDEX>`                                     | `client archive 1`                     |
+| `client restore` | Restores an archived client by index. | `client restore <INDEX>`                                     | `client restore 1`                     |
+| `list archived`  | Shows all archived clients with indices. | `list archived`                                              | `list archived`                        |
 
 #### Client Policy Management
 

@@ -15,9 +15,8 @@ import java.time.format.DateTimeParseException;
 import java.math.BigDecimal;
 
 public class ClientList implements ListContainer {
-    private static final String ADD_CLIENT_FORMAT = "Correct format: client add n/<NAME> c/<CONTACT> id/<NRIC> " +
-            "[p/<POLICY_NAME>]";
     private static final String DELETE_CLIENT_FORMAT = "Correct format: client delete <INDEX>";
+    private static final String ADD_CLIENT_FORMAT = "Correct format: client add n/<NAME> c/<CONTACT> id/<NRIC> ";
     private static final String ADD_POLICY_FORMAT = "Correct format: client addpolicy id/<NRIC> p/<POLICY_NAME> " +
             "s/<START_DATE> e/<EXPIRY_DATE> m/<PREMIUM>";
     private static final String UPDATE_POLICY_FORMAT = "Correct format: client updatepolicy id/<NRIC> p/<POLICY_NAME>" +
@@ -73,12 +72,9 @@ public class ClientList implements ListContainer {
             throw new FinanceProPlusException("Invalid command format or missing required fields.\n" + ADD_CLIENT_FORMAT
                     + "\nWhere [] are optional fields.");
         }
-        if (!Client.isValidNric(nric)) {
-            throw new FinanceProPlusException("Invalid NRIC. The format must be a letter, followed by " +
-                    "7 digits, and another letter (e.g., T1234567A)." + ADD_CLIENT_FORMAT);
-        }
-        if (findClientByNric(nric) != null) {
-            throw new FinanceProPlusException("A client with NRIC '" + nric + "' already exists.");
+        String sanitizedNric = nric.replaceAll("\\s+", "");
+        if (findClientByNric(sanitizedNric) != null) {
+            throw new FinanceProPlusException("A client with NRIC '" + nric.toUpperCase() + "' already exists.");
         }
         Client client = new Client(arguments, policyList);
         addClient(client);
@@ -131,7 +127,8 @@ public class ClientList implements ListContainer {
 
     public Client findClientByNric(String nric) throws FinanceProPlusException {
         if (nric == null || nric.isEmpty()) {
-            throw new FinanceProPlusException("Error: NRIC to find cannot be null or empty. Make sure id/ isn't empty");
+            throw new FinanceProPlusException("Error: NRIC to find cannot be null or empty. Make sure id/ isn't empty\n"
+            + ADD_CLIENT_FORMAT);
         }
         String upperCaseNricToFind = nric.toUpperCase();
         for (Client client : this.clients) {
@@ -208,7 +205,8 @@ public class ClientList implements ListContainer {
     private Policy validateAndGetBasePolicy(Client client, ListContainer mainPolicyList, String basePolicyName)
             throws FinanceProPlusException {
         PolicyList companyPolicies = (PolicyList) mainPolicyList;
-        Policy basePolicy = companyPolicies.findPolicyByName(basePolicyName);
+        String lowerCaseBasePolicyName = basePolicyName.toLowerCase();
+        Policy basePolicy = companyPolicies.findPolicyByName(lowerCaseBasePolicyName);
         if (basePolicy == null) {
             throw new FinanceProPlusException("Error: Base policy '" + basePolicyName
                     + "' not found in the main list.");

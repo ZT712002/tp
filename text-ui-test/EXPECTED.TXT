@@ -23,33 +23,13 @@ Name: 1233, Details: Full medical coverage with dental
 Added successfully!
 ----------------------------------------------------
 > Invalid command subtype, Please try again
-> Noted. I've added this client:
-Name: Zendne, ID: T0329123L, Contact: 12345678
-Added successfully!
-----------------------------------------------------
-> Noted. I've added this client:
-Name: nednez, ID: T0329103L, Contact: 12345678
-Added successfully!
-----------------------------------------------------
-> Invalid date format. Please use dd-MM-yyyy.
-> -------------------------------------
-         Client Details
--------------------------------------
-Name: Zendne
-NRIC: T0329123L
-Contact: 12345678
-
---- Policies ---
-1. Policy Name: 1234
-    - Monthly Premium: Not set
-    - Start Date: Not set
-    - Expiry Date: Not set
-
---- To-Dos ---
-No tasks found.
-----------------------------------------------------
-> Noted. I've removed this client:
-Name: Zendne, ID: T0329123L, Contact: 12345678
+> Invalid format. The 'client add' command must contain exactly n/, c/, and id/ parameters.
+Correct format: client add n/<NAME> c/<CONTACT> id/<NRIC>
+> Invalid format. The 'client add' command must contain exactly n/, c/, and id/ parameters.
+Correct format: client add n/<NAME> c/<CONTACT> id/<NRIC>
+> Error: Client with NRIC 'T0329123L' not found.
+> Error: Client with NRIC 'T0329123L' not found.
+> No clients to delete.
 ----------------------------------------------------
 > Noted. I've added this meeting:
 Title: TEST, Client: FOO, Date: 18-02-2025, Time: 10:00 to 14:30
@@ -57,8 +37,7 @@ Added successfully!
 ----------------------------------------------------
 > Here are the meetings in your list:
 1. Title: TEST, Client: FOO, Date: 18-02-2025, Time: 10:00 to 14:30
-> Here are the clients in your list:
-1. Name: nednez, ID: T0329103L, Contact: 12345678
+> No clients found.
 > Here are the policies in your list:
 1. Name: 1234, Details: Comprehensive life insurance with 500k coverage
 2. Name: 1233, Details: Full medical coverage with dental

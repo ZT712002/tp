@@ -75,13 +75,12 @@ class ClientListTest {
             FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
                     () -> clientList.addItem(args, mainPolicyList));
             assertEquals("Invalid command format or missing required fields.\n" +
-                    "Correct format: client add n/<NAME> c/<CONTACT> id/<NRIC> [p/<POLICY_NAME>]\n" +
-                    "Where [] are optional fields.", e.getMessage());
+                    "Correct format: client add n/<NAME> c/<CONTACT> id/<NRIC> "+
+                    "\nWhere [] are optional fields.", e.getMessage());
         }
 
         @Test
         void addItem_unimplementedMethod_throwsException() {
-            // FIX: Updated the expected exception message to be more accurate
             FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
                     () -> clientList.addItem("some args"));
             assertEquals("This method is not implemented for client list", e.getMessage());
@@ -230,7 +229,6 @@ class ClientListTest {
 
         @Test
         void updatePolicyForClient_validArgs_updatesSuccessfully() throws FinanceProPlusException {
-            // FIX: Your updatePolicy method requires all three fields (s, e, m)
             String updateArgs = "id/T1111111A p/1233 s/01-01-2023 e/31-12-2025 m/200.00";
             clientList.updatePolicyForClient(updateArgs);
 
@@ -310,7 +308,8 @@ class ClientListTest {
             String args = "n/Some Name";
             FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
                     () -> clientList.getClientByID(args));
-            assertEquals("Error: NRIC to find cannot be null or empty. Make sure id/ isn't empty", e.getMessage());
+            assertEquals("Error: NRIC to find cannot be null or empty. Make sure id/ isn't empty" +
+                    "\nCorrect format: client add n/<NAME> c/<CONTACT> id/<NRIC> ", e.getMessage());
         }
 
         @Test
@@ -318,7 +317,8 @@ class ClientListTest {
             String args = "id/";
             FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
                     () -> clientList.getClientByID(args));
-            assertEquals("Error: NRIC to find cannot be null or empty. Make sure id/ isn't empty", e.getMessage());
+            assertEquals("Error: NRIC to find cannot be null or empty. Make sure id/ isn't empty" +
+                    "\nCorrect format: client add n/<NAME> c/<CONTACT> id/<NRIC> ", e.getMessage());
         }
 
         @Test
@@ -364,7 +364,6 @@ class ClientListTest {
             clientList.deletePolicyForClient(deleteArgs);
 
             assertEquals(1, testClient.getClientPolicyList().getPolicyList().size());
-            // FIX: Use assertFalse for clearer intent
             assertFalse(testClient.hasPolicy("1234"));
             assertTrue(testClient.hasPolicy("1233"));
         }
@@ -382,8 +381,6 @@ class ClientListTest {
             String deleteArgs = "id/" + clientNric + " i/3";
             FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
                     () -> clientList.deletePolicyForClient(deleteArgs));
-            // FIX: This error comes from PolicyList's deleteItem, which may have a different message
-            // Let's check for a general invalid index message
             assertTrue(e.getMessage().toLowerCase().contains("invalid index"));
         }
 
