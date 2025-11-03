@@ -19,15 +19,14 @@ It's a CRM that works at your pace, not the other way around.
 5. Refer to the [Features](#features) or [Command Summary](#command-summary)
 ## Features
 
-### Client Features
-
-This guide provides a complete reference for all commands related to the `client` entity. The commands are designed for rapid data entry and retrieval, allowing you to manage your client portfolio entirely from the keyboard.
-
 ### Command Syntax Legend
 
 Before we begin, here is the syntax used in this guide:
 *   `<VALUE>`: A placeholder for a value you must provide (e.g., `<NRIC>`).
 *   `[...]`: Denotes an optional argument or group of arguments.
+### Client Features
+
+This guide provides a complete reference for all commands related to the `client` entity. The commands are designed for rapid data entry and retrieval, allowing you to manage your client portfolio entirely from the keyboard.
 
 #### **1. Adding a New Client**
 
@@ -39,7 +38,7 @@ This command creates a new client record. The policy is optional and, if include
     *   `n/<NAME>`: **Required.** The full name of the client.
     *   `c/<CONTACT>`: **Required.** The client's phone number.
     *   `id/<NRIC>`: **Required.** The client's unique NRIC number (acts as a primary key).
-    *   `p/<POLICY_NAME>`: *Optional.* The name of a base policy to assign to the client as a placeholder. The policy must already exist in the main policy list. Only 1 policy can be added in this command.
+    *   `p/<POLICY_NAME>`: *Optional.* The name of a base policy to assign to the client as a placeholder. The policy must already exist in the main policy list.
 
 *   **Examples:**
     *   To add a client without an initial policy:
@@ -177,67 +176,6 @@ This command displays all archived clients with their basic information, listed 
     ```
     list archived
     ```
-
----
-
-### Managing Client Policies
-
-These commands allow you to manage the specific insurance contracts associated with a client.
-
-#### **1. Adding a Detailed Policy to a Client**
-
-This command adds a new, fully detailed insurance contract to an existing client.
-
-*   **Command:** `client addpolicy id/<NRIC> p/<POLICY_NAME> s/<START_DATE> e/<EXPIRY_DATE> m/<PREMIUM>`
-
-*   **Arguments:**
-    *   `id/<NRIC>`: **Required.** The NRIC of the client.
-    *   `p/<POLICY_NAME>`: **Required.** The name of the base policy (must exist).
-    *   `s/<START_DATE>`: **Required.** The contract start date in `dd-MM-yyyy` format.
-    *   `e/<EXPIRY_DATE>`: **Required.** The contract expiry date in `dd-MM-yyyy` format.
-    *   `m/<PREMIUM>`: **Required.** The monthly premium amount (e.g., `150.75`).
-
-*   **Example:**
-    ```
-    client addpolicy id/S1234567A p/HealthShield s/14-09-2024 e/14-09-2026 m/250.50
-    ```
-
-#### **2. Updating a Client's Policy**
-
-This command modifies the details of an existing policy contract for a client. You only need to provide the fields you wish to change.
-
-*   **Command:** `client updatepolicy id/<NRIC> p/<POLICY_NAME> [s/<NEW_DATE>] [e/<NEW_DATE>] [m/<NEW_PREMIUM>]`
-
-*   **Arguments:**
-    *   `id/<NRIC>` & `p/<POLICY_NAME>`: **Required** identifiers.
-    *   `s/`, `e/`, `m/`: *Optional.* Provide at least one of these to update. Dates must be in `dd-MM-yyyy` format.
-
-*   **Example:**
-    *   To update only the premium and expiry date for Jane's "PremiumLife" policy:
-        ```
-        client updatepolicy id/G7654321B p/PremiumLife e/21-10-2060 m/375.00
-        ```
-
-#### **3. Deleting a Policy from a Client**
-
-This command removes a specific policy contract from a client without deleting the client themselves.
-
-*   **Command:** `client deletepolicy id/<NRIC> i/<INDEX>`
-
-*   **Arguments:**
-    *   `id/<NRIC>`: **Required.** The NRIC of the client.
-    *   `i/<INDEX>`: **Required.** The numerical index of the policy to delete. **You must run `client view id/<NRIC>` first to see the numbered list of policies and find the correct index.**
-
-*   **Workflow Example:**
-    1.  First, view the client to see their policies:
-        ```
-        client view id/G7654321B
-        ```        *(Output might show "1. Policy Name: HealthShield", "2. Policy Name: PremiumLife")*
-
-    2.  Then, use the policy's index to delete it:
-        ```
-        client deletepolicy id/G7654321B i/1
-        ```
 
 ---
 
@@ -401,6 +339,66 @@ This command permanently removes a policy template from the system. Note that th
     2.  Then, use that index to delete the policy:
         ```
         policy delete 1
+        ```
+
+---
+### Managing Client Policies
+
+These commands allow you to manage the specific insurance contracts associated with a client.
+
+#### **1. Adding a Detailed Policy to a Client**
+
+This command adds a new, fully detailed insurance contract to an existing client.
+
+*   **Command:** `client addpolicy id/<NRIC> p/<POLICY_NAME> s/<START_DATE> e/<EXPIRY_DATE> m/<PREMIUM>`
+
+*   **Arguments:**
+    *   `id/<NRIC>`: **Required.** The NRIC of the client.
+    *   `p/<POLICY_NAME>`: **Required.** The name of the base policy (must exist).
+    *   `s/<START_DATE>`: **Required.** The contract start date in `dd-MM-yyyy` format.
+    *   `e/<EXPIRY_DATE>`: **Required.** The contract expiry date in `dd-MM-yyyy` format.
+    *   `m/<PREMIUM>`: **Required.** The monthly premium amount (e.g., `150.75`).
+
+*   **Example:**
+    ```
+    client addpolicy id/S1234567A p/HealthShield s/14-09-2024 e/14-09-2026 m/250.50
+    ```
+
+#### **2. Updating a Client's Policy**
+
+This command modifies the details of an existing policy contract for a client. You only need to provide the fields you wish to change.
+
+*   **Command:** `client updatepolicy id/<NRIC> p/<POLICY_NAME> [s/<NEW_DATE>] [e/<NEW_DATE>] [m/<NEW_PREMIUM>]`
+
+*   **Arguments:**
+    *   `id/<NRIC>` & `p/<POLICY_NAME>`: **Required** identifiers.
+    *   `s/`, `e/`, `m/`: *Optional.* Provide at least one of these to update. Dates must be in `dd-MM-yyyy` format.
+
+*   **Example:**
+    *   To update only the premium and expiry date for Jane's "PremiumLife" policy:
+        ```
+        client updatepolicy id/G7654321B p/PremiumLife e/21-10-2060 m/375.00
+        ```
+
+#### **3. Deleting a Policy from a Client**
+
+This command removes a specific policy contract from a client without deleting the client themselves.
+
+*   **Command:** `client deletepolicy id/<NRIC> i/<INDEX>`
+
+*   **Arguments:**
+    *   `id/<NRIC>`: **Required.** The NRIC of the client.
+    *   `i/<INDEX>`: **Required.** The numerical index of the policy to delete. **You must run `client view id/<NRIC>` first to see the numbered list of policies and find the correct index.**
+
+*   **Workflow Example:**
+    1.  First, view the client to see their policies:
+        ```
+        client view id/G7654321B
+        ```        *(Output might show "1. Policy Name: HealthShield", "2. Policy Name: PremiumLife")*
+
+    2.  Then, use the policy's index to delete it:
+        ```
+        client deletepolicy id/G7654321B i/1
         ```
 
 ---
