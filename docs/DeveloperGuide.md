@@ -381,10 +381,9 @@ When a command with the prefix "meeting forecast" is invoked by the user, here i
 
 ![Figure of Meeting Forecast Command SQ](./umldiagrams/meeting_sequence_diagram_Forecast.png)
 
-When the user issues the command "meeting forecast" the command is first passed through the UI class. The UI then calls for the Parser which determines the command type as "meeting" and creates a new MeetingParser instance with the command arguments.
-The MeetingParser processes the command by calling executeAndCreateCommand() method which identifies this as a forecast operation and instantiates a new ForecastCommand object. Control is returned to the UI, which then calls execute() on the ForecastCommand.
-The ForecastCommand invokes listForecast() on the MeetingList to retrieve the upcoming meetings. The MeetingList iterates through all the stored meetings, and calls getDate() on each Meeting object to verify if it falls within the next 7 days from the current date.
-The MeetingList then returns all valid results to the ForecastCommand which formats the output and returns it to the UI. The UI finally displays the forecast results to the user, showing all meetings scheduled for the upcoming week.
+When the user issues the command "meeting forecast" the command is first passed through the UI class. The UI then uses the Parser to determine the command type and create the ForecastCommand object through the Command Parsing Sequence (details omitted).
+UI object then calls execute() on the command. The ForecastCommand invokes listForecast() on the MeetingList to retrieve the upcoming meetings. The MeetingList iterates through all the stored meetings, and calls getDate() on each Meeting object to verify if it falls within the next 7 days from the current date.
+The MeetingList then returns all valid results to the ForecastCommand which formats the output and returns it to the UI. The UI then calls printExecutionMessage() on the ForecastCommand to get the formatted results and finally displays the forecast results to the user, showing all meetings scheduled for the upcoming week.
 
 ## Product scope
 ### Target user profile
