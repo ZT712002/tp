@@ -583,5 +583,6 @@ Exits the Application
 
 
 | Command | Description           | Syntax / Arguments | Example |
-| :------ | :-------------------- | :----------------- | :------ |
+|:--------|:----------------------|:-------------------|:--------|
 | `exit`  | Exits the application | `exit`             | `exit`  |
+| `help`  | Lists all commands    | `help`             | `help`  |

@@ -31,6 +31,11 @@ public class Parser {
             return new MeetingParser(commandType, commandArgs);
         case "task":
             return new TaskParser(commandType, commandArgs);
+        case "help":
+            if(!commandArgs.equals("")) {
+                throw new  FinanceProPlusException("Help Command does not have any arguments");
+            }
+            return new HelpParser();
         case "exit":
             if(!commandArgs.equals("")) {
                 throw new  FinanceProPlusException("Exit Command does not have any arguments");

@@ -196,7 +196,7 @@ public class Client {
         PolicyList clientPolicies = this.getClientPolicyList();
         Policy policyToRemove = null;
         for (Policy p : clientPolicies.getPolicyList()) {
-            if (p.getName().equals(policyName)) {
+            if (p.getName().equalsIgnoreCase(policyName)) {
                 policyToRemove = p;
                 break;
             }
