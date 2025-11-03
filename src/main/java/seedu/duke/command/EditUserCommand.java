@@ -22,8 +22,6 @@ public class EditUserCommand extends Command {
             userList.addItem(arguments);
             return;
         }
-
-        // Replace existing user without clearing other data
         System.out.println("Updating user details...");
         userList.editUser(arguments);
     }
