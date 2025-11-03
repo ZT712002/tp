@@ -60,14 +60,11 @@ public class FinanceProPlus {
                     try {
                         List<String> policyLines = storage.loadClientPolicies(c.getNric());
                         for (String line : policyLines) {
-
                             clients.addPolicyToClientSilent("id/"+c.getNric()+" " +line, policies);
                         }
                     } catch (Exception ex) {
                         logger.warning("Failed to load policy details for client "
                                 + c.getNric() + ": " + ex.getMessage());
-
-
                     }
                 } catch (Exception ex) {
                     logger.warning("Failed to load data for client " + c.getNric() + ": " + ex.getMessage());
