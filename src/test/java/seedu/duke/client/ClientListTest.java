@@ -76,7 +76,7 @@ class ClientListTest {
                     () -> clientList.addItem(args, mainPolicyList));
             assertEquals("Invalid command format or missing required fields.\n" +
                     "Correct format: client add n/<NAME> c/<CONTACT> id/<NRIC> "+
-            "\nWhere [] are optional fields.", e.getMessage());
+                    "\nWhere [] are optional fields.", e.getMessage());
         }
 
         @Test

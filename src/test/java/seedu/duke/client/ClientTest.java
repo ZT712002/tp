@@ -11,7 +11,6 @@ import seedu.duke.policy.PolicyList;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.List;
 
