@@ -4,12 +4,14 @@
     *   [Architecture](#architecture)
     *   [Storage Component](#storage-component)
     *   [Storage Initialization on Startup](#storage-initialization-on-startup)
+    *   [Parser Logic Flow](#parser-logic-flow)
     *   [LookUpTable Component](#lookuptable-component)
     *   [Client Features](#client-features)
     *   [Command Execution Flow: A Detailed Walkthrough](#command-execution-flow-a-detailed-walkthrough)
     *   [List Feature, Design and Implementation](#list-feature-design-and-implementation)
     *   [Task Management Feature](#task-management-feature)
     *   [Meeting Features](#meeting-features)
+    *   [Design Considerations and Principles](#design-considerations-and-principles)
 *   [Product scope](#product-scope)
     *   [Target user profile](#target-user-profile)
     *   [Value proposition](#value-proposition)
@@ -204,7 +206,7 @@ The parsing process is now complete. The UI holds a fully formed `AddCommand` ob
 ### Client Features
 To begin, here is a high level Class Diagram of Clients and its interaction with other classes:
 
-![Clients Class Diagram](./umldiagrams/client_manager_component.svg)
+![Clients Class Diagram](./umldiagrams/simplified_clientManagement.svg)
 
 The Client Management component is the core of handling customer data within the application. It is responsible for creating, storing, retrieving, updating, and archiving client profiles. The design separates active clients from archived clients and uses a common interface (ListContainer) to ensure consistent handling of data collections throughout the application.
 
@@ -369,6 +371,48 @@ When the user issues the command "meeting forecast" the command is first passed 
 The MeetingParser processes the command by calling executeAndCreateCommand() method which identifies this as a forecast operation and instantiates a new ForecastCommand object. Control is returned to the UI, which then calls execute() on the ForecastCommand.
 The ForecastCommand invokes listForecast() on the MeetingList to retrieve the upcoming meetings. The MeetingList iterates through all the stored meetings, and calls getDate() on each Meeting object to verify if it falls within the next 7 days from the current date.
 The MeetingList then returns all valid results to the ForecastCommand which formats the output and returns it to the UI. The UI finally displays the forecast results to the user, showing all meetings scheduled for the upcoming week.
+
+### Design Considerations and Principles
+Here are some principles we have used in developing this application.
+#### 1. Separation of Concerns (SoC)
+
+This is the most fundamental principle applied at a high level. The application is divided into distinct packages, each with a single, clear responsibility.
+
+*   **How it's used:**
+    *   `seedu.duke.parser`: Solely responsible for interpreting user input and converting it into executable commands. It knows nothing about data storage or business logic.
+    *   `seedu.duke.command`: Contains the command objects. Each command encapsulates a single user action (e.g., `AddCommand`, `DeleteCommand`) but delegates the actual work to the appropriate manager class.
+    *   `seedu.duke.client`, `seedu.duke.policy`, etc.: These packages contain the data models (e.g., `Client`) and their respective manager classes (e.g., `ClientList`). They handle all business logic and data manipulation.
+*   **Benefits:** This separation makes the codebase easier to navigate, debug, and extend. A change to the parsing logic will not affect how client data is stored, and vice versa.
+
+#### 2. Factory Pattern
+
+The parser mechanism is a classic example of the Factory Pattern. Its job is to create objects (in this case, `Command` objects) without exposing the creation logic to the client (the UI).
+
+*   **How it's used:**
+    *   The `Parser.selectParserType()` method acts as a factory. Based on the initial command word (e.g., `"client"`), it produces a specific sub-parser (`ClientParser`).
+    *   This sub-parser's `executeAndCreateCommand()` method then acts as a second factory, producing a specific `Command` object (e.g., `AddCommand`) based on the sub-command (e.g., `"add"`).
+*   **Benefits:** This decouples the UI from the concrete command classes. The UI only needs to know that it will receive a `Command` object that it can `execute()`. This makes it very easy to add new commands without changing the UI's code.
+
+#### 3. Composition over Inheritance
+
+This principle states that it is often better for a class to "have-a" relationship with another class (composition) than an "is-a" relationship (inheritance).
+
+*   **How it's used:**
+    *   A `Client` object **has a** `PolicyList` and a `TaskList`. We did not make `Client` *extend* `PolicyList`. This is a crucial distinction. A client is a distinct entity that *contains* policies; it is not a type of policy list itself.
+*   **Benefits:** This approach is far more flexible. It avoids the "fragile base class" problem and allows the `Client` class to be composed of various components without being locked into a rigid inheritance hierarchy. It also more accurately models the real-world relationship between a client and their assets.
+### Design Considerations
+#### 1. Singleton Pattern
+
+*   **What it is:** A pattern that ensures a class has only one instance and provides a global point of access to it. It might seem suitable for classes like `ClientList`.
+*   **Why it wasn't used:** Singletons can introduce global state, which makes unit testing more difficult. It's harder to provide a "mock" or "fake" `ClientList` for a test if the code always accesses the single global instance. Passing the `LookUpTable` around is a more explicit and test-friendly approach to dependency management.
+
+#### 2. Model-View-Controller (MVC) Architecture
+
+*   **What it is:** MVC is a popular architectural pattern for applications with user interfaces. It separates the application into three interconnected components:
+    *   **Model:** The core data and business logic (e.g., the `Client` class and `ClientList`).
+    *   **View:** The user interface that displays the data (e.g., the console output).
+    *   **Controller:** The component that takes user input and translates it into actions on the Model, then updates the View.
+*   **Why it wasn't used:** The full MVC pattern is best suited for complex graphical user interfaces (GUIs) where the View can be in many different states and needs to be updated in response to changes in the Model. For our simple, linear command-line interface (CLI), this level of separation is unnecessary overhead. The current "Parse-Command-Execute" loop is a more direct and efficient architecture for a CLI, where each command performs an action and immediately prints a result.
 
 ## Product scope
 ### Target user profile
