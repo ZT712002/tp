@@ -9,10 +9,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Handles saving and loading of program data to disk.
- * Supports both text storage (for internal persistence) and CSV export (for Excel viewing).
- */
 public class StorageManager {
 
     private static final String DATA_FOLDER = "data/";
@@ -130,13 +126,6 @@ public class StorageManager {
             return new ArrayList<>();
         }
         return Files.readAllLines(Path.of(file.getPath()));
-    }
-
-    public void deleteClientPoliciesFile(String nric) {
-        File file = new File(CLIENT_POLICIES_FOLDER + nric + ".txt");
-        if (file.exists()) {
-            file.delete();
-        }
     }
 
 }

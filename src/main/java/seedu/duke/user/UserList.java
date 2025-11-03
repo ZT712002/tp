@@ -41,15 +41,7 @@ public class UserList implements ListContainer {
 
     @Override
     public void deleteItem(String arguments) throws FinanceProPlusException {
-        if (user == null) {
-            System.out.println("No user to delete.");
-            return;
-        }
-        logger.info("User deleted: " + user.toString());
-        System.out.println("Noted. I've removed this user:");
-        System.out.println(user.toString());
-        user = null;
-        assert user == null : "User should be null after deletion";
+        throw new FinanceProPlusException("Not implemented for UserList class");
     }
 
     @Override
