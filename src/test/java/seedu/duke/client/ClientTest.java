@@ -184,7 +184,7 @@ class   ClientTest {
     @Test
     void toString_clientWithNoPolicies_returnsCorrectString() throws FinanceProPlusException {
         Client client = new Client("n/John Doe c/12345678 id/S1234567A", mainPolicyList);
-        String expected = "Name: John Doe, ID: S1234567A, Contact: 12345678";
+        String expected = "Name: John Doe, ID: S1234567A, Contact: 12345678, Policies: 0, To-Dos: 0";
         assertEquals(expected, client.toString());
     }
 
