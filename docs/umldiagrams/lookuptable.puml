@@ -14,7 +14,7 @@ interface ListContainer <<interface>> {
   + int checkDeleteIndex(String arguments)
 }
 
-class :ClientList implements ListContainer {
+class ClientList implements ListContainer {
   - ArrayList<Client> clients
   - <u>logger:Logger </u>
   + void addClient(Client client)
@@ -23,28 +23,28 @@ class :ClientList implements ListContainer {
   + void updatePolicyForClient(String args)
 }
 
-class :PolicyList implements ListContainer {
+class PolicyList implements ListContainer {
   - ArrayList<Policy> policies
   + void addPolicy(Policy policy)
   + Policy findPolicyByName(String policyName)
 }
 
-class :MeetingList implements ListContainer {
+class MeetingList implements ListContainer {
   - ArrayList<Meeting> meetings
   - <u>logger:Logger </u>
 }
 
-class :UserList implements ListContainer {
+class UserList implements ListContainer {
 
 }
 
-class :LookUpTable {
+class LookUpTable {
   - HashMap<String, ListContainer> map
   + ListContainer getList(String key)
 }
 
-":LookUpTable" *-- ":MeetingList"
-":LookUpTable" *-- ":UserList"
-":LookUpTable" *-- ":ClientList"
-":LookUpTable" *-- ":PolicyList"
+LookUpTable *-- MeetingList
+LookUpTable *-- UserList
+LookUpTable *-- ClientList
+LookUpTable *-- PolicyList
 @enduml
