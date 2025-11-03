@@ -37,7 +37,7 @@ This command creates a new client record.
 *   **Arguments:**
     *   `n/<NAME>`: **Required.** The full name of the client.
     *   `c/<CONTACT>`: **Required.** The client's phone number. Must be 8 digits long.
-    *   `id/<NRIC>`: **Required.** The client's unique NRIC number (acts as a primary key).
+    *   `id/<NRIC>`: **Required.** The client's unique NRIC number (acts as a primary key). Must be 1 Alphabet, followed by 7 digits, and another alphabet eg `S1234567A`.
     
 *   **Examples:**
     *   To add a client:
@@ -186,7 +186,7 @@ This command creates a new task and links it directly to a client.
 *   **Command:** `client addtodo id/<NRIC> d/<DESCRIPTION> by/<DUE_DATE>`
 
 *   **Arguments:**
-    *   `id/<NRIC>`: **Required.** The NRIC of the client.
+    *   `id/<NRIC>`: **Required.** The NRIC of the client. 
     *   `d/<DESCRIPTION>`: **Required.** The description of the task.
     *   `by/<DUE_DATE>`: **Required.** The due date in `dd-MM-yyyy` format.
 
@@ -521,11 +521,11 @@ Exits the Application
 
 | Command          | Description | Syntax / Arguments                                           | Example                                |
 |:-----------------| :--- |:-------------------------------------------------------------|:---------------------------------------|
-| `client add`     | Creates a new client record. | `client add n/<NAME> c/<CONTACT> id/<NRIC>`                  | `client add n/John Doe c/123 id/S123A` |
-| `client view`    | Displays full details for one client (policies, to-dos). | `client view id/<NRIC>`                                      | `client view id/S123A`                 |
+| `client add`     | Creates a new client record. | `client add n/<NAME> c/<CONTACT> id/<NRIC>`                  | `client add n/John Doe c/123 id/S1234567A` |
+| `client view`    | Displays full details for one client (policies, to-dos). | `client view id/<NRIC>`                                      | `client view id/S1234567A`                 |
 | `list client`    | Shows a summary of all clients with their index numbers. | `list client`                                                | `list client`                          |
 | `client delete`  | Removes a client by index (use `list client` first). | `client delete <INDEX>`                                      | `client delete 1`                      |
-| `client search`  | Searches for a client by NRIC and displays basic info. | `client search <NRIC>`                                       | `client search S123A`                  |
+| `client search`  | Searches for a client by NRIC and displays basic info. | `client search <NRIC>`                                       | `client search S1234567A`                  |
 | `client archive` | Moves a client to archived list by index. | `client archive <INDEX>`                                     | `client archive 1`                     |
 | `client restore` | Restores an archived client by index. | `client restore <INDEX>`                                     | `client restore 1`                     |
 | `list archived`  | Shows all archived clients with indices. | `list archived`                                              | `list archived`                        |
@@ -534,16 +534,16 @@ Exits the Application
 
 | Command | Description | Syntax / Arguments | Example |
 | :--- | :--- | :--- | :--- |
-| `client addpolicy` | Adds a new, detailed policy contract to a client. | `client addpolicy id/<NRIC> p/<POLICY> s/<dd-MM-yyyy> e/<dd-MM-yyyy> m/<PREMIUM>` | `client addpolicy id/S123A p/Health s/14-09-2024 e/14-09-2026 m/250.50` |
-| `client updatepolicy` | Modifies an existing policy contract for a client. | `client updatepolicy id/<NRIC> p/<POLICY> [s/...] [e/...] [m/...]` | `client updatepolicy id/S123A p/Health m/275.00` |
-| `client deletepolicy` | Removes a policy from a client by index (use `client view` first). | `client deletepolicy id/<NRIC> i/<INDEX>` | `client deletepolicy id/S123A i/1` |
+| `client addpolicy` | Adds a new, detailed policy contract to a client. | `client addpolicy id/<NRIC> p/<POLICY> s/<dd-MM-yyyy> e/<dd-MM-yyyy> m/<PREMIUM>` | `client addpolicy id/S1234567A p/Health s/14-09-2024 e/14-09-2026 m/250.50` |
+| `client updatepolicy` | Modifies an existing policy contract for a client. | `client updatepolicy id/<NRIC> p/<POLICY> [s/...] [e/...] [m/...]` | `client updatepolicy id/S1234567A p/Health m/275.00` |
+| `client deletepolicy` | Removes a policy from a client by index (use `client view` first). | `client deletepolicy id/<NRIC> i/<INDEX>` | `client deletepolicy id/S1234567A i/1` |
 
 #### Client Task (To-Do) Management
 
 | Command | Description | Syntax / Arguments | Example |
 | :--- | :--- | :--- | :--- |
-| `client addtodo` | Adds a new to-do task for a specific client. | `client addtodo id/<NRIC> d/<DESC> by/<dd-MM-yyyy>` | `client addtodo id/S123A d/Follow up claim by/30-11-2025` |
-| `client listtodos` | Lists all to-do tasks for a single client. | `client listtodos id/<NRIC>` | `client listtodos id/S123A` |
+| `client addtodo` | Adds a new to-do task for a specific client. | `client addtodo id/<NRIC> d/<DESC> by/<dd-MM-yyyy>` | `client addtodo id/S1234567A d/Follow up claim by/30-11-2025` |
+| `client listtodos` | Lists all to-do tasks for a single client. | `client listtodos id/<NRIC>` | `client listtodos id/S1234567A` |
 
 #### Meeting Management
 
