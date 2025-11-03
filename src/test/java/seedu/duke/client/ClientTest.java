@@ -182,7 +182,7 @@ class   ClientTest {
 
     @Test
     void addPolicy_newPolicy_addsSuccessfully() throws FinanceProPlusException {
-        Client client = new Client("n/Test c/111 id/T111", mainPolicyList);
+        Client client = new Client("n/Test c/11124567 id/T111", mainPolicyList);
         assertTrue(client.getClientPolicyList().getPolicyList().isEmpty());
 
         Policy lifePolicyInfo = ((PolicyList) mainPolicyList).findPolicyByName("1234");
@@ -195,7 +195,7 @@ class   ClientTest {
 
     @Test
     void addPolicy_existingPolicy_doesNotAddDuplicate() throws FinanceProPlusException {
-        Client client = new Client("n/Test c/111 id/T111 p/1234", mainPolicyList);
+        Client client = new Client("n/Test c/1112 6789 id/T111 p/1234", mainPolicyList);
         assertEquals(1, client.getClientPolicyList().getPolicyList().size());
 
         Policy lifePolicyInfo = ((PolicyList) mainPolicyList).findPolicyByName("1234");
@@ -208,20 +208,20 @@ class   ClientTest {
 
     @Test
     void hasPolicy_policyExists_returnsTrue() throws FinanceProPlusException {
-        Client client = new Client("n/Test c/111 id/T111 p/1234", mainPolicyList);
+        Client client = new Client("n/Test c/1112 3456 id/T111 p/1234", mainPolicyList);
         assertTrue(client.hasPolicy("1234"));
     }
 
     @Test
     void hasPolicy_policyDoesNotExist_returnsFalse() throws FinanceProPlusException {
-        Client client = new Client("n/Test c/111 id/T111", mainPolicyList);
+        Client client = new Client("n/Test c/1112 4567 id/T111", mainPolicyList);
         assertFalse(client.hasPolicy("1234"));
     }
 
     @Test
     void toString_clientWithNoPolicies_returnsCorrectString() throws FinanceProPlusException {
         Client client = new Client("n/John Doe c/12345678 id/S1234567A", mainPolicyList);
-        String expected = "Name: John Doe, ID: S1234567A, Contact: 12345678, Policies: ";
+        String expected = "Name: John Doe, ID: S1234567A, Contact: 12345678";
         assertEquals(expected, client.toString());
     }
 
@@ -232,12 +232,11 @@ class   ClientTest {
         assertTrue(clientString.contains("Name: Jane Doe"));
         assertTrue(clientString.contains("ID: S9876543B"));
         assertTrue(clientString.contains("Contact: 87654321"));
-        assertTrue(clientString.contains("1234"));
     }
 
     @Test
     void viewDetails_clientWithNoPolicies_printsCorrectly() throws FinanceProPlusException {
-        Client client = new Client("n/View Test c/999 id/V999", mainPolicyList);
+        Client client = new Client("n/View Test c/9999 1111 id/V999", mainPolicyList);
         client.viewDetails();
         String output = outContent.toString();
 
@@ -249,7 +248,7 @@ class   ClientTest {
 
     @Test
     void viewDetails_clientWithPolicies_printsCorrectly() throws FinanceProPlusException {
-        Client client = new Client("n/View Test c/999 id/V999 p/1234", mainPolicyList);
+        Client client = new Client("n/View Test c/9991 2345 id/V999 p/1234", mainPolicyList);
         client.viewDetails();
         String output = outContent.toString();
 

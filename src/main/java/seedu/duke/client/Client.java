@@ -70,7 +70,14 @@ public class Client {
         }
         this.name = detailsMap.get("n").get(0);
         this.nric = detailsMap.get("id").get(0).toUpperCase();
-        this.phoneNumber = Integer.parseInt(detailsMap.get("c").get(0));
+        String rawContactString = detailsMap.get("c").get(0);
+        String sanitizedContactString = rawContactString.replaceAll("\\s+", "");
+        String phoneRegex = "^\\d{8}$";
+        if (!sanitizedContactString.matches(phoneRegex)) {
+            throw new FinanceProPlusException("Invalid contact number.The number must be exactly 8 digits long.");
+        }
+        this.phoneNumber = Integer.parseInt(sanitizedContactString);
+
     }
 
     /**
@@ -123,8 +130,7 @@ public class Client {
         assert name != null : "Name should not be null when calling toString";
         assert nric != null : "NRIC should not be null when calling toString";
         assert policyList != null : "PolicyList should not be null when calling toString";
-        return "Name: " + name + ", ID: " + nric + ", Contact: " + phoneNumber + ", Policies: " +
-                policyList.toString();
+        return "Name: " + name + ", ID: " + nric + ", Contact: " + phoneNumber;
     }
 
     public String getName() {

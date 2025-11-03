@@ -92,8 +92,8 @@ class ClientListTest {
     class DeleteItemTests {
         @BeforeEach
         void addClientForDeletion() throws FinanceProPlusException {
-            clientList.addItem("n/Client One c/111 id/T1111111A", mainPolicyList);
-            clientList.addItem("n/Client Two c/222 id/T2222222B", mainPolicyList);
+            clientList.addItem("n/Client One c/11112345 id/T1111111A", mainPolicyList);
+            clientList.addItem("n/Client Two c/22223456 id/T2222222B", mainPolicyList);
         }
 
         @Test
@@ -135,8 +135,8 @@ class ClientListTest {
     class ListItemsTests {
         @Test
         void listItems_nonEmptyList_printsList() throws FinanceProPlusException {
-            clientList.addItem("n/Client One c/111 id/T1111111A", mainPolicyList);
-            clientList.addItem("n/Client Two c/222 id/T2222222B", mainPolicyList);
+            clientList.addItem("n/Client One c/1111 2345 id/T1111111A", mainPolicyList);
+            clientList.addItem("n/Client Two c/2222 9812 id/T2222222B", mainPolicyList);
             clientList.listItems();
             String output = outContent.toString();
             assertTrue(output.contains("Here are the clients in your list:"));
@@ -155,7 +155,7 @@ class ClientListTest {
     class AddPolicyToClientTests {
         @BeforeEach
         void addClientForPolicy() throws FinanceProPlusException {
-            clientList.addItem("n/Client One c/111 id/T1111111A", mainPolicyList);
+            clientList.addItem("n/Client One c/11112222 id/T1111111A", mainPolicyList);
         }
 
         @Test
@@ -223,7 +223,7 @@ class ClientListTest {
     class UpdatePolicyForClientTests {
         @BeforeEach
         void setupClientWithPolicy() throws FinanceProPlusException {
-            clientList.addItem("n/Client One c/111 id/T1111111A", mainPolicyList);
+            clientList.addItem("n/Client One c/11134567 id/T1111111A", mainPolicyList);
             String addArgs = "id/T1111111A p/1233 s/01-01-2023 e/01-01-2024 m/150.00";
             clientList.addPolicyToClient(addArgs, mainPolicyList);
         }
@@ -284,7 +284,7 @@ class ClientListTest {
 
         @BeforeEach
         void setupClient() throws FinanceProPlusException {
-            clientList.addItem("n/James Bond c/007 id/" + realNric, mainPolicyList);
+            clientList.addItem("n/James Bond c/00712345 id/" + realNric, mainPolicyList);
             outContent.reset();
         }
 
@@ -345,7 +345,7 @@ class ClientListTest {
 
         @BeforeEach
         void setupClientWithPolicies() throws FinanceProPlusException {
-            clientList.addItem("n/Client One c/111 id/" + clientNric, mainPolicyList);
+            clientList.addItem("n/Client One c/11111111 id/" + clientNric, mainPolicyList);
             testClient = clientList.findClientByNric(clientNric);
             String addPolicyArgs1 = "id/" + clientNric + " p/1234 s/01-01-2023 e/01-01-2024 m/100";
             String addPolicyArgs2 = "id/" + clientNric + " p/1233 s/01-01-2023 e/01-01-2024 m/200";

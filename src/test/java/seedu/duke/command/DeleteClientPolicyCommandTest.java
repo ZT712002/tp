@@ -34,7 +34,7 @@ class DeleteClientPolicyCommandTest {
         ((PolicyList) mainPolicyList).addPolicy(new Policy("n/Life d/Premium", true));
 
 
-        clientList.addItem("n/Test Client c/123 id/" + clientNric, mainPolicyList);
+        clientList.addItem("n/Test Client c/12345678 id/" + clientNric, mainPolicyList);
 
 
         String addPolicyArgs1 = "id/" + clientNric + " p/Health s/01-01-2024 e/01-01-2025 m/100";
