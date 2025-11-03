@@ -30,15 +30,11 @@ public class User {
 
         name = detailsMap.get("n");
         email = detailsMap.get("e");
-        representativeNumber = detailsMap.get("r");
-
-        try {
-            phoneNumber = Integer.parseInt(detailsMap.get("c"));
-        } catch (NumberFormatException ex) {
-            throw new FinanceProPlusException("Invalid contact format. Please enter digits only.");
-        }
-
         validateEmail(email);
+        representativeNumber = detailsMap.get("r");
+        String contactString = detailsMap.get("c");
+        validateContact(contactString);
+        phoneNumber = Integer.parseInt(contactString);
 
         assert this.name != null && !this.name.isEmpty()
                 : "User name should be initialized";
@@ -118,4 +114,20 @@ public class User {
 
         }
     }
+    /**
+     * Validates the given contact number to ensure it follows the correct format.
+     * This method checks that the provided contact string consists of exactly eight numeric digits.
+     * It is used to enforce valid Singapore phone number formatting before creating or updating a user.
+     *
+     * @param contact the contact number string to validate
+     * @throws FinanceProPlusException if the contact number is not exactly eight digits long
+     *                                 or contains non-numeric characters
+     */
+    private void validateContact(String contact) throws FinanceProPlusException {
+        if (!contact.matches("\\d{8}")) {
+            throw new FinanceProPlusException("Invalid contact number. "
+                    + "Please enter an 8-digit phone number (e.g., 91234567).");
+        }
+    }
 }
+

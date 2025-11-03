@@ -22,13 +22,11 @@ public class EditUserCommand extends Command {
             userList.addItem(arguments);
             return;
         }
-        System.out.println("Updating user details...");
         userList.editUser(arguments);
     }
 
     @Override
     public void printExecutionMessage() {
-        System.out.println("----------------------------------------------------");
         System.out.println("User details successfully updated.");
         System.out.println("----------------------------------------------------");
     }
