@@ -1,0 +1,53 @@
+@startuml meeting_class_dg
+!theme plain
+skinparam classAttributeIconSize 0
+
+hide circle
+
+interface ListContainer <<interface>> {
+    +addItem(arguments: String)
+    +addItem(arguments: String, listContainer: ListContainer)
+    +deleteItem(arguments: String)
+    +listItems()
+    +checkDeleteIndex(arguments: String): int
+}
+
+class LookUpTable {
+    -HashMap<String, ListContainer> map
+    
+    +ListContainer getList(String key)
+}
+
+class MeetingList {
+    -meetings: ArrayList<Meeting>
+
+    +MeetingList()
+    +addItem(arguments: String)
+    +addItem(arguments: String, listContainer: ListContainer)
+    +deleteItem(arguments: String)
+    +listItems()
+    +checkDeleteIndex(arguments: String): int
+    +listForecast()
+    +toStorageFormat(): List<String>
+    +loadFromStorage(lines: List<String>)
+    +toCSVFormat(): List<String[]>
+}
+
+class Meeting {
+    -title: String
+    -client: String
+    -date: String
+    -startTime: String
+    -endTime: String
+    
+    +Meeting(arguments: String)
+    +getTitle(): String
+    +getDate(): String
+    +toString(): String
+}
+
+ListContainer <|.. MeetingList
+LookUpTable o-- ListContainer : stores
+MeetingList *-- Meeting : contains
+
+@enduml
