@@ -1,51 +1,27 @@
 @startuml meeting-sequence_diagram_Forecast
 
-actor User as "Financial Advisor"
-participant UI as "UI:"
-participant Parser as "Parser:"
-participant MeetingParser as "MeetingParser:"
-participant ForecastCommand as "ForecastCommand:"
-participant MeetingList as "MeetingList:"
-participant Meeting as "Meeting:"
+actor "Financial Advisor" as User
+participant UI as ":UI"
+participant Parser as ":Parser"
+participant Command as ":ForecastCommand"
+participant MeetingList as ":MeetingList"
+participant Meeting as ":Meeting"
 
-User -> UI: "meeting forecast"
-activate UI
+User -> UI: enters "meeting forecast"
 
-UI -> Parser: parse(userInput)
-activate Parser
+ref over UI, Parser
+    **Command Parsing Sequence**
+    (Details on how the input string is converted
+    into a Command object are omitted for brevity.
+    See the "Command Parsing" diagram for details.)
+end ref
 
-note right of Parser: The selectParserType method\nis called to determine the correct\nsub-parser to use.
+note right of UI: The UI now holds a ForecastCommand object.
 
-Parser -> Parser: selectParserType(userInput)
-activate Parser
-Parser --> Parser:
-deactivate Parser
+UI -> Command: execute()
+activate Command
 
-Parser -> MeetingParser: create(commandType, commandArgs)
-activate MeetingParser
-
-note right of MeetingParser: The constructor splits the commandArgs into a\nsub-command ("forecast") and its arguments.
-
-MeetingParser -> ForecastCommand: create(commandType, args)
-activate ForecastCommand
-
-note right of ForecastCommand: A new ForecastCommand object\nis instantiated. Details Omitted.
-
-ForecastCommand --> MeetingParser: return ForecastCommand
-deactivate ForecastCommand
-
-MeetingParser --> Parser: return ForecastCommand
-deactivate MeetingParser
-
-Parser --> UI: return ForecastCommand
-deactivate Parser
-
-note right of UI: The UI now holds a fully formed ForecastCommand\nobject, ready for execution.
-
-UI -> ForecastCommand: execute()
-activate ForecastCommand
-
-ForecastCommand -> MeetingList: listForecast()
+Command -> MeetingList: listForecast()
 activate MeetingList
 
 loop for each meeting in meetings
@@ -53,17 +29,20 @@ MeetingList -> Meeting: getDate()
 activate Meeting
 Meeting --> MeetingList:
 deactivate Meeting
-
-note right: Parse date and check if within next 7 days
 end
 
-MeetingList --> ForecastCommand:
+MeetingList --> Command
 deactivate MeetingList
 
-ForecastCommand --> UI:
-deactivate ForecastCommand
+Command --> UI
+deactivate Command
 
-UI -> User: "Meetings in the next 7 days: 1. Title: ..."
+UI -> Command: printExecutionMessage()
+activate Command
+Command --> UI: "Meetings in the next 7 days: 1. Title: ..."
+deactivate Command
+
+UI --> User: Displays forecast results
 deactivate UI
 
 @enduml
