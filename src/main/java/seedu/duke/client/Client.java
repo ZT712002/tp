@@ -62,6 +62,12 @@ public class Client {
      * @throws FinanceProPlusException If any required key is missing.
      */
     private void initialiseMainDetails(Map<String, List<String>> detailsMap) throws FinanceProPlusException {
+        for (Map.Entry<String, List<String>> entry : detailsMap.entrySet()) {
+            if (entry.getValue().size() > 1) {
+                throw new FinanceProPlusException("Duplicate parameter '" + entry.getKey() +
+                        "/' found. Each parameter must be provided only once.");
+            }
+        }
         final Set<String> allowedKeys = Set.of("n", "c", "id");
         if (!detailsMap.keySet().equals(allowedKeys)) {
             throw new FinanceProPlusException("Invalid format. The 'client add' command must contain exactly n/, c/, " +
@@ -190,7 +196,7 @@ public class Client {
         PolicyList clientPolicies = this.getClientPolicyList();
         Policy policyToRemove = null;
         for (Policy p : clientPolicies.getPolicyList()) {
-            if (p.getName().equals(policyName)) {
+            if (p.getName().equalsIgnoreCase(policyName)) {
                 policyToRemove = p;
                 break;
             }

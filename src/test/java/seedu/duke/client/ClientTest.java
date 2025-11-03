@@ -8,6 +8,7 @@ import seedu.duke.exception.FinanceProPlusException;
 import seedu.duke.policy.ClientPolicy;
 import seedu.duke.policy.Policy;
 import seedu.duke.policy.PolicyList;
+import seedu.duke.task.TaskList;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -17,6 +18,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -25,6 +27,20 @@ class   ClientTest {
     private ListContainer mainPolicyList;
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final PrintStream originalOut = System.out;
+    private Client client;
+    private static class StubPolicy extends Policy {
+        public StubPolicy(String name) throws FinanceProPlusException {
+            super("n/" + name + " d/details", false);
+        }
+    }
+
+
+    private static class StubClientPolicy extends ClientPolicy {
+        public StubClientPolicy(Policy basePolicy) throws FinanceProPlusException {
+            super(basePolicy);
+        }
+    }
+
 
     @BeforeEach
     void setUp() throws FinanceProPlusException {
@@ -33,7 +49,7 @@ class   ClientTest {
         Policy lifePolicy = new Policy("n/1233 d/LifeTest", true);
         ((PolicyList) mainPolicyList).addPolicy(healthPolicy);
         ((PolicyList) mainPolicyList).addPolicy(lifePolicy);
-
+        client = new Client("n/Test Client c/12345678 id/T1234567A", mainPolicyList);
 
         System.setOut(new PrintStream(outContent));
     }
@@ -42,6 +58,19 @@ class   ClientTest {
     void tearDown() {
         System.setOut(originalOut);
     }
+    @Test
+    void getTodoList_onNewClient_returnsNonNullTaskList() {
+        TaskList todoList = client.getTodoList();
+        assertNotNull(todoList, "The returned TaskList should not be null.");
+    }
+
+    @Test
+    void getTodoList_calledMultipleTimes_returnsSameInstance() {
+        TaskList list1 = client.getTodoList();
+        TaskList list2 = client.getTodoList();
+        assertSame(list1, list2, "Consecutive calls to getTodoList() should return the same instance.");
+    }
+
 
 
     @Test
@@ -56,10 +85,38 @@ class   ClientTest {
     }
 
     @Test
+    void removePolicyByName_policyDoesNotExist_returnsFalse() throws FinanceProPlusException {
+        Policy basePolicy = new StubPolicy("HealthShield");
+        client.addPolicy(new StubClientPolicy(basePolicy));
+        assertEquals(1, client.getPolicyList().getPolicyList().size());
+        boolean result = client.removePolicyByName("LifeInsurance");
+        assertFalse(result, "Method should return false when the policy to remove is not found.");
+        assertEquals(1, client.getPolicyList().getPolicyList().size(), "Policy list size" +
+                " should remain unchanged.");
+    }
+
+    @Test
+    void removePolicyByName_clientHasNoPolicies_returnsFalse() {
+        assertEquals(0, client.getPolicyList().getPolicyList().size());
+        boolean result = client.removePolicyByName("AnyPolicy");
+        assertFalse(result, "Method should return false when the client's policy list is empty.");
+    }
+
+    @Test
+    void removePolicyByName_caseSensitiveName_returnsFalse() throws FinanceProPlusException {
+        Policy basePolicy = new StubPolicy("HealthShield"); // Note the capitalization
+        client.addPolicy(new StubClientPolicy(basePolicy));
+        assertEquals(1, client.getPolicyList().getPolicyList().size());
+        boolean result = client.removePolicyByName("healthshield");
+        assertFalse(result, "Removal should be case-sensitive and return false for a mismatched case.");
+        assertEquals(1, client.getPolicyList().getPolicyList().size(), "Policy should not be" +
+                " removed if case does not match.");
+    }
+
+    @Test
     void constructor_validArgsWithExistingPolicy_clientCreatedWithPolicy() throws FinanceProPlusException {
         String args = "n/Jane Doe c/87654321 id/S9876543B";
         Client client = new Client(args, mainPolicyList);
-
         assertNotNull(client);
         assertEquals("Jane Doe", client.getName());
         assertEquals("S9876543B", client.getNric());
