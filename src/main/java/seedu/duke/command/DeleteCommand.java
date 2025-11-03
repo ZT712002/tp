@@ -16,16 +16,14 @@ public class DeleteCommand extends Command{
 
     @Override
     public void execute(LookUpTable lookUpTable) throws FinanceProPlusException {
-        ListContainer listContainer = lookUpTable.getList(subtype);
         if (subtype.equals("policy")) {
             PolicyList policyList = (PolicyList) lookUpTable.getList("policy");
             ClientList clientList = (ClientList) lookUpTable.getList("client");
-
-            // Call the new, overloaded method that performs the cascade
             policyList.deleteItem(arguments, clientList);
-
+        } else {
+            ListContainer listContainer = lookUpTable.getList(subtype);
+            listContainer.deleteItem(arguments);
         }
-        listContainer.deleteItem(arguments);
     }
 
     @Override
