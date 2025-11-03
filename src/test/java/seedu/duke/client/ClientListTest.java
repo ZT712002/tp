@@ -260,9 +260,7 @@ class ClientListTest {
             String updateArgs = "p/1234 s/01-01-2023 e/31-12-2025 m/100";
             FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
                     () -> clientList.updatePolicyForClient(updateArgs));
-            assertEquals("Invalid command. Both client NRIC (id/) and policy name (p/) are required.\n" +
-                    "Correct format: client updatepolicy id/<NRIC> p/<POLICY_NAME> [s/<NEW_DATE>] " +
-                            "[e/<NEW_DATE>] [m/<NEW_PREMIUM>]"
+            assertEquals("Error: NRIC to find cannot be null or empty. Make sure id/ isn't empty\n"
                     , e.getMessage());
         }
 
@@ -308,8 +306,7 @@ class ClientListTest {
             String args = "n/Some Name";
             FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
                     () -> clientList.getClientByID(args));
-            assertEquals("Error: NRIC to find cannot be null or empty. Make sure id/ isn't empty" +
-                    "\nCorrect format: client add n/<NAME> c/<CONTACT> id/<NRIC> ", e.getMessage());
+            assertEquals("Invalid format. This command only accepts the 'id/' parameter.", e.getMessage());
         }
 
         @Test
@@ -318,13 +315,12 @@ class ClientListTest {
             FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
                     () -> clientList.getClientByID(args));
             assertEquals("Error: NRIC to find cannot be null or empty. Make sure id/ isn't empty" +
-                    "\nCorrect format: client add n/<NAME> c/<CONTACT> id/<NRIC> ", e.getMessage());
+                    "\n", e.getMessage());
         }
 
         @Test
         void getClientByID_argsWithExtraData_returnsCorrectClient() throws FinanceProPlusException {
-            String args = "n/Irrelevant c/999 id/" + realNric + " p/SomePolicy";
-            Client foundClient = clientList.getClientByID(args);
+            Client foundClient = clientList.getClientByID("id/"+realNric);
             assertNotNull(foundClient);
             assertEquals(realNric, foundClient.getNric());
         }

@@ -9,6 +9,7 @@ import seedu.duke.policy.ClientPolicy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
@@ -127,8 +128,8 @@ public class ClientList implements ListContainer {
 
     public Client findClientByNric(String nric) throws FinanceProPlusException {
         if (nric == null || nric.isEmpty()) {
-            throw new FinanceProPlusException("Error: NRIC to find cannot be null or empty. Make sure id/ isn't empty\n"
-            + ADD_CLIENT_FORMAT);
+            throw new FinanceProPlusException("Error: NRIC to find cannot be null or empty. " +
+                    "Make sure id/ isn't empty\n");
         }
         String upperCaseNricToFind = nric.toUpperCase();
         for (Client client : this.clients) {
@@ -220,11 +221,11 @@ public class ClientList implements ListContainer {
 
     private Map<String, List<String>> parseAndValidateAddPolicyArgs(String arguments) throws FinanceProPlusException {
         Map<String, List<String>> argsMap = Client.parseClientDetails(arguments);
-        List<String> requiredKeys = List.of("id", "p", "s", "e", "m");
-        for (String key : requiredKeys) {
-            if (!argsMap.containsKey(key) || argsMap.get(key).isEmpty()) {
-                throw new FinanceProPlusException("Invalid command or missing required fields.\n" + ADD_POLICY_FORMAT);
-            }
+        checkDuplicates(argsMap);
+        final Set<String> allowedKeys = Set.of("id", "p", "s", "e", "m");
+        if (!argsMap.keySet().equals(allowedKeys)) {
+            throw new FinanceProPlusException("Invalid format. The 'client addpolicy' command must contain" +
+                    " exactly id/, p/, s/, e/, and m/ parameters.\n" + ADD_POLICY_FORMAT);
         }
         return argsMap;
     }
@@ -245,20 +246,24 @@ public class ClientList implements ListContainer {
     private Map<String, List<String>> parseAndValidateUpdatePolicyArgs(String arguments)
             throws FinanceProPlusException {
         Map<String, List<String>> argsMap = Client.parseClientDetails(arguments);
-        if (!argsMap.containsKey("id") || !argsMap.containsKey("p")) {
-            throw new FinanceProPlusException("Invalid command. Both client NRIC (id/) and policy name (p/) " +
-                    "are required.\n" + UPDATE_POLICY_FORMAT);
+        checkDuplicates(argsMap);
+        final Set<String> allowedKeys = Set.of("id", "p", "s", "e", "m");
+        for (String providedKey : argsMap.keySet()) {
+            if (!allowedKeys.contains(providedKey)) {
+                throw new FinanceProPlusException("Invalid parameter '" + providedKey + "/'. Only id/, p/, s/, e/," +
+                        " and m/ are allowed for this command.\n" + UPDATE_POLICY_FORMAT);
+            }
         }
         if (!argsMap.containsKey("s") && !argsMap.containsKey("e") && !argsMap.containsKey("m")) {
-            throw new FinanceProPlusException("Invalid command. You must provide at least one " +
-                    "field to update (s/, e/, or m/).\n" + UPDATE_POLICY_FORMAT);
+            throw new FinanceProPlusException("Invalid command. You must provide at least one field " +
+                    "to update (s/, e/, or m/).\n" + UPDATE_POLICY_FORMAT);
         }
         return argsMap;
     }
 
     private ClientPolicy findClientPolicyToUpdate(Map<String, List<String>> argsMap) throws FinanceProPlusException {
-        String nric = argsMap.get("id").get(0);
-        String basePolicyName = argsMap.get("p").get(0);
+        String nric = safeGetFirst(argsMap, "id");
+        String basePolicyName = safeGetFirst(argsMap, "p");
         Client client = findClientByNric(nric);
         if (client == null) {
             throw new FinanceProPlusException("Error: Client with NRIC '" + nric + "' not found.");
@@ -316,6 +321,11 @@ public class ClientList implements ListContainer {
 
     public Client getClientByID(String args) throws FinanceProPlusException {
         Map<String, List<String>> argsMap = Client.parseClientDetails(args);
+        checkDuplicates(argsMap);
+        final Set<String> allowedKeys = Set.of("id");
+        if (!argsMap.keySet().equals(allowedKeys)) {
+            throw new FinanceProPlusException("Invalid format. This command only accepts the 'id/' parameter.");
+        }
         String nric = safeGetFirst(argsMap, "id");
         Client client = findClientByNric(nric);
         if (client == null) {
@@ -421,6 +431,21 @@ public class ClientList implements ListContainer {
         Map<String, List<String>> argsMap = parseAndValidateUpdatePolicyArgs(arguments);
         ClientPolicy clientPolicyToUpdate = findClientPolicyToUpdate(argsMap);
         applyPolicyUpdatesFromArgs(clientPolicyToUpdate, argsMap);
+    }
+
+    /**
+     * Checks a parsed arguments map to ensure no parameter key has been provided more than once.
+     *
+     * @param argsMap The map to validate.
+     * @throws FinanceProPlusException If a duplicate parameter is found.
+     */
+    private static void checkDuplicates(Map<String, List<String>> argsMap) throws FinanceProPlusException {
+        for (Map.Entry<String, List<String>> entry : argsMap.entrySet()) {
+            if (entry.getValue().size() > 1) {
+                throw new FinanceProPlusException("Duplicate parameter '" + entry.getKey() + "/' found. " +
+                        "Each parameter must be provided only once.");
+            }
+        }
     }
 
 }
