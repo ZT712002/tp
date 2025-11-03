@@ -74,7 +74,7 @@ public class Client {
     }
 
     /**
-     * Handles the creation of a "placeholder" ClientPolicy if the 'p/' prefix is provided.
+     * Handles the creation of a "placeholder" ClientPolicy  if the 'p/' prefix is provided.
      *
      * @param detailsMap     The map of parsed arguments.
      * @param mainPolicyList The main list of company policies to validate against.

@@ -48,6 +48,13 @@ public class User {
                 : "User representative number should be initialized";
     }
 
+    /**
+     * Parses user details into a map keyed by short codes ({n}, {e}, {c}, {r}).
+     * Unknown tokens are ignored.
+     *
+     * @param userDetails raw argument string.
+     * @return map of parsed keys to values; empty if input is null/blank.
+     */
     public static Map<String, String> parseUserDetails(String userDetails) {
         assert userDetails != null : "Input string for parsing cannot be null";
 
@@ -67,6 +74,11 @@ public class User {
         return detailsMap;
     }
 
+    /**
+     * Returns a human readable multi-line representation of the user.
+     *
+     * @return formatted string containing name, email, contact, and representative number.
+     */
     @Override
     public String toString() {
         assert name != null : "Name should not be null when calling toString";
@@ -79,6 +91,12 @@ public class User {
                 + "\n" + "Representative No.: " + representativeNumber;
     }
 
+    /**
+     * Returns a single-line storage representation of this user
+     * (e.g., {n/John e/j@x.com c/98765432 r/FA-12345}).
+     *
+     * @return storage line containing all fields.
+     */
     String toStorageString() {
         return String.format("n/%s e/%s c/%d r/%s", name, email, phoneNumber, representativeNumber);
     }
@@ -86,7 +104,12 @@ public class User {
     public String[] toCSVRow() {
         return new String[]{name, email, String.valueOf(phoneNumber), representativeNumber};
     }
-
+    /**
+     * Validates the email format using a simple pattern.
+     *
+     * @param email email to validate.
+     * @throws FinanceProPlusException if the email is invalid.
+     */
     private void validateEmail(String email) throws FinanceProPlusException {
         String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
         if (!email.matches(emailRegex)) {
