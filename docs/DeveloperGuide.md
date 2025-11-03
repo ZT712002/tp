@@ -536,7 +536,7 @@ policy add n/TravelSafe d/Travel insurance covering medical emergencies
 **Step 3: Add Clients**
 ```
 client add n/Alice Wong c/98765432 id/S1234567A
-client add n/Bob Tan c/87654321 id/G7654321B p/HealthShield
+client add n/Bob Tan c/87654321 id/G7654321B 
 client add n/Charlie Lee c/91112233 id/S9876543C
 ```
 
@@ -568,14 +568,6 @@ meeting add t/Policy Review c/Alice Wong d/05-11-2025 from/14:00 to/16:00
 meeting add t/Initial Consultation c/Bob Tan d/07-11-2025 from/10:30 to/11:30
 meeting add t/Claim Discussion c/Charlie Lee d/03-11-2025 from/09:00
 ```
-
-#### Method 2: Manual File Population
-
-For advanced testing scenarios, you can manually create or modify files in the `data/` directory. Ensure the application is closed before editing these files:
-
-1. Navigate to the `data/` folder
-2. Edit the relevant `.txt` files following the format shown in the Storage Component section of this guide
-3. Relaunch the application to load the modified data
 
 ### Testing Individual Features
 
@@ -633,6 +625,11 @@ Refer to the command summary tables in the User Guide for complete syntax. Below
 | View current user      | `user view`                                                        | Displays John Smith's details |
 | Edit user              | `user edit n/Jane Doe e/jane@example.com c/99998888 r/FA-99999`       | User updated successfully     |
 | View new user          | `user view`                                                       | Displays Jane Doe's details   |
+
+#### 6. Miscellaneous 
+| Test Case              | Command                                                                             | Expected Result               |
+|:-----------------------|:-------------------------------------------------------------------------|:------------------------------|
+|Exits the Application| `exit`| Exits the application successfully|
 
 ### Testing Data Persistence
 
