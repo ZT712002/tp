@@ -37,7 +37,7 @@ This command creates a new client record. The policy is optional and, if include
 
 *   **Arguments:**
     *   `n/<NAME>`: **Required.** The full name of the client.
-    *   `c/<CONTACT>`: **Required.** The client's phone number.
+    *   `c/<CONTACT>`: **Required.** The client's phone number. Must be 8 digits long.
     *   `id/<NRIC>`: **Required.** The client's unique NRIC number (acts as a primary key).
     *   `p/<POLICY_NAME>`: *Optional.* The name of a base policy to assign to the client as a placeholder. The policy must already exist in the main policy list. Only 1 policy can be added in this command.
 
