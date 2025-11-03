@@ -38,7 +38,6 @@ public class UserList implements ListContainer {
             throw new FinanceProPlusException("A user already exists. Edit user to update information.");
         }
         user = new User(arguments);
-        logger.info("User added: " + user.toString());
         assert user != null : "User object should have been successfully created";
         System.out.println("Noted. I've added this user:");
         System.out.println(user.toString());
@@ -118,11 +117,12 @@ public class UserList implements ListContainer {
      * @throws FinanceProPlusException if the arguments are invalid.
      */
     public void editUser(String arguments) throws FinanceProPlusException {
+
         assert arguments != null && !arguments.trim().isEmpty() : "Arguments for edit cannot be null or empty";
+        System.out.println("Updating user details");
         User newUser = new User(arguments);
-        logger.info("User updated from: " + (user == null ? "None" : user.toString()) + " to: " + newUser.toString());
         user = newUser;
-        System.out.println(user.toString());
+        System.out.println(user);
     }
 
 }
