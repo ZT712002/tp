@@ -1,36 +1,46 @@
 @startuml meeting-sequence_diagram_Forecast
-!theme plain
 
-actor User
-participant UI
-participant Parser
-participant MeetingParser
-participant ForecastCommand
-participant MeetingList
-participant Meeting
+actor User as "Financial Advisor"
+participant UI as "UI:"
+participant Parser as "Parser:"
+participant MeetingParser as "MeetingParser:"
+participant ForecastCommand as "ForecastCommand:"
+participant MeetingList as "MeetingList:"
+participant Meeting as "Meeting:"
 
 User -> UI: "meeting forecast"
 activate UI
 
-UI -> Parser: parse()
+UI -> Parser: parse(userInput)
 activate Parser
 
-Parser -> Parser: selectParserType("meeting")
-Parser -> MeetingParser: MeetingParser()
+note right of Parser: The selectParserType method\nis called to determine the correct\nsub-parser to use.
+
+Parser -> Parser: selectParserType(userInput)
+activate Parser
+Parser --> Parser:
+deactivate Parser
+
+Parser -> MeetingParser: create(commandType, commandArgs)
 activate MeetingParser
 
-MeetingParser -> MeetingParser: executeAndCreateCommand()
-MeetingParser -> ForecastCommand: new ForecastCommand("meeting")
+note right of MeetingParser: The constructor splits the commandArgs into a\nsub-command ("forecast") and its arguments.
+
+MeetingParser -> ForecastCommand: create(commandType, args)
 activate ForecastCommand
 
-ForecastCommand --> MeetingParser:
+note right of ForecastCommand: A new ForecastCommand object\nis instantiated. Details Omitted.
+
+ForecastCommand --> MeetingParser: return ForecastCommand
 deactivate ForecastCommand
 
-MeetingParser --> Parser:
+MeetingParser --> Parser: return ForecastCommand
 deactivate MeetingParser
 
-Parser --> UI:
+Parser --> UI: return ForecastCommand
 deactivate Parser
+
+note right of UI: The UI now holds a fully formed ForecastCommand\nobject, ready for execution.
 
 UI -> ForecastCommand: execute()
 activate ForecastCommand
