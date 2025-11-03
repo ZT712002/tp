@@ -2,14 +2,7 @@
 Welcome to FinanceProPlus!
 Your personal finance management assistant.
 *************************************
-New user? Here are some commands to get you started:
-  1. 'client add n/<NAME> c/<CONTACT> id/<NRIC> p/<POLICY>' - Add a new client
-  2. 'policy add n/<NAME> d/<DETAILS>' - Add a new policy
-  3. 'list client' - View all your clients
-  4. 'list meeting' - View all your meetings
-  5. 'list policy' - View all your policies
-  6. 'exit' - Exit the application
-Tip: Start by adding a client with the full details!
+New user? Run 'help' to get started
 *************************************
 What is your command?
 > No clients found.
