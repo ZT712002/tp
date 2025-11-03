@@ -1,0 +1,49 @@
+@startuml
+title Sequence Diagram: Command Parsing
+
+actor "Financial Advisor" as User
+participant UI as ":UI"
+participant Parser as ":Parser"
+participant ClientParser as ":ClientParser"
+participant Command as ":AddCommand"
+
+User -> UI: enters "client add ..."
+activate UI
+
+UI -> Parser: parse(userInput)
+activate Parser
+
+note right of Parser
+  The selectParserType method
+  is called to determine the correct
+  sub-parser to use.
+end note
+Parser -> Parser: selectParserType(userInput)
+activate Parser
+Parser --> Parser
+deactivate Parser
+
+Parser -> ClientParser**: create(commandType, commandArgs)
+activate ClientParser
+note right of ClientParser: The constructor splits the commandArgs into a\nsub-command ("add") and its arguments.
+
+ClientParser -> Command**: create(commandType, args)
+activate Command
+note left of Command: A new AddCommand object \nis instantiated. Details Omitted.
+Command --> ClientParser
+deactivate Command
+
+ClientParser --> Parser: return AddCommand
+deactivate ClientParser
+Parser --> UI: return AddCommand
+deactivate Parser
+
+note right of UI
+  The UI now holds a fully formed AddCommand
+  object, ready for execution.
+end note
+
+UI --> User
+deactivate UI
+
+@enduml
