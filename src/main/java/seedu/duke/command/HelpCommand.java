@@ -52,7 +52,8 @@ public class HelpCommand extends Command {
 
     private static void meetingManagement() {
         System.out.println("--- Meeting Management ---");
-        System.out.println("- meeting add t/<TITLE> c/<CLIENT> d/<dd-MM-yyyy> from/<HH:mm> [to/<HH:mm>]: Schedules a new meeting.");
+        System.out.println("- meeting add t/<TITLE> c/<CLIENT> d/<dd-MM-yyyy> from/<HH:mm> [to/<HH:mm>]:" +
+                " Schedules a new meeting.");
         System.out.println("- meeting delete <INDEX>: Deletes a meeting by its index.");
         System.out.println("- meeting forecast: Shows meetings scheduled for the next 7 days.\n");
     }
@@ -74,8 +75,10 @@ public class HelpCommand extends Command {
 
     private static void clientPolicy() {
         System.out.println("--- Client Policy Management ---");
-        System.out.println("- client addpolicy id/<NRIC> p/<POLICY> s/<dd-MM-yyyy> e/<dd-MM-yyyy> m/<PREMIUM>: Adds a policy to a client.");
-        System.out.println("- client updatepolicy id/<NRIC> p/<POLICY> [s/...] [e/...] [m/...]: Updates a client's policy.");
+        System.out.println("- client addpolicy id/<NRIC> p/<POLICY> s/<dd-MM-yyyy> e/<dd-MM-yyyy> m/<PREMIUM>: " +
+                "Adds a policy to a client.");
+        System.out.println("- client updatepolicy id/<NRIC> p/<POLICY> [s/...] [e/...] [m/...]: " +
+                "Updates a client's policy.");
         System.out.println("- client deletepolicy id/<NRIC> i/<INDEX>: Deletes a policy from a client.\n");
     }
 

@@ -50,7 +50,9 @@ class DeleteCommandTest {
         @Override public void addItem(String arguments) {}
         @Override public void addItem(String arguments, ListContainer listContainer) {}
         @Override public void listItems() {}
-        @Override public int checkDeleteIndex(String arguments) { return 0; }
+        @Override public int checkDeleteIndex(String arguments) {
+            return 0;
+        }
     }
 
 
@@ -111,7 +113,8 @@ class DeleteCommandTest {
         deleteCommand.execute(stubLookUpTable);
         assertEquals(arguments, stubPolicyList.overloadedDeleteArgs);
         assertNotNull(stubPolicyList.clientListPassed, "A ClientList should have been passed.");
-        assertSame(stubClientList, stubPolicyList.clientListPassed, "The correct ClientList instance should be passed.");
+        assertSame(stubClientList, stubPolicyList.clientListPassed, "The correct ClientList instance " +
+                "should be passed.");
         assertNull(stubPolicyList.simpleDeleteArgs, "The standard deleteItem method should not have been called.");
     }
 

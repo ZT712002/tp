@@ -109,7 +109,8 @@ class   ClientTest {
         assertEquals(1, client.getPolicyList().getPolicyList().size());
         boolean result = client.removePolicyByName("healthshield");
         assertFalse(result, "Removal should be case-sensitive and return false for a mismatched case.");
-        assertEquals(1, client.getPolicyList().getPolicyList().size(), "Policy should not be removed if case does not match.");
+        assertEquals(1, client.getPolicyList().getPolicyList().size(), "Policy should not be" +
+                " removed if case does not match.");
     }
 
     @Test

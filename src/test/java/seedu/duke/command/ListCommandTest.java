@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 
 class ListCommandTest {
-    
+
     private static class StubListContainer implements ListContainer {
         private boolean listItemsWasCalled = false;
 
@@ -25,13 +25,15 @@ class ListCommandTest {
         }
 
         @Override
-        public void addItem(String arguments) { /* Do nothing */ }
+        public void addItem(String arguments) {  }
         @Override
-        public void addItem(String arguments, ListContainer listContainer) { /* Do nothing */ }
+        public void addItem(String arguments, ListContainer listContainer) {  }
         @Override
-        public void deleteItem(String arguments) { /* Do nothing */ }
+        public void deleteItem(String arguments) {  }
         @Override
-        public int checkDeleteIndex(String arguments) { return 0; }
+        public int checkDeleteIndex(String arguments) {
+            return 0;
+        }
     }
 
 
