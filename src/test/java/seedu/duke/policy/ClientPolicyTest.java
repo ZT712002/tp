@@ -49,8 +49,7 @@ class ClientPolicyTest {
     }
     @Test
     void setters_updateFieldsCorrectly() throws FinanceProPlusException {
-        // Arrange
-        ClientPolicy policy = new ClientPolicy(basePolicy); // Start with a placeholder
+        ClientPolicy policy = new ClientPolicy(basePolicy);
         LocalDate newStartDate = LocalDate.of(2024, 2, 1);
         LocalDate newExpiryDate = LocalDate.of(2026, 2, 1);
         BigDecimal newPremium = new BigDecimal("99.99");

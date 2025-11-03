@@ -28,7 +28,7 @@ class ViewClientCommandTest {
 
 
         public SpyClient() throws FinanceProPlusException {
-            super("n/dummy c/1234 5678 id/DUMMY", new PolicyList());
+            super("n/dummy c/1234 5678 id/D1234567S", new PolicyList());
         }
 
         @Override
@@ -95,7 +95,7 @@ class ViewClientCommandTest {
 
     @Test
     void execute_clientFound_callsViewDetailsOnClient() throws FinanceProPlusException {
-        String args = "id/S123A";
+        String args = "id/S1234567A";
         ViewClientCommand command = new ViewClientCommand("client", args);
         command.execute(lookUpTable);
         assertTrue(spyClientList.getClientByIdCalled, "getClientByID should have been called on the list.");

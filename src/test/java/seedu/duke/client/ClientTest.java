@@ -182,7 +182,7 @@ class   ClientTest {
 
     @Test
     void addPolicy_newPolicy_addsSuccessfully() throws FinanceProPlusException {
-        Client client = new Client("n/Test c/11124567 id/T111", mainPolicyList);
+        Client client = new Client("n/Test c/11124567 id/T1111111A", mainPolicyList);
         assertTrue(client.getClientPolicyList().getPolicyList().isEmpty());
 
         Policy lifePolicyInfo = ((PolicyList) mainPolicyList).findPolicyByName("1234");
@@ -195,26 +195,25 @@ class   ClientTest {
 
     @Test
     void addPolicy_existingPolicy_doesNotAddDuplicate() throws FinanceProPlusException {
-        Client client = new Client("n/Test c/1112 6789 id/T111 p/1234", mainPolicyList);
+        Client client = new Client("n/Test c/1112 6789 id/T1111111A p/1234", mainPolicyList);
         assertEquals(1, client.getClientPolicyList().getPolicyList().size());
 
         Policy lifePolicyInfo = ((PolicyList) mainPolicyList).findPolicyByName("1234");
         ClientPolicy clientLifePolicy = new ClientPolicy(lifePolicyInfo);
 
-        // Attempt to add the same policy again
         client.addPolicy(clientLifePolicy);
         assertEquals(1, client.getClientPolicyList().getPolicyList().size());
     }
 
     @Test
     void hasPolicy_policyExists_returnsTrue() throws FinanceProPlusException {
-        Client client = new Client("n/Test c/1112 3456 id/T111 p/1234", mainPolicyList);
+        Client client = new Client("n/Test c/1112 3456 id/T1111111A p/1234", mainPolicyList);
         assertTrue(client.hasPolicy("1234"));
     }
 
     @Test
     void hasPolicy_policyDoesNotExist_returnsFalse() throws FinanceProPlusException {
-        Client client = new Client("n/Test c/1112 4567 id/T111", mainPolicyList);
+        Client client = new Client("n/Test c/1112 4567 id/T1111111A", mainPolicyList);
         assertFalse(client.hasPolicy("1234"));
     }
 
@@ -236,24 +235,24 @@ class   ClientTest {
 
     @Test
     void viewDetails_clientWithNoPolicies_printsCorrectly() throws FinanceProPlusException {
-        Client client = new Client("n/View Test c/9999 1111 id/V999", mainPolicyList);
+        Client client = new Client("n/View Test c/9999 1111 id/V9999991A", mainPolicyList);
         client.viewDetails();
         String output = outContent.toString();
 
         assertTrue(output.contains("Name: View Test"));
-        assertTrue(output.contains("NRIC: V999"));
+        assertTrue(output.contains("NRIC: V9999991A"));
         assertTrue(output.contains("Contact: 999"));
         assertTrue(output.contains("This client currently has no policies."));
     }
 
     @Test
     void viewDetails_clientWithPolicies_printsCorrectly() throws FinanceProPlusException {
-        Client client = new Client("n/View Test c/9991 2345 id/V999 p/1234", mainPolicyList);
+        Client client = new Client("n/View Test c/9991 2345 id/V9999991A p/1234", mainPolicyList);
         client.viewDetails();
         String output = outContent.toString();
 
         assertTrue(output.contains("Name: View Test"));
-        assertTrue(output.contains("NRIC: V999"));
+        assertTrue(output.contains("NRIC: V9999991A"));
         assertTrue(output.contains("Contact: 999"));
         assertTrue(output.contains("--- Policies ---"));
         assertTrue(output.contains("1. Policy Name: 1234"));

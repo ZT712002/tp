@@ -15,6 +15,8 @@ import java.util.stream.Collectors;
 
 public class Client {
     private static final String CLIENT_REGEX = "\\s+(?=[a-z]+\\/)";
+    private static final String ADD_CLIENT_FORMAT = "Correct format: client add n/<NAME> c/<CONTACT> id/<NRIC> " +
+            "[p/<POLICY_NAME>]";
     private String name;
     private PolicyList policyList;
     private TaskList todoList;
@@ -69,7 +71,16 @@ public class Client {
             }
         }
         this.name = detailsMap.get("n").get(0);
-        this.nric = detailsMap.get("id").get(0).toUpperCase();
+        String rawNric = detailsMap.get("id").get(0).toUpperCase();
+        String sanitizedNric = rawNric.replaceAll("\\s+", "");
+        if (sanitizedNric.isEmpty()) {
+            throw new FinanceProPlusException("NRIC cannot be empty.");
+        }
+        if (!Client.isValidNric(sanitizedNric)) {
+            throw new FinanceProPlusException("Invalid NRIC. After removing spaces, the format must be a letter," +
+                    " 7 digits, and another letter (e.g., T1234567A)." + ADD_CLIENT_FORMAT);
+        }
+        this.nric = sanitizedNric.toUpperCase();
         String rawContactString = detailsMap.get("c").get(0);
         String sanitizedContactString = rawContactString.replaceAll("\\s+", "");
         String phoneRegex = "^\\d{8}$";

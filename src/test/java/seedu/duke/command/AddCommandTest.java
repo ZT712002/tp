@@ -50,7 +50,7 @@ class AddCommandTest {
             this.receivedStringArg = arguments;
         }
 
-        // Override the two-argument method to record the call
+
         @Override
         public void addItem(String arguments, ListContainer listContainer) throws FinanceProPlusException {
             if (shouldThrow) {
@@ -88,7 +88,6 @@ class AddCommandTest {
 
         @Override
         public void addItem(String arguments, ListContainer listContainer) throws FinanceProPlusException {
-            // This method shouldn't be called for PolicyList in our test cases
             this.addItemWithTwoArgsCalled = true;
         }
     }
