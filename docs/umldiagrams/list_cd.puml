@@ -10,7 +10,7 @@ hide circle
 
 
 package seedu.duke.parser {
-    abstract class Parser {
+    class Parser {
         + {static} parse(userInput: String): Command
         # {static} selectParserType(userInput: String): Parser
         # executeAndCreateCommand(): Command
@@ -26,7 +26,7 @@ package seedu.duke.parser {
 }
 
 package seedu.duke.command {
-    abstract class Command {
+     class Command {
         + execute(...)
     }
 

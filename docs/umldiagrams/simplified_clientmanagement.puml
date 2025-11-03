@@ -1,0 +1,46 @@
+@startuml
+title High-Level View: Client Management Component
+
+skinparam classAttributeIconSize 0
+hide circle
+skinparam interfaceStereotype "interface"
+
+package seedu.duke.container {
+    interface ListContainer <<interface>> {
+        + addItem(...)
+        + deleteItem(...)
+        + listItems()
+    }
+}
+
+package seedu.duke.client {
+    class ClientList {
+        + addItem(arguments: String, policyList: ListContainer)
+        + findClientByNric(nric: String): Client
+    }
+
+    class ArchivedClientList {
+        + archiveClient(client: Client)
+        + restoreClient(index: int): Client
+    }
+
+    class Client {
+        - name: String
+        - nric: String
+    }
+}
+
+
+ClientList ..|> ListContainer
+ArchivedClientList ..|> ListContainer
+
+
+ClientList "1" *-- "0..*" Client : manages active >
+ArchivedClientList "1" *-- "0..*" Client : manages archived >
+
+
+note "A Client object is MOVED between these two lists during archiving/restoring." as N1
+(ClientList, Client) .. N1
+(ArchivedClientList, Client) .. N1
+
+@enduml
