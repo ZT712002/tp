@@ -10,13 +10,13 @@ hide circle
 
 
 package seedu.duke.parser {
-    abstract class Parser {
+    class :Parser {
         + {static} parse(userInput: String): Command
         # {static} selectParserType(userInput: String): Parser
         # executeAndCreateCommand(): Command
     }
 
-    class ListParser {
+    class :ListParser {
         - commandSubtype: String
         --
         + ListParser(type: String, commandArgs: String)
@@ -26,11 +26,11 @@ package seedu.duke.parser {
 }
 
 package seedu.duke.command {
-    abstract class Command {
+    class :Command {
         + execute(...)
     }
 
-    class ListCommand {
+    class :ListCommand {
         - arguments: String
         --
         + ListCommand(subtype: String)
@@ -39,53 +39,53 @@ package seedu.duke.command {
 }
 
 package seedu.duke.container {
-    interface ListContainer {
+    interface :ListContainer {
         + listItems()
         ' Other methods omitted for clarity
     }
 
-    class LookUpTable {
+    class :LookUpTable {
         + getList(key: String): ListContainer
     }
 }
 
 ' Concrete ListContainer implementations
 package seedu.duke.client {
-    class ClientList
-    class ArchivedClientList
+    class :ClientList
+    class :ArchivedClientList
 }
 package seedu.duke.meeting {
-    class MeetingList
+    class :MeetingList
 }
 package seedu.duke.policy {
-    class PolicyList
+    class :PolicyList
 }
 package seedu.duke.task {
-    class TaskList
+    class :TaskList
 }
 package seedu.duke.user {
-    class UserList
+    class :UserList
 }
 
 
 
 ' Inheritance
-Parser <|-- ListParser
-Command <|-- ListCommand
+":Parser" <|-- ":ListParser"
+":Command" <|-- ":ListCommand"
 
 ' Implementation
-ClientList ..|> ListContainer
-ArchivedClientList ..|> ListContainer
-MeetingList ..|> ListContainer
-PolicyList ..|> ListContainer
-TaskList ..|> ListContainer
-UserList ..|> ListContainer
+":ClientList" ..|> ":ListContainer"
+":ArchivedClientList" ..|> ":ListContainer"
+":MeetingList" ..|> ":ListContainer"
+":PolicyList" ..|> ":ListContainer"
+":TaskList" ..|> ":ListContainer"
+":UserList" ..|> ":ListContainer"
 
 ' Dependency
-Parser ..> ListParser : <<creates>>
-ListParser ..> ListCommand : <<creates>>
-ListCommand ..> LookUpTable : uses >
-ListCommand ..> ListContainer : uses >
-LookUpTable ..> ListContainer : returns >
+":Parser" ..> ":ListParser" : <<creates>>
+":ListParser" ..> ":ListCommand" : <<creates>>
+":ListCommand" ..> ":LookUpTable" : uses >
+":ListCommand" ..> ":ListContainer" : uses >
+":LookUpTable" ..> ":ListContainer" : returns >
 
 @enduml
