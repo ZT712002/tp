@@ -363,14 +363,63 @@ When a user creates a new task, the following sequence of operations occurs:
 
 
 ### Meeting Features
-When the command "meeting forecast" is invoked by a user, here is a sequence diagram depicting the overall flow of the program.
+To begin, here is a high level Class Diagram of Meetings and its interaction with other classes:
+
+![Meeting Class Diagram](./umldiagrams/meeting_class_dg.png)
+
+The Meeting Management component handles scheduling and tracking of client meetings within the application. It is responsible for creating, storing, retrieving, and forecasting meeting records. The design follows the same architectural pattern as other components, implementing the ListContainer interface for consistent data handling.
+
+The primary classes in this component are:
+* Meeting: The data model representing an individual meeting.
+* MeetingList: The manager for all meeting records.
+* ListContainer: An interface defining a standard contract for list operations.
+
+#### 1. Meeting Class Breakdown
+**Responsibility:** Acts as the data model for a single meeting. It encapsulates all information related to a meeting, including title, client, date, and time details.
+
+**Key Attributes:**
+* `title, client, date`: Basic meeting information.
+* `startTime, endTime`: Meeting time details (endTime is optional).
+
+**Key Behaviors:**
+- The constructor `Meeting(String arguments)` is responsible for parsing a formatted string to populate the meeting's details.
+- `getTitle()` and `getDate()` provide access to meeting details for operations.
+- `toString()` provides formatted string representation for display.
+- `toStorageString()` provides standardized way to serialize meeting data for file storage.
+- `toCSVRow()` converts meeting data to CSV format for export.
+
+#### 2. MeetingList Class Breakdown
+**Responsibility**: Manages the collection of all meetings. It serves as the primary entry point for all operations on meetings, such as adding, searching, and forecasting them.
+
+**Relationship**: Implements the ListContainer interface.
+
+**Key Attributes**:
+`meetings`: An ArrayList<Meeting> to store the meeting objects.
+
+**Key Behaviors:**
+* `addItem(arguments)`: Parses user input and creates and adds a new Meeting object.
+* `deleteItem(arguments)`: Removes a meeting from the list based on their index.
+* `listForecast()`: Contains the business logic to display meetings within the next 7 days. It iterates through all meetings and filters based on date proximity.
+* `toStorageFormat()`: Converts meetings to storage format for persistence.
+* `loadFromStorage()`: Loads meetings from storage format.
+* `toCSVFormat()`: Converts meetings to CSV format for export.
+
+#### 3. Key Interactions and Data Flow
+**Meeting Creation**: A command parses user input and calls MeetingList.addItem(). MeetingList creates a new Meeting instance, which parses the detailed arguments including date and time validation.
+
+**Meeting Forecasting**: The forecast command calls MeetingList.listForecast(). MeetingList iterates through all meetings, calls getDate() on each Meeting object, and displays those falling within the next 7 days.
+
+#### 4. Error Handling
+**FinanceProPlusException**: This custom exception is used consistently to signal errors related to business logic (e.g., invalid date format, missing required fields) or data validation (e.g., malformed input). This standardizes error handling throughout the component.
+
+#### 5. Example of Meeting Forecast
+When a command with the prefix "meeting forecast" is invoked by the user, here is a sequence diagram depicting the overall flow of the program.
 
 ![Figure of Meeting Forecast Command SQ](./umldiagrams/meeting_sequence_diagram_Forecast.png)
 
-When the user issues the command "meeting forecast" the command is first passed through the UI class. The UI then calls for the Parser which determines the command type as "meeting" and creates a new MeetingParser instance with the command arguments.
-The MeetingParser processes the command by calling executeAndCreateCommand() method which identifies this as a forecast operation and instantiates a new ForecastCommand object. Control is returned to the UI, which then calls execute() on the ForecastCommand.
-The ForecastCommand invokes listForecast() on the MeetingList to retrieve the upcoming meetings. The MeetingList iterates through all the stored meetings, and calls getDate() on each Meeting object to verify if it falls within the next 7 days from the current date.
-The MeetingList then returns all valid results to the ForecastCommand which formats the output and returns it to the UI. The UI finally displays the forecast results to the user, showing all meetings scheduled for the upcoming week.
+When the user issues the command "meeting forecast" the command is first passed through the UI class. The UI then uses the Parser to determine the command type and create the ForecastCommand object through the Command Parsing Sequence (details omitted).
+UI object then calls execute() on the command. The ForecastCommand invokes listForecast() on the MeetingList to retrieve the upcoming meetings. The MeetingList iterates through all the stored meetings, and calls getDate() on each Meeting object to verify if it falls within the next 7 days from the current date.
+The MeetingList then returns all valid results to the ForecastCommand which formats the output and returns it to the UI. The UI then calls printExecutionMessage() on the ForecastCommand to get the formatted results and finally displays the forecast results to the user, showing all meetings scheduled for the upcoming week.
 
 ### Design Considerations and Principles
 Here are some principles we have used in developing this application.
@@ -612,7 +661,7 @@ Refer to the command summary tables in the User Guide for complete syntax. Below
 
 | Test Case | Command | Expected Result |
 | :--- | :--- | :--- |
-| List all meetings | `meeting list` | Shows all meetings with indices |
+| List all meetings | `list meeting` | Shows all meetings with indices |
 | Add meeting with end time | `meeting add t/Renewal Discussion c/Alice Wong d/10-11-2025 from/15:00 to/16:30` | Meeting added successfully |
 | Add meeting without end time | `meeting add t/Quick Call c/Bob Tan d/08-11-2025 from/11:00` | Meeting added with start time only |
 | View upcoming meetings | `meeting forecast` | Shows meetings within next 7 days |

@@ -1,41 +1,27 @@
 @startuml meeting-sequence_diagram_Forecast
-!theme plain
 
-actor User
-participant UI
-participant Parser
-participant MeetingParser
-participant ForecastCommand
-participant MeetingList
-participant Meeting
+actor "Financial Advisor" as User
+participant UI as ":UI"
+participant Parser as ":Parser"
+participant Command as ":ForecastCommand"
+participant MeetingList as ":MeetingList"
+participant Meeting as ":Meeting"
 
-User -> UI: "meeting forecast"
-activate UI
+User -> UI: enters "meeting forecast"
 
-UI -> Parser: parse()
-activate Parser
+ref over UI, Parser
+    **Command Parsing Sequence**
+    (Details on how the input string is converted
+    into a Command object are omitted for brevity.
+    See the "Command Parsing" diagram for details.)
+end ref
 
-Parser -> Parser: selectParserType("meeting")
-Parser -> MeetingParser: MeetingParser()
-activate MeetingParser
+note right of UI: The UI now holds a ForecastCommand object.
 
-MeetingParser -> MeetingParser: executeAndCreateCommand()
-MeetingParser -> ForecastCommand: new ForecastCommand("meeting")
-activate ForecastCommand
+UI -> Command: execute()
+activate Command
 
-ForecastCommand --> MeetingParser:
-deactivate ForecastCommand
-
-MeetingParser --> Parser:
-deactivate MeetingParser
-
-Parser --> UI:
-deactivate Parser
-
-UI -> ForecastCommand: execute()
-activate ForecastCommand
-
-ForecastCommand -> MeetingList: listForecast()
+Command -> MeetingList: listForecast()
 activate MeetingList
 
 loop for each meeting in meetings
@@ -43,17 +29,20 @@ MeetingList -> Meeting: getDate()
 activate Meeting
 Meeting --> MeetingList:
 deactivate Meeting
-
-note right: Parse date and check if within next 7 days
 end
 
-MeetingList --> ForecastCommand:
+MeetingList --> Command
 deactivate MeetingList
 
-ForecastCommand --> UI:
-deactivate ForecastCommand
+Command --> UI
+deactivate Command
 
-UI -> User: "Meetings in the next 7 days: 1. Title: ..."
+UI -> Command: printExecutionMessage()
+activate Command
+Command --> UI: "Meetings in the next 7 days: 1. Title: ..."
+deactivate Command
+
+UI --> User: Displays forecast results
 deactivate UI
 
 @enduml
