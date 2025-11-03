@@ -8,7 +8,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Represents a file-based storage utility for application data, exports, and per-client artifacts.
+ * Ensures required folders exist and provides helpers for reading/writing files and CSV.
+ */
 public class StorageManager {
 
     private static final String DATA_FOLDER = "data/";
