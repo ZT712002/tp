@@ -28,7 +28,7 @@ class ViewClientCommandTest {
 
 
         public SpyClient() throws FinanceProPlusException {
-            super("n/dummy c/123 id/DUMMY", new PolicyList());
+            super("n/dummy c/1234 5678 id/DUMMY", new PolicyList());
         }
 
         @Override
