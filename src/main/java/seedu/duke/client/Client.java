@@ -118,7 +118,8 @@ public class Client {
         assert name != null : "Name should not be null when calling toString";
         assert nric != null : "NRIC should not be null when calling toString";
         assert policyList != null : "PolicyList should not be null when calling toString";
-        return "Name: " + name + ", ID: " + nric + ", Contact: " + phoneNumber;
+        return "Name: " + name + ", ID: " + nric + ", Contact: " + phoneNumber+
+                ", Policies: " + getPolicyCount() + ", To-Dos: " + getTodoCount();
     }
 
     public String getName() {
@@ -263,6 +264,24 @@ public class Client {
 
     public PolicyList getPolicyList() {
         return this.policyList;
+    }
+
+    /**
+     * Returns the number of policy contracts associated with this client.
+     *
+     * @return The count of policies.
+     */
+    public int getPolicyCount() {
+        return this.policyList.getPolicyList().size();
+    }
+
+    /**
+     * Returns the number of to-do items associated with this client.
+     *
+     * @return The count of to-dos.
+     */
+    public int getTodoCount() {
+        return this.todoList.getSize(); // Or todoList.getTasks().size() depending on your TaskList implementation
     }
 }
 
