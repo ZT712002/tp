@@ -7,7 +7,9 @@ import seedu.duke.command.EditUserCommand;
 import seedu.duke.command.ListCommand;
 import seedu.duke.exception.FinanceProPlusException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 
 public class UserParserTest {
