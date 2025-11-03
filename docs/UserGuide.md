@@ -19,15 +19,14 @@ It's a CRM that works at your pace, not the other way around.
 5. Refer to the [Features](#features) or [Command Summary](#command-summary)
 ## Features
 
-### Client Features
-
-This guide provides a complete reference for all commands related to the `client` entity. The commands are designed for rapid data entry and retrieval, allowing you to manage your client portfolio entirely from the keyboard.
-
 ### Command Syntax Legend
 
 Before we begin, here is the syntax used in this guide:
 *   `<VALUE>`: A placeholder for a value you must provide (e.g., `<NRIC>`).
 *   `[...]`: Denotes an optional argument or group of arguments.
+### Client Features
+
+This guide provides a complete reference for all commands related to the `client` entity. The commands are designed for rapid data entry and retrieval, allowing you to manage your client portfolio entirely from the keyboard.
 
 #### **1. Adding a New Client**
 
@@ -39,7 +38,7 @@ This command creates a new client record. The policy is optional and, if include
     *   `n/<NAME>`: **Required.** The full name of the client.
     *   `c/<CONTACT>`: **Required.** The client's phone number.
     *   `id/<NRIC>`: **Required.** The client's unique NRIC number (acts as a primary key).
-    *   `p/<POLICY_NAME>`: *Optional.* The name of a base policy to assign to the client as a placeholder. The policy must already exist in the main policy list. Only 1 policy can be added in this command.
+    *   `p/<POLICY_NAME>`: *Optional.* The name of a base policy to assign to the client as a placeholder. The policy must already exist in the main policy list.
 
 *   **Examples:**
     *   To add a client without an initial policy:
