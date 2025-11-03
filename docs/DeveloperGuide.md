@@ -148,7 +148,56 @@ In the LookUptable Component,
 * It stores the various lists(ClientList,PolicyList,MeetingList,UserList) that implements the ListContainer Interface.
 * Once instantiated, the constructor creates the list objects and stores it as a Hashmap with the appropriate key-value pairs
 * The LookUpTable is composed of the lists. If deleted, the list objects will be destroyed
+### Parser Logic Flow
 
+To begin, here is a high level sequence diagram of how any command is being determined by the algorithm:
+
+![Generic Parser Sequence](./umldiagrams/genericParserSequence.svg)
+
+The process begins when the UI receives the user input and calls the `Parser.parse()` method. This is the single entry point for all command parsing in the application.
+
+```java
+// In Main/UI class (conceptual)
+String userInput = "client add n/John Doe id/S1234567A";
+Command command = Parser.parse(userInput);
+```
+
+
+
+The `parse()` method immediately delegates the main task to `selectParserType()`. This method performs the **first level of parsing**:
+
+1.  It calls `splitCommand(userInput)`, which splits the input string into two parts based on the first space:
+    *   `commandParts[0]` becomes `"client"`
+    *   `commandParts[1]` becomes `"add n/John Doe id/S1234567A"`
+2.  It converts the `commandType` ("client") to lowercase to ensure case-insensitivity.
+3.  It uses a `switch` statement to act as a **factory**. Based on the `commandType`, it decides which specialized parser to create. In this case, it matches `case "client":`.
+4.  It instantiates and returns a new `ClientParser`, passing the `commandType` ("client") and the remaining arguments (`commandArgs`) to its constructor.
+
+At this point, the main `Parser` has successfully delegated the rest of the work to a specialist.
+
+
+The `ClientParser` is now created. Its constructor immediately performs the **second level of parsing**:
+
+1.  It takes the `commandArgs` it received (`"add n/John Doe id/S1234567A"`).
+2.  It calls `splitCommand()` on these arguments, splitting them into:
+    *   `commandParts[0]` becomes `"add"`
+    *   `commandParts[1]` becomes `"n/John Doe id/S1234567A"`
+3.  It stores `"add"` as the `commandSubtype` and the rest as the final `arguments`.
+
+The `ClientParser` is now fully initialized and knows that the user wants to perform an `add` action related to a `client`.
+
+
+Back in the main `Parser.parse()` method, it now calls `executeAndCreateCommand()` on the `ClientParser` object it just created.
+
+1.  The `ClientParser` overrides this method.
+2.  It uses its own `switch` statement based on the `commandSubtype` it determined earlier ("add").
+3.  It matches `case "add":` and instantiates the final, concrete command object: `new AddCommand("client", "n/John Doe id/S1234567A")`.
+
+
+1.  The newly created `AddCommand` object is returned from `ClientParser.executeAndCreateCommand()` to `Parser.parse()`.
+2.  `Parser.parse()` returns this `AddCommand` object to the original caller (the UI).
+
+The parsing process is now complete. The UI holds a fully formed `AddCommand` object that contains all the necessary information to execute the user's request. It can now call `command.execute()`.
 
 
 
@@ -219,25 +268,10 @@ Here is a step-by-step breakdown of the execution flow for a typical command, su
 
 
 #### Phase 1: Parsing and Command Instantiation
-
-This phase is responsible for converting the user's raw input string into an executable `Command` object.
-
-1.  **Input Capture:** The `Ui` component captures the raw command string from the user.
-
-2.  **Initial Parsing:** The main application loop invokes the static `Parser.parse(string)` method. This top-level parser acts as a **Factory**. It inspects the first word of the command (e.g., `"client"`) to determine which specialized parser to use.
-
-3.  **Delegation to Sub-Parser:** The `Parser` factory instantiates a specific subclass, in this case, `new ClientParser(...)`, and passes the remaining arguments to it.
-
-4.  **Command Creation:** The `ClientParser` identifies the command's subtype (e.g., `"add"`) and its arguments. It then instantiates the corresponding concrete command object:
-    ```
-    new AddCommand("client", "n/Zendne ...");
-    ```
-
-5.  **Return to Caller:** This newly created `AddCommand` object is returned all the way up the call stack to the main application loop in `FinanceProPlus`. At this point, the application holds an executable object but has not yet performed any action.
+Refer to [parser logic flow](#parser-logic-flow)
 
 
-
-#### Phase 2: Execution and Business Logic
+#### Phase 2: Execution 
 
 This phase is where the `Command` object performs its designated action by interacting with the data models.
 

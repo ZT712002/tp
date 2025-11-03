@@ -1,82 +1,58 @@
 @startuml
-
-
 title Sequence Diagram: Add New Client
 
+actor "Financial Advisor" as User
+participant UI as ":UI"
+participant Parser as ":Parser"
+participant Command as ":AddCommand"
+participant ClientList as ":ClientList"
+participant Client as ":Client"
 
-actor User as "Financial Advisor"
-participant UI
-participant Parser
-participant ClientParser
-participant Command as "AddCommand"
-participant ClientList
-participant Client
-
-
-User -> UI: enters "add client /n John Doe ..."
+User -> UI: enters "client add n/John Doe ..."
 activate UI
-UI -> Parser :parse();
-activate Parser
 
+ref over UI, Parser
+    **Command Parsing Sequence**
+    (Details on how the input string is converted
+    into a Command object are omitted for brevity.
+    See the "Command Parsing" diagram for details.)
+end ref
 
-    Parser -> Parser: executeAndCreateCommand();
-    activate Parser
-    Parser --> Parser:
-    deactivate Parser
-    Parser -> ClientParser**: ClientParser();
-    activate ClientParser
+note right of UI: The UI now holds an AddCommand object.
 
-    ClientParser -> ClientParser:splitCommand();
-    activate ClientParser
-    ClientParser --> ClientParser
-    deactivate ClientParser
+UI-> Command : execute()
+activate Command
 
-    ClientParser -> Command**:
-    activate Command
-    Command -> Command:AddCommand();
-    activate Command
-    Command --> Command
-    deactivate Command
-    Command -->ClientParser
-    deactivate Command
-    ClientParser --> Parser
-    deactivate ClientParser
-    Parser --> UI
-    deactivate Parser
-    UI->Command :execute();
-    activate Command
-    Command -> ClientList
-    activate ClientList
-    ClientList -> ClientList:AddItem();
-    activate ClientList
+Command -> ClientList: addItem(arguments, policyList)
+activate ClientList
 
-    ClientList ->Client**
-    activate Client
+ClientList -> Client**: create(arguments, policyList)
+activate Client
+note left of Client: The Client constructor parses the details\n(name, nric, etc.) and validates them.
+Client -> Client: Client();
+activate Client
+Client --> Client
+deactivate Client
+Client -->ClientList
+deactivate Client
 
-    Client -> Client: Client();
-    activate Client
-    Client -->Client
-    deactivate Client
-    Client -->ClientList
-    deactivate Client
-    ClientList -> ClientList: AddClient(Client);
-    activate ClientList
-    ClientList --> ClientList
-    deactivate ClientList
-    ClientList -->ClientList
-    deactivate ClientList
-    ClientList --> Command
-    deactivate ClientList
-    Command --> UI
-    deactivate Command
-    UI ->Command :printExecutionMessage();
-    Activate Command
-    Command --> UI
-    deactivate Command
+ClientList -> ClientList: addClient(client)
+activate ClientList
+ClientList --> ClientList
+deactivate ClientList
 
+ClientList --> Command
+deactivate ClientList
 
-    UI --> User: Displays "Client added successfully"
+Command --> UI
+deactivate Command
 
-deactivate Parser
+UI -> Command : printExecutionMessage()
+activate Command
+Command --> UI: "Noted. I've added this client: ..."
+deactivate Command
+
+UI --> User: Displays success message
+deactivate UI
 
 @enduml
