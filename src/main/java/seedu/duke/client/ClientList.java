@@ -16,8 +16,7 @@ import java.math.BigDecimal;
 
 public class ClientList implements ListContainer {
     private static final String DELETE_CLIENT_FORMAT = "Correct format: client delete <INDEX>";
-    private static final String ADD_CLIENT_FORMAT = "Correct format: client add n/<NAME> c/<CONTACT> id/<NRIC> " +
-            "[p/<POLICY_NAME>]";
+    private static final String ADD_CLIENT_FORMAT = "Correct format: client add n/<NAME> c/<CONTACT> id/<NRIC> ";
     private static final String ADD_POLICY_FORMAT = "Correct format: client addpolicy id/<NRIC> p/<POLICY_NAME> " +
             "s/<START_DATE> e/<EXPIRY_DATE> m/<PREMIUM>";
     private static final String UPDATE_POLICY_FORMAT = "Correct format: client updatepolicy id/<NRIC> p/<POLICY_NAME>" +

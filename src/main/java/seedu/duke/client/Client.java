@@ -11,12 +11,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Client {
     private static final String CLIENT_REGEX = "\\s+(?=[a-z]+\\/)";
-    private static final String ADD_CLIENT_FORMAT = "Correct format: client add n/<NAME> c/<CONTACT> id/<NRIC> " +
-            "[p/<POLICY_NAME>]";
+    private static final String ADD_CLIENT_FORMAT = "Correct format: client add n/<NAME> c/<CONTACT> id/<NRIC>";
     private String name;
     private PolicyList policyList;
     private TaskList todoList;
@@ -43,7 +43,6 @@ public class Client {
         Map<String, List<String>> detailsMap = parseClientDetails(arguments);
 
         initialiseMainDetails(detailsMap);
-        initialiseOptionalPolicy(detailsMap, mainPolicyList);
         if (this.name == null || this.name.isEmpty() ||
                 this.phoneNumber == 0 ||
                 this.nric == null || this.nric.isEmpty()) {
@@ -63,6 +62,11 @@ public class Client {
      * @throws FinanceProPlusException If any required key is missing.
      */
     private void initialiseMainDetails(Map<String, List<String>> detailsMap) throws FinanceProPlusException {
+        final Set<String> allowedKeys = Set.of("n", "c", "id");
+        if (!detailsMap.keySet().equals(allowedKeys)) {
+            throw new FinanceProPlusException("Invalid format. The 'client add' command must contain exactly n/, c/, " +
+                    "and id/ parameters.\n" + ADD_CLIENT_FORMAT);
+        }
         List<String> requiredKeys = List.of("n", "c", "id");
         for (String key : requiredKeys) {
             if (!detailsMap.containsKey(key) || detailsMap.get(key).isEmpty()) {
@@ -91,33 +95,6 @@ public class Client {
 
     }
 
-    /**
-     * Handles the creation of a "placeholder" ClientPolicy if the 'p/' prefix is provided.
-     *
-     * @param detailsMap     The map of parsed arguments.
-     * @param mainPolicyList The main list of company policies to validate against.
-     * @throws FinanceProPlusException If the policy number is empty or the policy doesn't exist.
-     */
-    private void initialiseOptionalPolicy(Map<String, List<String>> detailsMap, ListContainer mainPolicyList)
-            throws FinanceProPlusException {
-        if (!detailsMap.containsKey("p")) {
-            return;
-        }
-
-        PolicyList companyPolicies = (PolicyList) mainPolicyList;
-        for (String policyName : detailsMap.get("p")) {
-            if (policyName.isEmpty()) {
-                throw new FinanceProPlusException("Invalid command: Policy number (p/) cannot be empty.");
-            }
-            Policy basePolicy = companyPolicies.findPolicyByName(policyName);
-            if (basePolicy == null) {
-                throw new FinanceProPlusException("Validation Error: Policy '" + policyName
-                        + "' does not exist. Please add it to the main policy list first.");
-            }
-            ClientPolicy placeholderPolicy = new ClientPolicy(basePolicy);
-            this.policyList.addPolicy(placeholderPolicy);
-        }
-    }
 
     public static Map<String, List<String>> parseClientDetails(String clientDetails) {
         assert clientDetails != null : "Input string for parsing cannot be null";

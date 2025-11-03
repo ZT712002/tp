@@ -75,7 +75,7 @@ class ClientListTest {
             FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
                     () -> clientList.addItem(args, mainPolicyList));
             assertEquals("Invalid command format or missing required fields.\n" +
-                    "Correct format: client add n/<NAME> c/<CONTACT> id/<NRIC> [p/<POLICY_NAME>]"+
+                    "Correct format: client add n/<NAME> c/<CONTACT> id/<NRIC> "+
             "\nWhere [] are optional fields.", e.getMessage());
         }
 
@@ -309,7 +309,7 @@ class ClientListTest {
             FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
                     () -> clientList.getClientByID(args));
             assertEquals("Error: NRIC to find cannot be null or empty. Make sure id/ isn't empty" +
-                    "\nCorrect format: client add n/<NAME> c/<CONTACT> id/<NRIC> [p/<POLICY_NAME>]", e.getMessage());
+                    "\nCorrect format: client add n/<NAME> c/<CONTACT> id/<NRIC> ", e.getMessage());
         }
 
         @Test
@@ -318,7 +318,7 @@ class ClientListTest {
             FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
                     () -> clientList.getClientByID(args));
             assertEquals("Error: NRIC to find cannot be null or empty. Make sure id/ isn't empty" +
-                    "\nCorrect format: client add n/<NAME> c/<CONTACT> id/<NRIC> [p/<POLICY_NAME>]", e.getMessage());
+                    "\nCorrect format: client add n/<NAME> c/<CONTACT> id/<NRIC> ", e.getMessage());
         }
 
         @Test
