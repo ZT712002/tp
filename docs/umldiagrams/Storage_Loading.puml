@@ -2,7 +2,7 @@
 @startuml
 title Sequence Diagram: Application Startup Data Loading
 
-actor User as "User"
+actor "Financial advisor" as User
 
 participant ":FinanceProPlus" as FinanceProPlus
 participant ":StorageManager" as StorageManager
