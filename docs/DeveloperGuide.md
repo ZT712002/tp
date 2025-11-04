@@ -364,6 +364,236 @@ When a user creates a new task, the following sequence of operations occurs:
 
 ![Task Add Sequence Diagram](./umldiagrams/tasksequence.png)
 
+#### Design Patterns and Considerations for Task-Related Features
+
+This section discusses key design patterns and principles applied in the task management and client todo features.
+
+##### 1. Single Responsibility Principle (SRP) in Command Classes
+
+The `AddClientTodoCommand` class exemplifies the SRP by focusing solely on **orchestration** rather than business logic:
+
+**How it's applied:**
+- The command class is responsible only for:
+  - Parsing command arguments into a structured format (using `parseArguments()`)
+  - Extracting and validating required fields (using `extractTodoDetails()`)
+  - Delegating the actual todo creation to the appropriate domain object
+- Business logic (e.g., validating dates, storing todos) resides in the `Task` and `Client` classes
+- Data management (e.g., finding a client) is handled by `ClientList`
+
+**Benefits:**
+- Each class has one reason to change: commands change if command syntax changes, domain objects change if business rules change
+- Makes testing simpler: you can test command parsing separately from business logic
+- Promotes reusability: the same `Task` class can be used for both standalone tasks and client todos
+
+**Example from code:**
+```java
+// Command orchestrates but doesn't implement business logic
+public void execute(LookUpTable lookUpTable) throws FinanceProPlusException {
+    ClientList clientList = (ClientList) lookUpTable.getList(subtype);
+    Map<String, String> argsMap = parseArguments(arguments);
+    String nric = argsMap.get("id");
+    
+    // Delegate to ClientList for finding client
+    Client client = clientList.findClientByNric(nric);
+    
+    // Delegate to Client for adding todo
+    String todoDetails = extractTodoDetails(argsMap);
+    client.addTodo(todoDetails);
+}
+```
+
+##### 2. Comprehensive Exception-Based Error Handling
+
+All task and policy operations use `FinanceProPlusException` for predictable, user-friendly error handling.
+
+**How it's applied:**
+- **Early Validation:** All required fields are checked before any processing begins
+- **Specific Error Messages:** Each validation failure provides clear, actionable feedback
+- **Granular Validation:** The system distinguishes between missing individual fields vs. missing multiple fields
+
+**Example from AddClientTodoCommand:**
+```java
+private String extractTodoDetails(Map<String, String> argsMap) throws FinanceProPlusException {
+    String description = argsMap.get("d");
+    String dueDate = argsMap.get("by");
+    
+    boolean missingDescription = (description == null || description.isEmpty());
+    boolean missingDueDate = (dueDate == null || dueDate.isEmpty());
+    
+    if (missingDescription && missingDueDate) {
+        throw new FinanceProPlusException("Todo description (d/) and due date (by/) are required.");
+    }
+    if (missingDescription) {
+        throw new FinanceProPlusException("Todo description (d/) is required.");
+    }
+    if (missingDueDate) {
+        throw new FinanceProPlusException("Todo due date (by/) is required.");
+    }
+    
+    return "d/" + description + " by/" + dueDate;
+}
+```
+
+**Benefits:**
+- User receives immediate, specific feedback about what went wrong
+- Application never crashes from invalid input
+- Consistent error handling pattern across all features
+
+##### 3. Composition Over Inheritance for Client-Todo Relationship
+
+The `Client` class demonstrates composition by **containing** a `TaskList` rather than extending it.
+
+**Design Decision:**
+```java
+public class Client {
+    private String name;
+    private String nric;
+    private PolicyList policyList;  // Client HAS-A policy list
+    private TaskList todoList;       // Client HAS-A todo list
+    
+    public void addTodo(String todoArguments) throws FinanceProPlusException {
+        this.todoList.addItem(todoArguments);  // Delegates to composed object
+    }
+}
+```
+
+**Why this design was chosen:**
+- A `Client` is fundamentally a person/entity, not a type of task list
+- This allows a client to have multiple collections (policies AND todos) without complex multiple inheritance
+- The `TaskList` can be reused in different contexts (standalone tasks, client todos) without tight coupling
+- Changes to `TaskList` implementation don't affect the `Client` interface
+
+**Alternative Rejected:** Making `Client` extend `TaskList` would violate the "is-a" relationship and make the code rigid.
+
+##### 4. Separation of Concerns: Standalone Tasks vs. Client Todos
+
+Despite both using the `Task` class, the system maintains a clear separation between general tasks and client-specific todos.
+
+**Architectural Separation:**
+- **Standalone Tasks:** Managed by a single `TaskList` accessible via `LookUpTable`, stored in `task.txt`
+- **Client Todos:** Each `Client` object maintains its own `TaskList`, stored in `data/client_tasks/<NRIC>.txt`
+
+**Why this separation exists:**
+- **Use Case Distinction:** Standalone tasks (e.g., "Complete quarterly report") vs. client-specific actions (e.g., "Follow up with S1234567A on claim")
+- **Data Isolation:** Each client's todos are independently stored and loaded, preventing data corruption
+- **Scalability:** As the number of clients grows, file operations remain efficient (only load relevant client data)
+- **Debugging:** Issues with one client's todos don't affect others; files can be inspected individually
+
+**Storage Design Benefits:**
+```
+data/
+├── task.txt                     # Standalone tasks
+├── client_tasks/
+│   ├── S1234567A.txt           # Alice's todos (isolated)
+│   ├── G7654321B.txt           # Bob's todos (isolated)
+│   └── S9876543C.txt           # Charlie's todos (isolated)
+```
+
+##### 5. Defensive Programming with Assertions
+
+The `Task` and `Policy` classes use assertions extensively to catch programming errors during development.
+
+**How it's applied in Task:**
+```java
+public Task(String arguments) throws FinanceProPlusException {
+    assert arguments != null && !arguments.trim().isEmpty() : 
+        "Arguments for task creation cannot be null";
+    
+    // ... parsing logic ...
+    
+    assert this.description != null && !description.isEmpty() : 
+        "Description should not be null or empty";
+    assert this.dueDate != null && !dueDate.isEmpty() : 
+        "Due date should not be null or empty";
+}
+```
+
+**How it's applied in Policy:**
+```java
+public Policy(String arguments, boolean parseDetails) throws FinanceProPlusException {
+    assert arguments != null : "Arguments cannot be null";
+    // ... construction logic ...
+    assert this.name != null : "Policy name must be set after construction";
+    assert this.details != null : "Policy details must be set after construction";
+    assert !this.name.isEmpty() : "Policy name cannot be empty";
+}
+```
+
+**Benefits:**
+- Assertions catch invariant violations during development (when assertions are enabled)
+- Serve as executable documentation of pre-conditions and post-conditions
+- Help identify bugs early in the development cycle
+- Don't impact production performance (assertions can be disabled in production)
+
+##### 6. Policy Validation Design
+
+The policy system employs a two-tier validation approach to maintain data integrity.
+
+**Two-Tier Policy Structure:**
+1. **Base Policy (`Policy`):** Represents company-wide policy templates (e.g., "HealthShield", "PremiumLife")
+2. **Client Policy (`ClientPolicy`):** Extends base policies with client-specific details (dates, premiums)
+
+**Validation Pattern:**
+```java
+private Policy validateAndGetBasePolicy(Client client, ListContainer mainPolicyList, 
+                                       String basePolicyName) throws FinanceProPlusException {
+    // Step 1: Verify base policy exists in company catalog
+    Policy basePolicy = companyPolicies.findPolicyByName(basePolicyName.toLowerCase());
+    if (basePolicy == null) {
+        throw new FinanceProPlusException("Error: Base policy '" + basePolicyName 
+            + "' not found in the main list.");
+    }
+    
+    // Step 2: Prevent duplicate policies for the same client
+    if (client.hasPolicy(basePolicyName)) {
+        throw new FinanceProPlusException("Error: Client " + client.getNric()
+            + " already has a contract for policy '" + basePolicyName + "'.");
+    }
+    
+    return basePolicy;
+}
+```
+
+**Why this design:**
+- **Data Consistency:** Clients can only be assigned policies that exist in the company's catalog
+- **Referential Integrity:** Prevents orphaned client policies
+- **Business Rule Enforcement:** A client cannot have duplicate policies
+- **Centralized Management:** Policy details are defined once in the base policy
+
+##### 7. Test Design: Spy/Stub Pattern
+
+The test suite for `AddClientTodoCommand` demonstrates effective use of test doubles for unit testing.
+
+**Test Double Strategy:**
+```java
+static class SpyClient extends Client {
+    boolean addTodoCalled = false;
+    
+    @Override
+    public void addTodo(String todoArguments) throws FinanceProPlusException {
+        addTodoCalled = true;  // Record that method was called
+        super.addTodo(todoArguments);
+    }
+}
+
+static class SpyClientList extends ClientList {
+    Client clientToReturn;
+    boolean findByNricCalled = false;
+    
+    @Override
+    public Client findClientByNric(String nric) throws FinanceProPlusException {
+        findByNricCalled = true;  // Verify interaction occurred
+        return clientToReturn;     // Control test behavior
+    }
+}
+```
+
+**Benefits of this approach:**
+- **Isolation:** Tests only the command's orchestration logic, not the entire system
+- **Verification:** Can assert that specific methods were called with correct arguments
+- **Control:** Can simulate edge cases (e.g., client not found) without complex setup
+- **Speed:** Tests run quickly without file I/O or complex object graphs
+
 
 ### Meeting Features
 To begin, here is a high level Class Diagram of Meetings and its interaction with other classes:
