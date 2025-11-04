@@ -2,6 +2,10 @@ package seedu.duke.task;
 
 import seedu.duke.exception.FinanceProPlusException;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +35,14 @@ public class Task {
 
     private void validateDateFormat(String dateString) throws FinanceProPlusException {
         if (!dateString.matches("\\d{2}-\\d{2}-\\d{4}")) {
+            throw new FinanceProPlusException("Invalid date format. Please use dd-MM-yyyy (e.g., 15-01-2024)");
+        }
+        
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-uuuu")
+                    .withResolverStyle(ResolverStyle.STRICT);
+            LocalDate.parse(dateString, formatter);
+        } catch (DateTimeParseException e) {
             throw new FinanceProPlusException("Invalid date format. Please use dd-MM-yyyy (e.g., 15-01-2024)");
         }
     }
