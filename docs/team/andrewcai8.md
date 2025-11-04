@@ -54,20 +54,46 @@ tasks, meetings and their Companies' policies. It can also show them their upcom
   * Justification: Improves user experience by providing a clear indication that the application has started successfully and gives users context about the application.
   * Highlights: Designed the message to be informative and aligned with the application's professional tone.
 
+- **Bug Fixes and Issue Resolution**
+  * Client Todo Issues
+    * Fixed edge cases in client todo deletion where invalid indices would cause unexpected behavior.
+    * Resolved issues with todo persistence in storage, ensuring todos are correctly saved and loaded across sessions.
+    * Fixed formatting inconsistencies in todo list display to improve readability.
+  * Task Management Issues
+    * Addressed bugs in task date validation to handle invalid date formats gracefully.
+    * Fixed task deletion index out of bounds errors and improved error messaging.
+    * Resolved conflicts between task storage and client storage mechanisms.
+  * Policy Management Issues
+    * Fixed duplicate policy detection logic to prevent adding policies with identical names.
+    * Resolved policy deletion issues that could leave orphaned references in client records.
+    * Addressed index synchronization problems in policy list management.
+
 - **Unit Tests**
   * Wrote comprehensive unit tests for all the above features to ensure code reliability and maintainability.
+  * Added test cases specifically targeting edge cases and bug scenarios discovered during development.
 
 **Contributions to UG**
 
 - Documented the Task Management features section, including add, list, and delete commands with examples.
 - Documented the Policy Management features section, including add, list, and delete commands with examples.
 - Added detailed command reference entries for task and policy commands in the Quick Reference table.
+- Created comprehensive examples demonstrating typical workflows for financial advisors.
+- Updated error message documentation to help users understand and resolve common issues.
+- Added notes and warnings for edge cases in task and policy management.
+- Improved formatting and consistency across all feature documentation sections.
 
 **Contributions to DG**
 
 - Primary author of the Task Management Feature section, explaining the design considerations and implementation details.
 - Created the Task Add sequence diagram (`tasksequence.puml`) showing the flow from user input through parser to storage.
 - Documented the interaction between TaskCommand, TaskList, and Storage components.
+- Authored the Policy Management architecture documentation, including class relationships and data flow.
+- Added implementation details for client todo integration with the existing Client class structure.
+- Documented design decisions for separating standalone tasks from client-specific todos.
+- Created detailed explanations of storage mechanisms for tasks, todos, and policies.
+- Updated architecture diagrams to reflect the addition of task and policy management components.
+- Documented error handling strategies and validation logic for all implemented features.
+- Added user stories and use cases specific to task and policy management features.
 
 **Team Based Tasks**
 
