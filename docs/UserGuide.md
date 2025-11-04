@@ -497,6 +497,11 @@ Updates the existing user profile with new details.
 
 * Command: `user edit`
 
+#### **List all commands**
+
+Lists all available commands
+* Command `help`
+
 
 #### **Exiting the Application**
 
