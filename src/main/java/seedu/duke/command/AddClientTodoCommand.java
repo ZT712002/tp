@@ -59,10 +59,16 @@ public class AddClientTodoCommand extends Command {
         String description = argsMap.get("d");
         String dueDate = argsMap.get("by");
 
-        if (description == null || description.isEmpty()) {
+        boolean missingDescription = (description == null || description.isEmpty());
+        boolean missingDueDate = (dueDate == null || dueDate.isEmpty());
+
+        if (missingDescription && missingDueDate) {
+            throw new FinanceProPlusException("Todo description (d/) and due date (by/) are required.");
+        }
+        if (missingDescription) {
             throw new FinanceProPlusException("Todo description (d/) is required.");
         }
-        if (dueDate == null || dueDate.isEmpty()) {
+        if (missingDueDate) {
             throw new FinanceProPlusException("Todo due date (by/) is required.");
         }
 

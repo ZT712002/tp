@@ -141,6 +141,24 @@ class AddClientTodoCommandTest {
                 () -> command.execute(lookUpTable));
         assertEquals("Todo due date (by/) is required.", e.getMessage());
     }
+
+    @Test
+    void execute_missingBothDescriptionAndDueDate_throwsException() {
+        AddClientTodoCommand command = new AddClientTodoCommand("client",
+                "id/S1234567A");
+        FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
+                () -> command.execute(lookUpTable));
+        assertEquals("Todo description (d/) and due date (by/) are required.", e.getMessage());
+    }
+
+    @Test
+    void execute_emptyDescriptionAndDueDate_throwsException() {
+        AddClientTodoCommand command = new AddClientTodoCommand("client",
+                "id/S1234567A d/ by/");
+        FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
+                () -> command.execute(lookUpTable));
+        assertEquals("Todo description (d/) and due date (by/) are required.", e.getMessage());
+    }
 }
 
 
