@@ -12,13 +12,11 @@ week.
 [Code Dashboard Link](https://nus-cs2113-ay2526s1.github.io/tp-dashboard/?search=eggskay&breakdown=true&sort=groupTitle%20dsc&sortWithin=title&since=2025-09-19T00%3A00%3A00&timeframe=commit&mergegroup=&groupSelect=groupByRepos&checkedFileTypes=docs~functional-code~test-code~other&filteredFileName=)
 
 ### Enhancements Added
-
 - User Command Methods
-    - **Add:** Enables financial advisors to create their personal profile in the system. Enforces single-user mode to prevent duplicate profiles.
+    - **Add:** Enables financial advisors to create their personal profile in the system. (Enforces single-user mode)
     - **Edit:** Updates existing user information dynamically.
     - **View:** Displays current stored user details in a consistent format using the shared `listItems()` interface.  
-      *Highlights:* Added email and 8-digit contact validation, and restricted single-user creation with defensive checks and assertions.
-
+      *Highlights:* Added email and 8-digit contact validation.
 
 - Storage System (Autosave)
     * What it does: Automatically saves all major data lists (User, Client, Policy, Meeting, Archived Clients, and Task)
@@ -26,16 +24,11 @@ week.
     * Justification: Prevents data loss and ensures that every update made during runtime is immediately persisted to
       disk.
     * Highlights:
-        * Added autosave logic inside `FinanceProPlus.saveAllData()` which is triggered at the end of each command
-          cycle.
         * Utilized `StorageManager` to handle all read/write operations to text-based files.
-        * Integrated per-client task storage — every client’s personal to-do list is saved in the `/data/client_tasks/`
-          directory under their NRIC filename (e.g., `S1234567A.txt`).
-        * Integrated per-client policy storage — every client’s personal policy list is saved in the `/data/client_policies/`
+        * Integrated per-client task storage — every client’s personal to-do list and  policy list is saved in the `/data/client_tasks/` and `/data/client_policies/`
           directory under their NRIC filename (e.g., `S1234567A.txt`).
         * Added **storage helper functions** to each list class (`toStorageFormat()`, `toCSVFormat()`,
-          `loadFromStorage()`) to provide standardized serialization and deserialization of data. This ensures that
-          every class can independently save and restore its state.
+          `loadFromStorage()`) to provide standardized serialization and deserialization of data. 
         * Implemented consistent `Logger.info()` messages for each successful save to simplify debugging and verify
           autosave performance.
 
@@ -46,12 +39,9 @@ week.
       automatically.
     * Highlights:
         * Added a `loadFromFiles()` function in `FinanceProPlus` that calls each list’s `loadFromStorage()` method.
-        * Implemented automatic loading of client-specific to-do lists by reading from each file in the
-          `/data/client_tasks/` directory.
-        * Implemented automatic loading of client-specific policy lists by reading from each file in the
-            `/data/client_policies/` directory.
+        * Implemented automatic loading of client-specific to-do lists and policy listsby reading from each file in the
+          `/data/client_tasks/` directory and `/data/client_policies/`.
         * Added robust error handling to continue loading other data even if one file is missing or corrupted.
-        * Startup events are logged with `Logger.info()` for transparency and easier troubleshooting.
 
 - CSV Exporting
     * What it does: Exports all main data lists (User, Client, Policy, Meeting) into structured `.csv` files for use in
@@ -64,13 +54,9 @@ week.
     * What it does: Handles all user-specific commands such as `add`, `edit`, and `view` for the User entity.
     * Justification: Separates the logic of parsing user commands from other entities, ensuring modularity and better
       scalability.
-    * Highlights: Implemented within `UserParser` to integrate smoothly with the main parser system while maintaining
-      entity-level independence. Required careful design to ensure consistency with the command execution flow and error
-      handling.
 
 * Unit Tests and Assertions
     * Added automated testing and defensive programming practices across all implemented components.  
-
 
 **Contributions to UG**
 
