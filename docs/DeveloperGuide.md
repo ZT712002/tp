@@ -61,19 +61,21 @@ All saved data resides within a single primary directory:
 #### Key Data Files
 
 
-| Data Type        | Storage Location               | Example Path                      |
-| :--------------- | :----------------------------- | :-------------------------------- |
-| User             | `data/user.txt`                | `data/user.txt`                   |
-| Client           | `data/client.txt`              | `data/client.txt`                 |
-| Archived Clients | `data/archived_clients.txt`    | `data/archived_clients.txt`       |
-| Policy           | `data/policy.txt`              | `data/policy.txt`                 |
-| Meeting          | `data/meeting.txt`             | `data/meeting.txt`                |
-| Client Todos     | `data/client_tasks/<NRIC>.txt` | `data/client_tasks/S1234567A.txt` |
-| Task             | `task.txt`                     | `task.csv`                        |
+| Data Type        | Storage Location                  | Example Path                         |
+|:-----------------|:----------------------------------|:-------------------------------------|
+| User             | `data/user.txt`                   | `data/user.txt`                      |
+| Client           | `data/client.txt`                 | `data/client.txt`                    |
+| Archived Clients | `data/archived_clients.txt`       | `data/archived_clients.txt`          |
+| Policy           | `data/policy.txt`                 | `data/policy.txt`                    |
+| Meeting          | `data/meeting.txt`                | `data/meeting.txt`                   |
+| Client Todos     | `data/client_tasks/<NRIC>.txt`    | `data/client_tasks/S1234567A.txt`    |
+| Client Policies  | `data/client_policies/<NRIC>.txt` | `data/client_policies/S1234567A.txt` |                                                                                
+| Task             | `task.txt`                        | `task.txt`                           |
 
 
-#### Client Task Storage Design (`client_tasks/` Folder)
+#### Client Task and Policy Storage Design (`client_tasks/` Folder and `client_policies/`)
 Each client’s personal to-do list is saved in a separate text file named after their NRIC, located inside the `client_tasks/` subfolder.  
+While each client's personal policies are saved in a separate text file named after their NRIC, located inside `client_policies/` subfolder.
 This design ensures isolation between clients and simplifies debugging, updating, and file management.
 
 #### Workflow Description (Autosave)
@@ -107,7 +109,8 @@ On startup, the `FinanceProPlus` constructor initializes the `StorageManager` an
 - **MeetingList**
 - **ArchivedClientList**
 - **TaskList**
-- **Per-Client TaskLists** (located under `data/client_tasks/`)
+- **Per-Client TodoLists** (located under `data/client_tasks/`)
+- **Per-Client PolicyLists** (located under `data/client_policies/`)
 
 If any file is missing or unreadable, the app logs the issue but continues loading other data, ensuring robust operation even with partial data.
 
@@ -121,7 +124,7 @@ If any file is missing or unreadable, the app logs the issue but continues loadi
     - `meetings.loadFromStorage(storage.loadFromFile("meeting.txt"));`
     - `archivedClients.loadFromStorage(storage.loadFromFile("archived_clients.txt"));`
     - `tasks.loadFromStorage(storage.loadFromFile("task.txt"));`
-    - iterates through each client and updates their personal todolist.
+    -  Then it iterates through each client and updates their personal TodoList and PolicyList.
 4. Each list reconstructs its objects from text lines.
 5. `Logger.info("Data loaded successfully.")` confirms successful initialization.
 
