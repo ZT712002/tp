@@ -676,9 +676,12 @@ Refer to the command summary tables in the User Guide for complete syntax. Below
 | View new user          | `user view`                                                       | Displays Jane Doe's details   |
 
 #### 6. Miscellaneous 
+
+
 | Test Case              | Command                                                                             | Expected Result               |
 |:-----------------------|:-------------------------------------------------------------------------|:------------------------------|
 |Exits the Application| `exit`| Exits the application successfully|
+
 
 ### Testing Data Persistence
 
