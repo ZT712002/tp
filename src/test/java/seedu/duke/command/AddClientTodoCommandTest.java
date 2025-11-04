@@ -159,6 +159,33 @@ class AddClientTodoCommandTest {
                 () -> command.execute(lookUpTable));
         assertEquals("Todo description (d/) and due date (by/) are required.", e.getMessage());
     }
+
+    @Test
+    void execute_invalidDayInDate_throwsException() {
+        AddClientTodoCommand command = new AddClientTodoCommand("client",
+                "id/S1234567A d/Review policy by/90-11-2025");
+        FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
+                () -> command.execute(lookUpTable));
+        assertEquals("Invalid date format. Please use dd-MM-yyyy (e.g., 15-01-2024)", e.getMessage());
+    }
+
+    @Test
+    void execute_invalidMonthInDate_throwsException() {
+        AddClientTodoCommand command = new AddClientTodoCommand("client",
+                "id/S1234567A d/Review policy by/15-13-2025");
+        FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
+                () -> command.execute(lookUpTable));
+        assertEquals("Invalid date format. Please use dd-MM-yyyy (e.g., 15-01-2024)", e.getMessage());
+    }
+
+    @Test
+    void execute_invalidDateFebruary30_throwsException() {
+        AddClientTodoCommand command = new AddClientTodoCommand("client",
+                "id/S1234567A d/Review policy by/30-02-2025");
+        FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
+                () -> command.execute(lookUpTable));
+        assertEquals("Invalid date format. Please use dd-MM-yyyy (e.g., 15-01-2024)", e.getMessage());
+    }
 }
 
 
