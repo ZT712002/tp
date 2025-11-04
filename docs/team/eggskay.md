@@ -13,14 +13,13 @@ week.
 
 ### Enhancements Added
 - User Command Methods
-    - **Add:** Enables financial advisors to create their personal profile in the system. (Enforces single-user mode)
+    - **Add:** Enables financial advisors to create their personal profile in the system.
     - **Edit:** Updates existing user information dynamically.
     - **View:** Displays current stored user details in a consistent format using the shared `listItems()` interface.  
       *Highlights:* Added email and 8-digit contact validation.
 
 - Storage System (Autosave)
-    * What it does: Automatically saves all major data lists (User, Client, Policy, Meeting, Archived Clients, and Task)
-      after every command is executed.
+    * What it does: Automatically saves all major data lists after every command is executed.
     * Justification: Prevents data loss and ensures that every update made during runtime is immediately persisted to
       disk.
     * Highlights:
@@ -28,7 +27,7 @@ week.
         * Integrated per-client task storage — every client’s personal to-do list and  policy list is saved in the `/data/client_tasks/` and `/data/client_policies/`
           directory under their NRIC filename (e.g., `S1234567A.txt`).
         * Added **storage helper functions** to each list class (`toStorageFormat()`, `toCSVFormat()`,
-          `loadFromStorage()`) to provide standardized serialization and deserialization of data. 
+          `loadFromStorage()`).
         * Implemented consistent `Logger.info()` messages for each successful save to simplify debugging and verify
           autosave performance.
 
@@ -52,8 +51,6 @@ week.
 
 - User Parser Implementation
     * What it does: Handles all user-specific commands such as `add`, `edit`, and `view` for the User entity.
-    * Justification: Separates the logic of parsing user commands from other entities, ensuring modularity and better
-      scalability.
 
 * Unit Tests and Assertions
     * Added automated testing and defensive programming practices across all implemented components.  
@@ -66,7 +63,6 @@ week.
 
 - Documented the **Storage Component**, including autosave, startup loading, and per-client to-do list storage design.
 - Created the **Storage Sequence Diagrams** (“Autosave Triggered by FinanceProPlus” and “Storage Loading Sequence”).
-- Added implementation details for `loadFromFiles()` and storage helper methods across all list classes.
 
 **Team-Based Tasks**
 - Set up GitHub team organisation and repository.
