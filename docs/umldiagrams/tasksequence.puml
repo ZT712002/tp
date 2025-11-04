@@ -5,15 +5,15 @@ title Sequence Diagram: Add New Task
 
 
 actor User as "Financial Advisor"
-participant UI
-participant App as "FinanceProPlus"
-participant Parser
-participant TaskParser
-participant Command as "AddCommand"
-participant LookUpTable
-participant TaskList
-participant Task
-participant Console
+participant ": UI" as UI
+participant ": FinanceProPlus" as App
+participant ": Parser" as Parser
+participant ": TaskParser" as TaskParser
+participant ": AddCommand" as Command
+participant ": LookUpTable" as LookUpTable
+participant ": TaskList" as TaskList
+participant ": Task" as Task
+participant ": Console" as Console
 
 
 User -> UI: enters "task add d/Report by/15-01-2024"
