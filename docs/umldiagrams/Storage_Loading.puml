@@ -2,16 +2,18 @@
 @startuml
 title Sequence Diagram: Application Startup Data Loading
 
-actor User as "System Launch"
-participant FinanceProPlus
-participant StorageManager
-participant PolicyList
-participant ClientList
-participant UserList
-participant MeetingList
-participant ArchivedClientList
-participant TaskList
-participant Logger
+actor User as "User"
+
+participant ":FinanceProPlus" as FinanceProPlus
+participant ":StorageManager" as StorageManager
+participant ":Logger" as Logger
+participant ":PolicyList" as PolicyList
+participant ":ClientList" as ClientList
+participant ":UserList" as UserList
+participant ":MeetingList" as MeetingList
+participant ":ArchivedClientList" as ArchivedClientList
+participant ":TaskList" as TaskList
+
 
 
 == Initialization ==
@@ -85,6 +87,10 @@ TaskList --> FinanceProPlus:
 deactivate TaskList
 
 FinanceProPlus -> Logger: info("Data loaded successfully.")
+activate Logger
+Logger --> FinanceProPlus
+deactivate Logger
+FinanceProPlus --> User
 deactivate FinanceProPlus
 
 @enduml
