@@ -504,6 +504,41 @@ Exits the Application
 * Command `exit`
 
 ---
+
+## Tips & Best Practices
+
+### Understanding Client To-Dos vs Standalone Tasks
+
+**Client To-Dos** are action items tied to a specific client (e.g., "Follow up on John's claim submission"). Use these when the task is client-specific and you want it to appear when viewing that client's profile.
+
+**Standalone Tasks** are general action items not tied to any particular client (e.g., "Review quarterly insurance report", "Renew office license"). Use these for administrative work, personal reminders, or industry-related deadlines.
+
+*Tip: When in doubt, if the task mentions a client's name or involves client-specific work, make it a client to-do.*
+
+### Policy Management Workflow
+
+1. **Create Base Policies First**: Before assigning policies to clients, ensure you've created the base policy template using `policy add`. Think of these as your product catalog.
+
+2. **Assign to Clients**: Once a base policy exists, use `client addpolicy` to create a specific contract for a client with dates and premium details.
+
+3. **Keep Base Policies Updated**: If you stop offering a policy, you can delete the base policy template. This won't affect existing client contracts that reference that policy.
+
+### Effective Client Management
+
+**When to Archive vs Delete:**
+- **Archive** clients who are no longer active but whose records you need to retain (e.g., clients who moved, paused policies, or are temporarily inactive). Archived clients can be restored if needed.
+- **Delete** only when you're certain you no longer need any record of the client. Deletion is permanent and removes all associated policies and to-dos.
+
+**Using the View Command Effectively:**
+The `client view` command is your command center for a specific client. It shows everything in one place: personal details, all policies with dates and premiums, and all pending to-dos. Use this before client meetings to quickly refresh your memory.
+
+**Setting Meaningful Due Dates:**
+For client to-dos, be specific with due dates. Instead of setting arbitrary deadlines, align them with:
+- Policy expiry dates (set a reminder 30-60 days before)
+- Scheduled meetings (set follow-up reminders)
+- Client birthdays or renewal periods
+
+---
 ## FAQ
 
 **Q**: How do I transfer my data to another computer? 
