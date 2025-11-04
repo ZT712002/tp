@@ -1,13 +1,13 @@
 @startuml
 title Sequence Diagram: Autosave Triggered by FinanceProPlus (with Logging & Archived Clients)
 
-actor User
-participant "UI" as UI
-participant "FinanceProPlus" as App
-participant "Parser" as Parser
-participant "Command" as Command
-participant "StorageManager" as Storage
-participant "Logger" as Logger
+actor "Financial advisor" as User
+participant ":UI" as UI
+participant ":FinanceProPlus" as App
+participant ":Parser" as Parser
+participant ":Command" as Command
+participant ":StorageManager" as Storage
+participant ":Logger" as Logger
 
 User -> UI: enters command
 activate UI
