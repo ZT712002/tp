@@ -415,8 +415,8 @@ class ClientListTest {
             String deleteArgs = "id/" + clientNric;
             FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
                     () -> clientList.deletePolicyForClient(deleteArgs));
-            assertEquals("Invalid command. Both client NRIC (id/) and policy index (i/) are required.\n" +
-                    "Correct format: client deletepolicy id/<NRIC> i/<INDEX>", e.getMessage());
+            assertEquals("Invalid format. This command only accepts the 'id/' " +
+                    "and 'i/ parameter.", e.getMessage());
         }
 
         @Test
@@ -424,8 +424,8 @@ class ClientListTest {
             String deleteArgs = "i/1";
             FinanceProPlusException e = assertThrows(FinanceProPlusException.class,
                     () -> clientList.deletePolicyForClient(deleteArgs));
-            assertEquals("Invalid command. Both client NRIC (id/) and policy index (i/) are required.\n" +
-                    "Correct format: client deletepolicy id/<NRIC> i/<INDEX>", e.getMessage());
+            assertEquals("Invalid format. This command only accepts the 'id/' " +
+                    "and 'i/ parameter.", e.getMessage());
         }
     }
 }
