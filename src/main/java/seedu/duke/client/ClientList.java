@@ -405,9 +405,13 @@ public class ClientList implements ListContainer {
      */
     public void deletePolicyForClient(String arguments) throws FinanceProPlusException {
         Map<String, List<String>> argsMap = Client.parseClientDetails(arguments);
+        checkDuplicates(argsMap);
+        final Set<String> allowedKeys = Set.of("id","i");
+        if (!argsMap.keySet().equals(allowedKeys)) {
+            throw new FinanceProPlusException("Invalid format. This command only accepts the 'id/' and 'i/ parameter.");
+        }
         String nric = safeGetFirst(argsMap, "id");
         String indexString = safeGetFirst(argsMap, "i");
-
         if (nric.isEmpty() || indexString.isEmpty()) {
             throw new FinanceProPlusException("Invalid command. Both client NRIC (id/) and " +
                     "policy index (i/) are required.\n" + DELETE_POLICY_FORMAT);
