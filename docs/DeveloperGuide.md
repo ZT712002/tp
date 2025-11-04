@@ -681,6 +681,7 @@ Refer to the command summary tables in the User Guide for complete syntax. Below
 | Test Case              | Command                                                                             | Expected Result               |
 |:-----------------------|:-------------------------------------------------------------------------|:------------------------------|
 |Exits the Application| `exit`| Exits the application successfully|
+| Lists all Commands| `help`  | Lists all Commands successfully|
 
 
 ### Testing Data Persistence
