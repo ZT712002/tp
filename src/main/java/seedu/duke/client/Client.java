@@ -287,7 +287,7 @@ public class Client {
      * @return The count of to-dos.
      */
     public int getTodoCount() {
-        return this.todoList.getSize(); // Or todoList.getTasks().size() depending on your TaskList implementation
+        return this.todoList.getSize();
     }
 }
 
