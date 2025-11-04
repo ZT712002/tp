@@ -23,36 +23,17 @@ activate App
 activate UI
 UI --> App: "task add d/Report by/15-01-2024"
 deactivate UI
-App -> Parser: parse(input)
-activate Parser
 
+ref over App, Parser, TaskParser
+    **Generic Parsing Sequence**
+    (Details on how the input string is converted
+    into a Command object are omitted for brevity.
+    See the "Generic Parser Sequence" diagram for details.)
+end ref
 
-    Parser -> Parser: selectParserType()
-    activate Parser
-    Parser --> Parser
-    deactivate Parser
-    Parser -> TaskParser**: TaskParser(type, commandArgs)
-    activate TaskParser
+note right of App: The App now holds an AddCommand object.
 
-    TaskParser -> TaskParser: splitCommand() [inside constructor]
-    activate TaskParser
-    TaskParser --> TaskParser
-    deactivate TaskParser
-
-    Parser -> TaskParser: executeAndCreateCommand()
-    TaskParser -> Command**: new AddCommand("task", arguments)
-    activate Command
-    Command -> Command: AddCommand()
-    activate Command
-    Command --> Command
-    deactivate Command
-    Command --> TaskParser
-    deactivate Command
-    TaskParser --> Parser: return Command
-    deactivate TaskParser
-    Parser --> App: return Command
-    deactivate Parser
-    App -> Command: execute(lookUpTable)
+App -> Command: execute(lookUpTable)
     activate Command
     Command -> LookUpTable: getList("task")
     activate LookUpTable
@@ -91,8 +72,8 @@ activate Parser
 
     Console --> User: Shows console output
 
-deactivate Parser
 deactivate App
+deactivate UI
 
 @enduml
 
