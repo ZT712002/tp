@@ -192,8 +192,9 @@ public class ClientList implements ListContainer {
     private ClientPolicy createClientPolicyFromArgs(Map<String, List<String>> argsMap, Policy basePolicy)
             throws FinanceProPlusException {
         try {
-            LocalDate startDate = LocalDate.parse(argsMap.get("s").get(0), ClientPolicy.DATE_FORMATTER);
-            LocalDate expiryDate = LocalDate.parse(argsMap.get("e").get(0), ClientPolicy.DATE_FORMATTER);
+            List<LocalDate> dates = parseAndValidateDates(argsMap);
+            LocalDate startDate = dates.get(0);
+            LocalDate expiryDate = dates.get(1);
             BigDecimal premium = parseAndValidatePremium(argsMap.get("m").get(0));
             return new ClientPolicy(basePolicy, startDate, expiryDate, premium);
         } catch (DateTimeParseException e) {
@@ -285,24 +286,40 @@ public class ClientList implements ListContainer {
             throws FinanceProPlusException {
         boolean isUpdated = false;
         try {
-            if (argsMap.containsKey("s")) {
-                LocalDate newStartDate = LocalDate.parse(argsMap.get("s").get(0), ClientPolicy.DATE_FORMATTER);
-                if (newStartDate == null ||
-                        !clientPolicy.getStartDate().equals(newStartDate)) {
-                    clientPolicy.setStartDate(newStartDate);
-                    isUpdated = true;
+            LocalDate newStartDate = null;
+            LocalDate newExpiryDate = null;
+            boolean startDateProvided = argsMap.containsKey("s");
+            boolean expiryDateProvided = argsMap.containsKey("e");
+            if (startDateProvided) {
+                newStartDate = LocalDate.parse(argsMap.get("s").get(0), ClientPolicy.DATE_FORMATTER);
+            }
+            if (expiryDateProvided) {
+                newExpiryDate = LocalDate.parse(argsMap.get("e").get(0), ClientPolicy.DATE_FORMATTER);
+            }
+            if (startDateProvided && expiryDateProvided) {
+                if (newStartDate.isAfter(newExpiryDate)) {
+                    throw new FinanceProPlusException("Invalid dates: The new start date cannot be " +
+                            "after the new expiry date.");
+                }
+            } else if (startDateProvided) {
+                if (clientPolicy.getExpiryDate() != null && newStartDate.isAfter(clientPolicy.getExpiryDate())) {
+                    throw new FinanceProPlusException("Invalid start date: The new start date cannot be " +
+                            "after the existing expiry date.");
+                }
+            } else if (expiryDateProvided) {
+                if (clientPolicy.getStartDate() != null && clientPolicy.getStartDate().isAfter(newExpiryDate)) {
+                    throw new FinanceProPlusException("Invalid expiry date: The new expiry date cannot be " +
+                            "before the existing start date.");
                 }
             }
-
-            if (argsMap.containsKey("e")) {
-                LocalDate newExpiryDate = LocalDate.parse(argsMap.get("e").get(0), ClientPolicy.DATE_FORMATTER);
-                if (newExpiryDate == null ||
-                        !clientPolicy.getExpiryDate().equals(newExpiryDate)) {
-                    clientPolicy.setExpiryDate(newExpiryDate);
-                    isUpdated = true;
-                }
+            if (startDateProvided && !clientPolicy.getStartDate().equals(newStartDate)) {
+                clientPolicy.setStartDate(newStartDate);
+                isUpdated = true;
             }
-
+            if (expiryDateProvided && !clientPolicy.getExpiryDate().equals(newExpiryDate)) {
+                clientPolicy.setExpiryDate(newExpiryDate);
+                isUpdated = true;
+            }
             if (argsMap.containsKey("m")) {
                 BigDecimal newPremium = parseAndValidatePremium(argsMap.get("m").get(0));
                 if (clientPolicy.getMonthlyPremium() == null
@@ -313,8 +330,9 @@ public class ClientList implements ListContainer {
             }
         } catch (DateTimeParseException e) {
             throw new FinanceProPlusException(INVALID_DATE_FORMAT_MESSAGE);
-        } catch (NumberFormatException e) {
-            throw new FinanceProPlusException(INVALID_PREMIUM_FORMAT_MESSAGE);
+        } catch (NullPointerException e) {
+            throw new FinanceProPlusException("Cannot update dates on a policy with un-set dates." +
+                    " Please use 'addpolicy' to set initial dates.");
         }
         return isUpdated;
     }
@@ -446,6 +464,30 @@ public class ClientList implements ListContainer {
                         "Each parameter must be provided only once.");
             }
         }
+    }
+
+    /**
+     * Parses start and end dates from the arguments map and validates them.
+     * Ensures that the start date is not after the end date.
+     *
+     * @param argsMap The map of parsed arguments, must contain 's' and 'e' keys.
+     * @return A List containing the parsed startDate (at index 0) and expiryDate (at index 1).
+     * @throws FinanceProPlusException If dates are in the wrong format or logically invalid.
+     */
+    private List<LocalDate> parseAndValidateDates(Map<String, List<String>> argsMap) throws FinanceProPlusException {
+        LocalDate startDate;
+        LocalDate expiryDate;
+
+        try {
+            startDate = LocalDate.parse(argsMap.get("s").get(0), ClientPolicy.DATE_FORMATTER);
+            expiryDate = LocalDate.parse(argsMap.get("e").get(0), ClientPolicy.DATE_FORMATTER);
+        } catch (DateTimeParseException e) {
+            throw new FinanceProPlusException(INVALID_DATE_FORMAT_MESSAGE);
+        }
+        if (startDate.isAfter(expiryDate)) {
+            throw new FinanceProPlusException("Invalid dates: The start date cannot be after the expiry date.");
+        }
+        return List.of(startDate, expiryDate);
     }
 
 }
